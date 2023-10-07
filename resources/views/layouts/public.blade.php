@@ -12,6 +12,12 @@
     @stack('style')
 
     <style>
+      body{
+        /* background-color: #c71224; */
+      }
+      .navbar{
+        background-color: #191d20;
+      }
       #btnLogin{
         border: 1px solid rgb(232, 32, 32);
         color: #fff;
@@ -20,27 +26,39 @@
       #btnLogin:is(:hover){
         border: 1px solid #fff;
       }
+      
     </style>
     
   </head>
-  <body>
+  <body class="bg-dark">
 
-    <header>
-      <nav class="navbar navbar-expand-lg bg-dark" style="height: 4rem;">
+      <nav class="navbar navbar-expand-lg sticky-top" style="height: 4rem;">
         <div class="container d-flex justify-content-between">
           <a class="navbar-brand" href="#">
             <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150" class="d-inline-block align-text-top">
           </a>
-          <a href="#" id="btnLogin" class="btn btn-md rounded-pill px-4">Login</a>
+          @auth
+            <form action="{{ route('logout') }}" method="post">
+              @csrf
+              <button id="btnLogin" class="btn btn-md rounded-pill px-4">Logout</button>
+            </form>
+          @endauth
+
+          @guest
+          <div class="hstack gap-2">
+            <a href="{{ route('discover') }}" id="" class="btn btn-md text-white">Discover</a>
+            <a href="{{ route('login') }}" id="btnLogin" class="btn btn-md rounded-pill px-4">Login</a>
+          </div>
+          
+          @endguest
         </div>
       </nav>
-    </header>
 
     <main>
         @yield('content')
     </main>
 
-    <footer class="bottom-fixed">
+    <footer class="bottom-fixed text-center">
         <h3>Copyright <?= date('Y'); ?></h3>
     </footer>
     
