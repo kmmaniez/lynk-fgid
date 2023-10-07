@@ -111,7 +111,9 @@
             }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script> --}}
+    <script src="{{ asset('assets/feather-icons/dist/feather.js') }}"></script>
+
 </head>
 
 <body>
@@ -131,7 +133,7 @@
                     <li>
                         <h6 class="dropdown-header">Profile</h6>
                     </li>
-                    <li><a class="dropdown-item px-5 py-2" href="#">My Account</a></li>
+                    <li><a class="dropdown-item px-5 py-2" href="{{ route('account') }}">My Account</a></li>
                     <li>
                         <h6 class="dropdown-header">Settings</h6>
                     </li>
@@ -176,11 +178,8 @@
     </div>
 
     <script src="{{ asset('assets/vendor/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/bootstrap-5.3.1/js/dist/popover.js') }}"></script>
 
     <script>
-        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
         const link = document.getElementById('shareLink');
         const contentLink = document.getElementById('contentLink');
         link.addEventListener('click', (e) => {
