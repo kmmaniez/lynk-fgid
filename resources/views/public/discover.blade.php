@@ -113,6 +113,69 @@
         .container{
             overflow-x: hidden;
         }
+        .card-title{
+            margin-top: 48px;
+        }
+
+        section#hero{
+            height: 480px;
+            background-image: url("{{ asset('assets/carousel-1.jpg') }}");
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            position: relative;
+        }
+        section#hero::after{
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            content: '';
+            background-color: rgba(0, 0, 0, 0.5);
+            top: 0;
+        }
+        section#hero .title{
+            position: relative;
+            z-index: 2;
+            padding-inline-start: 24px;
+        }
+        section#hero .title h1{
+            text-shadow: 0px 8px 16px #191d20;
+        }
+        @media (max-width: 820px) {
+            section#hero{
+                height: max-content;
+                background-image: none;
+            }
+            section#hero::after{
+                display: none;
+            }
+            section#hero .title{
+                padding-inline-start: 0px;
+            }
+            section#hero .title h1{
+                font-size: 32px;
+            }
+            #avatar{
+                display: none;
+            }
+            .card-body span{
+                display: none;
+            }
+
+            section .card-title{
+                margin-top: 0;
+            }
+            #card-benefit:is(:hover){
+                transform: none;
+            }
+
+            .card-text{
+                display: none;
+            }
+            .row-benefit{
+                row-gap: 8px;
+            }
+        }
     </style>
 @endpush
 
@@ -123,23 +186,23 @@
             <div class="title">
                 <h1>Discover Creators, Inspire Content </h1>
 
-                <div class="position-relative mt-5 mb-3">
-                    <input type="text" class="form-control shadow-none border-danger w-100 pe-2 py-3" placeholder="lynkclone.id/username" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <button id="claim" class="btn btn-md btn-danger fw-bold position-absolute" style="width: 120px;" type="button" id="button-addon2">Claim</button>
+                <div class="position-relative mt-3 mb-3">
+                    <input type="text" class="form-control shadow-none border-danger w-100 pe-2 py-3" placeholder="Search...    " aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button id="claim" class="btn btn-md btn-danger fw-bold position-absolute" style="width: 120px;" type="button" id="button-addon2">Search</button>
                 </div>
 
             </div>
-            <div class="preview flex-grow-1">
+            {{-- <div class="preview flex-grow-1">
                 <img src="{{ asset('assets/valorant.jpg') }}" class="object-fit-contain" style="width: 100%; height: 600px;"
                     alt="" srcset="">
-            </div>
+            </div> --}}
         </section>
 
         <section id="creators" class="mt-5">
             <h2>Featured Indonesia Photographer</h2>
             <span>Discover the best streaming entertaiment</span>
 
-            <div class="row row-cols-1 row-cols-md-5 g-4 mt-3">
+            <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
                 @for ($i = 1; $i <= 10; $i++)
                     <div class="col">
                         <a href="/awkarin" class="text-decoration-none">
@@ -150,7 +213,7 @@
                                     <img id="avatar" src="{{ asset('assets/user' . rand(1,6) . '.jpg') }}"
                                         class="rounded-circle object-fit-cover border border-white border-3"
                                         style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
-                                    <h5 class="card-title mt-5">Creator {{ $i }}</h5>
+                                    <h5 class="card-title">Creator {{ $i }}</h5>
                                     <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                                         Sunt, aspernatur!</p>
                                     <span class="badge rounded-pill px-2">Singer</span>
@@ -165,7 +228,7 @@
 
         <section id="recently" class="mt-5 py-4">
             <h2>Recently Joined</h2>
-            <div class="row row-cols-1 row-cols-md-5 g-4 mt-3">
+            <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
                 @for ($i = 1; $i <= 10; $i++)
                     <div class="col">
                         <a href="/awkarin" class="text-decoration-none">
@@ -177,7 +240,7 @@
                                     <img id="avatar" src="{{ asset('assets/user' . rand(1,6) . '.jpg') }}"
                                         class="rounded-circle object-fit-cover border border-white border-3"
                                         style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
-                                    <h5 class="card-title mt-5">Creator {{ $i }}</h5>
+                                    <h5 class="card-title">Creator {{ $i }}</h5>
                                     <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                                         Sunt, aspernatur!</p>
                                     <span class="badge rounded-pill px-2">Singer</span>
