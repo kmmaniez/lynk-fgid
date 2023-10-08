@@ -21,13 +21,13 @@
     
                     <div class="card">
                         <div class="card-body text-center pt-3 pb-0 px-0">
-                            <h5 class="text-secondary text-uppercase">Estimate Payout</h5>
-                            <h5 class="text-success fw-bold">Rp. 2.150.000</h5>
+                            <h5 class="text-secondary text-uppercase">Last Payment</h5>
+                            <h5 class="text-success fw-bold">Rp. 500.000</h5>
     
                             <div class="hstack justify-content-evenly border border-end py-3 mt-3 w-100">
                                 <div class="last-payment">
-                                    <span class="d-block text-secondary">Last Payment</span>
-                                    <span class="fw-semibold">Rp. 500.000</span>
+                                    <span class="d-block text-secondary">Estimate Payout</span>
+                                    <span class="fw-semibold">Rp. 2.150.000</span>
                                 </div>
                                 <div class="next-payment">
                                     <span class="d-block text-secondary">Next Payment</span>
@@ -35,11 +35,11 @@
                                 </div>
                             </div>
     
-                            <div class="fees w-100 py-2" style="background-color: lightblue">
-                                <small class="text-success">Pemotongan 5% dari total transaksi penarikan</small>
+                            <div class="fees w-100 py-2 bg-danger-subtle">
+                                <small class="text-dark">Pemotongan 5% dari total transaksi penarikan</small>
                             </div>
     
-                            <div class="manual-withdraw py-2" style="background-color: lightcyan">
+                            <div class="manual-withdraw py-2">
                                 <span class="d-block">Dont't wait until next payment?</span>
                                 <a href="" class="text-decoration-none">Withdraw manual</a>
                             </div>
