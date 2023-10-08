@@ -59,6 +59,10 @@ Route::get('/account', function () {
     return view('creator.account');
 })->name('account');
 
+Route::get('/order', function () {
+    return view('creator.order');
+})->name('order');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
