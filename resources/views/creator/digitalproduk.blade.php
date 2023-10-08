@@ -105,8 +105,13 @@
                 <form action="" method="post">
                     @csrf
                     <div class="form-group mb-3">
-                        <label id="custom" for="upload">Upload gambar <i data-feather="image"></i></label>
+                        <label id="custom" for="upload">Upload Thumbnail <i data-feather="image"></i></label>
                         <input type="file" id="upload" hidden>
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label id="custom" for="upload">Upload gambar <i data-feather="image"></i></label>
+                        <input type="file" multiple id="upload">
                     </div>
     
                     <div class="mb-3">
@@ -217,8 +222,8 @@
                         </div>
                     </div>
     
-                    <div class="vstack w-100">
-                        <button class="btn bg-success bg-gradient text-white w-100">Tambah Produk</button>
+                    <div class="vstack gap-2 w-100">
+                        <button class="btn bg-danger fw-semibold text-uppercase bg-gradient text-white w-100">Tambah Produk</button>
                         <a href="{{ route('admin') }}" class="btn w-100 fw-medium">Cancel</a>
                     </div>
                 </form>
