@@ -20,28 +20,26 @@
                             @csrf
                             <div class="form-group">
                                 <label for="x">Username</label>
-                                <span class="d-block mt-2">@awkarin</span>
+                                <input class="form-control shadow-none" value="awkarin" type="text" name="x"
+                                    id="x">
                             </div>
                             <div class="form-group mt-3">
                                 <label for="x">Email</label>
-                                <span class="d-block mt-2">aw@gmail.com</span>
+                                {{-- <span class="d-block mt-2"></span> --}}
+                                <input class="form-control shadow-none" value="aw@gmail.com" type="text" name="x"
+                                    id="x">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="x">Name</label>
+                                <label for="x">Nama Pengguna</label>
                                 <input class="form-control shadow-none" value="Ahmad" type="text" name="x"
                                     id="x">
                             </div>
                             <div class="form-group mt-3">
-                                <label for="x">Phone</label>
+                                <label for="x">Telepon</label>
                                 <input class="form-control shadow-none" pattern="^0-9" type="number" name="x"
                                     id="x" required>
                             </div>
-                            <div class="form-group mt-3 mb-3">
-                                <label for="x">Address</label>
-                                <input class="form-control shadow-none" placeholder="Alamat anda" value="" type="text" name="x"
-                                    id="x">
-                            </div>
-                            <button class="btn btn-md btn-success w-100">Simpan</button>
+                            <button class="btn btn-md bg-danger bg-gradient text-white fw-semibold text-uppercase w-100 mt-3">Simpan</button>
                         </form>
                     </div>
                 </div>
@@ -56,7 +54,7 @@
                                     diregistrasi ulang!</strong></small>
                             {{-- <form action="" method="post">
                                 @csrf --}}
-                                <a href="#" class="btn btn-outline-danger btn-md w-100 mt-2">Hapus Akun</a>
+                                <a href="#" class="btn btn-outline-danger btn-md text-uppercase w-100 mt-2">Hapus Akun</a>
                             {{-- </form> --}}
                         </div>
                     </div>

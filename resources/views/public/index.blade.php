@@ -131,6 +131,9 @@
                 user-select: none;
             }
         }
+        section{
+            color: #fff;
+        }
         section .card-style{
             background-color: #191d20;
             color: #fff;
@@ -139,6 +142,35 @@
         section .card-style:is(:hover){
             outline: 3px solid salmon;
             cursor: pointer;
+        }
+        .row-benefit{
+            row-gap: 16px;
+        }
+        section#creators .card-title{
+            margin-top: 48px;
+        }
+        @media (max-width: 820px) {
+            #avatar{
+                display: none;
+            }
+            .card-body span{
+                display: none;
+            }
+
+            section#creators .card-title{
+                margin-top: 0;
+            }
+            #card-benefit:is(:hover){
+                transform: none;
+            }
+
+            section#creators .card-text{
+                display: none;
+            }
+            .row-benefit{
+                row-gap: 8px;
+            }
+            
         }
     </style>
 @endpush
@@ -198,7 +230,7 @@
 
         <section id="benefit" class="mt-5">
             <h2 class="text-center">How creators using FGID</h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4 mt-3">
+            <div class="row row-cols-1 row-cols-md-3 mt-3 row-benefit">
                 @for ($i = 0; $i < 6; $i++)
                     <div class="col">
                         <div class="card h-100" id="card-benefit">
@@ -219,17 +251,19 @@
             <h2>Featured Streamers & Gamers</h2>
             <span>Discover the best streaming entertaiment</span>
 
-            <div class="row row-cols-1 row-cols-md-5 g-4 mt-3">
+            <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
+                {{-- row-cols-md-5 --}}
                 @for ($i = 1; $i <= 6; $i++)
                     <div class="col">
                         <div class="card card-style h-100 rounded-4 border-0">
-                            <img src="{{ asset('assets/user' . $i . '.jpg') }}" style="width: 100%; height: 120px;"
+                            <img id="img-cover" src="{{ asset('assets/user' . $i . '.jpg') }}" style="width: 100%; height: 120px;"
                                 class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
+                                {{-- position-relative --}}
                             <div class="card-body position-relative">
                                 <img id="avatar" src="{{ asset('assets/user' . $i . '.jpg') }}"
                                     class="rounded-circle object-fit-cover border border-white border-3"
                                     style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
-                                <h5 class="card-title mt-5">Creator {{ $i }}</h5>
+                                <h5 class="card-title">Creator {{ $i }}</h5>
                                 <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                                     Sunt, aspernatur!</p>
                                 <span class="badge rounded-pill px-2">Singer</span>
@@ -386,12 +420,6 @@
                     </div>
                 </div>
 
-                <p>Pertanyaan saya tidak tertera di FAQ</p>
-                <p>Jika ada masalah atau butuh bantuan, kamu bisa menghubungi kami melalui email di tulung@fgid.xyz atau
-                    melalui DM di IG @FGID.XYZ dan Telegram @FGID.XYZ.</p>
-                <p>Jangan lupa Follow IG dan Telegram kami untuk mendapatkan informasi (Maintenance, Fitur, dll)</p>
-                <p>Jika ingin mengajukan Kerjasama silahkan email ke xc@fgid.xyz</p>
-                <p>Layanan CS kami tidak standby 24 Jam, untuk respon email yang masuk harap tunggu balasan dari kami.</p>
             </div>
         </section>
     </div>

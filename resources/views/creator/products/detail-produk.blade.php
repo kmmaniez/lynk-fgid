@@ -218,8 +218,8 @@
                 </div>
             </div>
             <div class="card-footer border-0 mb-3">
-                    <a href="#" id="btnAddToCart" class="btn btn-success bg-success bg-gradient w-100">Beli Sekarang</a>
-                    <a href="{{ route('owner') }}" id="" class="btn mt-2 btn-outline-primary w-100">Kembali</a>
+                    <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">Beli Sekarang</a>
+                    <a href="{{ route('owner') }}" id="" class="btn mt-2 w-100">Kembali</a>
 
             </div>
         </div>

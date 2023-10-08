@@ -101,7 +101,7 @@
             /* background-color: red; */
         }
         .nav-link:is(:hover){
-            background-color: #e8f4ff;
+            background-color: #ffe8e8;
         }
     </style>
     <script src="{{ asset('assets/feather-icons/dist/feather.min.js') }}"></script>
@@ -119,26 +119,26 @@
         </nav>
 
         <div class="sidebar hidden d-flex flex-column flex-shrink-0 bg-body-tertiary p-3">
-            <div class="toggle-sidebar bg-primary">
+            <div class="toggle-sidebar bg-danger">
                 <i data-feather="chevrons-right" class="feathers text-white"></i>
             </div>
-            <span class="fs-4">Hello @username</span>
+            <span class="fs-4">Hello @usernames</span>
             <hr>
             <ul class="nav nav-pills flex-column gap-1 mb-auto">
                 <li class="nav-item">
-                    <a href="{{ route('admin') }}" class="nav-link {{ (Request::routeIs('admin') ? 'fw-semibold active bg-gradient bg-gradient-primary' : 'text-secondary') }}">Dashboard</a>
+                    <a href="{{ route('admin') }}" class="nav-link {{ (Request::routeIs('admin') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ route('statistik') }}" class="nav-link {{ (Request::routeIs('statistik') ? 'fw-semibold active bg-gradient bg-gradient-primary' : 'text-secondary') }}">Statistic</a>
+                    <a href="{{ route('statistik') }}" class="nav-link {{ (Request::routeIs('statistik') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Statistic</a>
                 </li>
                 <li>
-                    <a href="#" class="nav-link text-secondary">Order</a>
+                    <a href="{{ route('order') }}" class="nav-link {{ (Request::routeIs('order') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Order</a>
                 </li>
-                <div class="list-group ps-3 mt-3">
+                <div class="list-group gap-1 ps-3 mt-3">
                     <small class="text-body-tertiary text-uppercase fw-bold mb-2">Settings</small>
 
                     <li>
-                        <a href="{{ route('account') }}" class="nav-link {{ (Request::routeIs('account') ? 'fw-semibold active bg-gradient bg-gradient-primary' : 'text-secondary') }}">Account
+                        <a href="{{ route('account') }}" class="nav-link {{ (Request::routeIs('account') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Account
                             Settings</a>
                     </li>
                     {{-- <li>
@@ -146,14 +146,14 @@
                             Settings</a>
                     </li> --}}
                     <li>
-                        <a href="{{ route('earning') }}" class="nav-link {{ (Request::routeIs('earning') ? 'fw-semibold active bg-gradient bg-gradient-primary' : 'text-secondary') }}">Earning Settings</a>
+                        <a href="{{ route('earning') }}" class="nav-link {{ (Request::routeIs('earning') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Earning Settings</a>
                     </li>
                     <li>
-                        <a href="{{ route('history') }}" class="nav-link {{ (Request::routeIs('history') ? 'fw-semibold active bg-gradient bg-gradient-primary' : 'text-secondary') }}">History
+                        <a href="{{ route('history') }}" class="nav-link {{ (Request::routeIs('history') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">History
                             Settings</a>
                     </li>
                     <li>
-                        <a href="{{ route('payout') }}" class="nav-link {{ (Request::routeIs('payout') ? 'fw-semibold active bg-gradient bg-gradient-primary' : 'text-secondary') }}">Payout
+                        <a href="{{ route('payout') }}" class="nav-link {{ (Request::routeIs('payout') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Payout
                             Settings</a>
                     </li>
                 </div>
