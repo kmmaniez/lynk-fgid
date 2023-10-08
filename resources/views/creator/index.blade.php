@@ -1,13 +1,20 @@
 @extends('layouts.master')
 @push('style')
     <style>
-        @media (max-width: 768px) {
-            #previewMockup{
-                display: none;
-            }
-        }
         .list-produk{
             /* width: 100%; */
+        }
+        .produk-action .card{
+            height: 10rem;
+        }
+        @media (max-width: 820px) {
+            .card{
+                height: max-content;
+            }
+            .list-produk .card-body .icon{
+                display: none;
+            }
+
         }
     </style>
 @endpush
@@ -57,18 +64,28 @@
     <section id="content" class="mt-3">
 
         <div class="produk-action">
-            <div class="row">
-                <div class="col">
-                    <div class="card border-0 p-0" style="height: 10rem;">
+            <div class="row g-0">
+                <div class="col-xl-4 col-12">
+                    <div class="card border-0 p-0">
+                        {{-- style="height: 10rem;" --}}
                         <div class="card-body">
-                            <a href="/createlink" class="btn btn-outline-success h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="link"></i> Link</a>
+                            <a href="/appearance" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="layout"></i> Appearance</a>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card border-0 p-0" style="height: 10rem;">
+                <div class="col-xl-4 col-12">
+                    <div class="card border-0 p-0">
+                        {{-- style="height: 10rem;" --}}
                         <div class="card-body">
-                            <a href="/digitalproduk" class="btn btn-outline-success h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="shopping-bag"></i> Digital Product</a>
+                            <a href="/createlink" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="link"></i> Link</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-12">
+                    <div class="card border-0 p-0">
+                        {{-- style="height: 10rem;" --}}
+                        <div class="card-body">
+                            <a href="/digitalproduk" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="shopping-bag"></i> Digital Product</a>
                         </div>
                     </div>
                 </div>
@@ -83,14 +100,17 @@
                     <div class="vstack gap-2 mt-3">
                         @for ($i=0; $i < 12; $i++)
                         <div class="card">
-                            <a href="/awkarin" class="text-decoration-none text-dark">
+                            <a href="/awkarin" target="_blank" class="text-decoration-none text-dark">
                                 <div class="card-body d-flex flex-start align-items-center gap-3">
                                     @if ($i%4 === 0)
                                     <img src="{{ asset('assets/user1.jpg') }}" 
                                     style="width: 4rem; height: 3rem;" 
                                     class="card-img-top" alt="...">
                                     @endif
-                                    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat!</span>
+                                    <div class="hstack justify-content-between w-100">
+                                        <span class="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat!</span>
+                                        <i id="icon" class="icon text-secondary" data-feather="arrow-up-right"></i>
+                                    </div>
                                 </div>
                             </a>
                         </div>
