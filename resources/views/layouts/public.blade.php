@@ -22,11 +22,28 @@
         border: 1px solid rgb(232, 32, 32);
         color: #fff;
         font-weight: bold;
+        padding: 8px 24px;
+      }
+      #logo{
+        width: 150px;
       }
       #btnLogin:is(:hover){
         border: 1px solid #fff;
       }
-      
+      .hstack{
+        gap: 2rem;
+      }
+      @media (max-width: 768px) {
+        #logo{
+          width: 124px;
+        }
+        .hstack{
+          gap: 16px;
+        }
+        #btnLogin{
+          font-size: 14px;
+        }
+      }
     </style>
     
   </head>
@@ -35,7 +52,7 @@
       <nav class="navbar navbar-expand-lg sticky-top" style="height: 4rem;">
         <div class="container d-flex justify-content-between">
           <a class="navbar-brand" href="#">
-            <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150" class="d-inline-block align-text-top">
+            <img src="{{ asset('assets/logo.png') }}" id="logo" alt="Logo" class="d-inline-block align-text-top">
           </a>
           @auth
             <form action="{{ route('logout') }}" method="post">
@@ -45,9 +62,9 @@
           @endauth
 
           @guest
-          <div class="hstack gap-2">
-            <a href="{{ route('discover') }}" id="" class="btn btn-md text-white">Discover</a>
-            <a href="{{ route('login') }}" id="btnLogin" class="btn btn-md rounded-pill px-4">Login</a>
+          <div class="hstack">
+            <span class=""><a href="{{ route('discover') }}" class="text-white text-decoration-none" id="">Discover</a></span>
+            <a href="{{ route('login') }}" id="btnLogin" class="btn btn-md rounded-pill">Login</a>
           </div>
           
           @endguest
