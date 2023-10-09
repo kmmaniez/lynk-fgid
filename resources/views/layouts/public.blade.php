@@ -8,13 +8,11 @@
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap5/css/bootstrap.min.css') }}">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <script src="{{ asset('assets/feather-icons/dist/feather.js') }}"></script>
 
     @stack('style')
 
     <style>
-      body{
-        /* background-color: #c71224; */
-      }
       .navbar{
         background-color: #191d20;
       }
@@ -33,6 +31,34 @@
       .hstack{
         gap: 2rem;
       }
+      .social-media{
+        width: 200px;
+        height: max-content;
+      }
+      footer ul{
+        list-style-type: none;
+      }
+      .social-media ul{
+        padding: 0;
+        /* background-color: cyan; */
+      }
+      .social-media ul li{
+        padding: 4px;
+        /* background-color: blueviolet; */
+      }
+      svg.fa-16{
+        width: 16px;
+        height: 16px;
+      }
+      svg.fa-24{
+        width: 24px;
+        height: 24px;
+      }
+      footer{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+      }
       @media (max-width: 768px) {
         #logo{
           width: 124px;
@@ -43,6 +69,26 @@
         #btnLogin{
           font-size: 14px;
         }
+        footer{
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-evenly;
+          align-items: center;
+          gap: 2rem;
+        }
+      }
+      main{
+        overflow: hidden;
+      }
+      footer{
+        background-color: #191d20;
+      }
+      footer a{
+        color: #fff;
+      }
+      footer a:hover{
+        opacity: 0.8;
       }
     </style>
     
@@ -75,12 +121,29 @@
         @yield('content')
     </main>
 
-    <footer class="bottom-fixed text-center">
-        <h3>Copyright <?= date('Y'); ?></h3>
+    <footer class="bottom-fixed text-white py-4">
+
+      <div class="description">
+        <span>Made with <i data-feather="heart" class="fa-16"></i> from FGID</span>
+        <span class="d-block mb-2">PT. FGID Indonesia</span>
+        <span class="d-block"><a href="http://" class="text-decoration-none">Syarat dan ketentuan</a></span>
+        <span><a href="http://" class="text-decoration-none">FAQ</a></span>
+      </div>
+
+      <div class="social-media">
+        <ul class="d-flex justify-content-between">
+          <li><a href="http://"><i data-feather="instagram" class="fa-24"></i></a></li>
+          <li><a href="http://"><i data-feather="facebook" class="fa-24"></i></a></li>
+          <li><a href="http://"><i data-feather="twitter" class="fa-24"></i></a></li>
+          <li><a href="http://"><i data-feather="mail" class="fa-24"></i></a></li>
+        </ul>
+      </div>
     </footer>
     
+    <script>
+        feather.replace();
+    </script>
     <script src="{{ asset('assets/vendor/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script> --}}
+    
   </body>
 </html>
