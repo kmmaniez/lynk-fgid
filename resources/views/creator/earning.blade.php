@@ -51,7 +51,7 @@
                     <div class="card">
                         <div class="card-header bg-transparent">
                             <div class="hstack justify-content-between">
-                                <span class="fs-5">Rekening Pembayaran</span>
+                                <span>Rekening Pembayaran</span>
                                 <a href="{{ route('manage-rekening') }}" title="Manage Rekening Pembayaran"
                                     class="text-decoration-none text-success fw-medium"><i data-feather="credit-card"
                                         style="width: 16px; height:16px;"></i> Manage Rekening</a>
