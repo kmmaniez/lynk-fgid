@@ -7,6 +7,9 @@
         .produk-action .card{
             height: 10rem;
         }
+        .produk-detail:is(:hover){
+            background-color: #fff5f5;
+        }
         @media (max-width: 820px) {
             .card{
                 height: max-content;
@@ -94,14 +97,14 @@
 
         <div class="list-produk">
             <div class="card border-0">
-                <div class="card-body">
+                <div class="card-body px-2">
                     <span class="fs-3">List produk</span>
 
                     <div class="vstack gap-2 mt-3">
                         @for ($i=0; $i < 12; $i++)
-                        <div class="card">
+                        <div class="card produk-detail">
                             <a href="/awkarin" target="_blank" class="text-decoration-none text-dark">
-                                <div class="card-body d-flex flex-start align-items-center gap-3">
+                                <div class="card-body ps-3 d-flex flex-start align-items-center gap-3">
                                     @if ($i%4 === 0)
                                     <img src="{{ asset('assets/user1.jpg') }}" 
                                     style="width: 4rem; height: 3rem;" 
