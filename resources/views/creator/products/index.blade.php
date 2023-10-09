@@ -172,17 +172,41 @@
             margin: 0 auto;
             border-top: 0.5px solid rgba(36, 35, 35, 0.1);
         }
-        @media (max-width: 768px) {
+        .bg-dark-cover{
+            background-color: #121212;
+            color: #fff;
+        }
+        section#wrap{
+            padding: 0 1rem;
+        }
+        @media (max-width: 820px) {
             footer{
                 width: 100%;
             }
+            section#wrap{
+                padding: 0 0.5rem;
+            }
+        }
+        #coverprofile{
+            content: '';
+            background: url('{{ asset("assets/user6.jpg") }}');
+            object-fit: cover;
+            background-size: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.3;
         }
     </style>
 @endpush
 @section('produk')
-    <section id="wrap" class="pb-3 px-3">
+    <section id="wrap" class="bg-dark pb-3">
             <div class="header" style="">
-                <div class="card rounded-0 border-0 text-center">
+                <div class="card bg-dark-cover rounded-0 border-0 text-center position-relative" style="z-index: 1">
+                    <div id="coverprofile"></div>
                     <div class="card-body vstack gap-3 align-items-center">
                         <img src="{{ asset('assets/user6.jpg') }}" style="width: 5rem; height: 5rem;" 
                             class="rounded-circle object-fit-cover" alt="...">
@@ -192,11 +216,11 @@
                 </div>
             </div>
 
-            <div class="list-products mt-2 mb-5">
-                <div class="row gap-3">
+            <div class="list-products mt-2">
+                <div class="row gap-2">
                     <div class="col-12">
                         <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card text-center">
+                            <div class="card bg-dark-cover text-center">
                                 <div class="card-body">
                                     <span>Lorem ipsum adipisicing elit. Repellat!</span>
                                 </div>
@@ -205,7 +229,7 @@
                     </div>
                     <div class="col-12">
                         <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card">
+                            <div class="card bg-dark-cover ">
                                 <div class="card-body d-flex flex-start align-items-center gap-3">
                                     <img src="{{ asset('assets/user1.jpg') }}" style="width: 4rem; height: 4rem;" class="card-img-top" alt="...">
                                     <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat!</span>
@@ -217,7 +241,7 @@
                         <div class="row">
                             <div class="col">
                                 <a href="/awkarin/detail" class="text-decoration-none">
-                                    <div class="card h-100">
+                                    <div class="card bg-dark-cover  h-100">
                                         <img src="{{ asset('assets/user1.jpg') }}" style="width: 100%; height: 120px;"
                                             class="card-img-top object-fit-cover" alt="...">
                                         <div class="card-body">
@@ -229,7 +253,7 @@
                             </div>
                             <div class="col">
                                 <a href="/awkarin/detail" class="text-decoration-none">
-                                    <div class="card h-100">
+                                    <div class="card bg-dark-cover h-100">
                                         <img src="{{ asset('assets/user3.jpg') }}" style="width: 100%; height: 120px;"
                                             class="card-img-top object-fit-cover" alt="...">
                                         <div class="card-body">
@@ -243,7 +267,7 @@
                     </div>
                     <div class="col-12">
                         <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card h-100">
+                            <div class="card bg-dark-cover  h-100">
                                 <img src="{{ asset('assets/user2.jpg') }}" style="width: 100%; height: 240px;"
                                     class="card-img-top object-fit-cover" alt="...">
                                 <div class="card-body">
@@ -255,7 +279,7 @@
                     </div>
                     <div class="col-12">
                         <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card text-center">
+                            <div class="card bg-dark-cover  text-center">
                                 <div class="card-body">
                                     <span>Lorem ipsum adipisicing elit. Repellat!</span>
                                 </div>
@@ -266,7 +290,7 @@
                         <div class="row">
                             <div class="col-6">
                                 <a href="/awkarin/detail" class="text-decoration-none">
-                                    <div class="card h-100">
+                                    <div class="card bg-dark-cover h-100">
                                         <img src="{{ asset('assets/user6.jpg') }}" style="width: 100%; height: 120px;"
                                             class="card-img-top object-fit-cover" alt="...">
                                         <div class="card-body">
