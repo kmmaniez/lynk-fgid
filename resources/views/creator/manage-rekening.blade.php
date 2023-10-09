@@ -236,7 +236,7 @@
                     </div>
                     <div class="vstack mt-3 gap-2">
                         <button class="btn btn-md bg-danger fw-semibold text-uppercase bg-gradient text-white">Save Change</button>
-                        <a href="{{ route('admin') }}" class="btn btn-md btn-outline-danger">Cancel</a>
+                        <a href="{{ route('admin') }}" class="btn btn-md">Cancel</a>
                     </div>
                 </div>
     
