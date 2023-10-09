@@ -255,21 +255,21 @@
                 {{-- row-cols-md-5 --}}
                 @for ($i = 1; $i <= 6; $i++)
                     <div class="col">
-                        <div class="card card-style h-100 rounded-4 border-0">
-                            <img id="img-cover" src="{{ asset('assets/user' . $i . '.jpg') }}" style="width: 100%; height: 120px;"
-                                class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
-                                {{-- position-relative --}}
-                            <div class="card-body position-relative">
-                                <img id="avatar" src="{{ asset('assets/user' . $i . '.jpg') }}"
-                                    class="rounded-circle object-fit-cover border border-white border-3"
-                                    style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
-                                <h5 class="card-title">Creator {{ $i }}</h5>
-                                <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                    Sunt, aspernatur!</p>
-                                <span class="badge rounded-pill px-2">Singer</span>
+                        <a href="{{ route('owner') }}" class="text-decoration-none">
+                            <div class="card card-style h-100 rounded-4 border-0">
+                                <img id="img-cover" src="{{ asset('assets/user' . $i . '.jpg') }}" style="width: 100%; height: 120px;"
+                                    class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
+                                <div class="card-body position-relative">
+                                    <img id="avatar" src="{{ asset('assets/user' . $i . '.jpg') }}"
+                                        class="rounded-circle object-fit-cover border border-white border-3"
+                                        style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
+                                    <h5 class="card-title">Creator {{ $i }}</h5>
+                                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                                        Sunt, aspernatur!</p>
+                                    <span class="badge rounded-pill px-2">Singer</span>
+                                </div>
                             </div>
-                        </div>
-
+                        </a>
                     </div>
                 @endfor
             </div>
