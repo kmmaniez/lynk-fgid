@@ -63,6 +63,10 @@ Route::get('/order', function () {
     return view('creator.order');
 })->name('order');
 
+Route::get('/appearance', function () {
+    return view('creator.appearance');
+})->name('appearance');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
