@@ -138,17 +138,54 @@
 </html> --}}
 @extends('layouts.products')
 @push('styles')
-    <style>
+    {{-- <style>
 
         .kotak{
             width: 100px;
             height: 50px;
             background-color: salmon;
         }
+        [type=radio] { 
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        /* IMAGE STYLES */
+        [type=radio] + img {
+            cursor: pointer;
+            width: 96px;
+            height: 48px;
+        }
+
+        /* CHECKED STYLES */
+        [type=radio]:checked + img {
+            background-color: #fff;
+            outline: 1px solid #3e9f72;
+            border-radius: 4px;
+        }
+        .payment-method .form-group .hstack{
+            justify-content: flex-start;
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .card-form-input{
+                padding: 8px 0px;
+            }
+            .payment-method .form-group .hstack{
+                justify-content: space-between;
+            }
+            
+        }
+    </style> --}}
+    <style>
+        .wrapper{
+            overflow-y: hidden;
+        }
     </style>
 @endpush
 @section('produk')
-    <section id="produk" class="">
+    {{-- <section id="produk" class="">
         <div class="card border-0 h-100">
             <div class="card-body">
 
@@ -198,16 +235,6 @@
                                             </div>
                                         </div>
                                     </td>
-                                    {{-- <td class="text-end">
-                                        <div class="item">
-                                            <span class="invisible">4</span>
-                                            <ul class="mt-2" >
-                                                <li><span>Rp. 20.000</span></li>
-                                                <li><span>Rp. 10.000</span></li>
-                                                <li><span>Rp. 30.000</span></li>
-                                            </ul>
-                                        </div>
-                                    </td> --}}
                                 </tr>
                                 <tr>
                                     <td>Fee platform</td>
@@ -223,7 +250,7 @@
                 </div>
 
                 <div class="card border-0 mt-2">
-                    <div class="card-body">
+                    <div class="card-body card-form-input">
                         <form action="" method="post">
                             <div class="form-group">
                                 <label for="">Email</label>
@@ -237,13 +264,20 @@
 
                             <div class="payment-method mt-2">
                                 <div class="form-group">
-                                    <label for="">Payments</label>
-
-                                    <div class="hstack gap-2">
-
-                                        <div class="kotak">QRIS</div>
-                                        <div class="kotak">OVO</div>
-                                        <div class="kotak">SHOPE</div>
+                                    <label for="">Pilih Pembayaran</label>
+                                    <div class="hstack mt-2" id="theme_profile">
+                                        <label>
+                                            <input class="form-check-input" type="radio" name="theme" value="light">
+                                            <img src="{{ asset('assets/ovo.jpg') }}" alt="light">
+                                        </label>
+                                        <label>
+                                            <input class="form-check-input" type="radio" name="theme" value="dark">
+                                            <img src="{{ asset('assets/qris.png') }}" alt="dark">
+                                        </label>
+                                        <label>
+                                            <input class="form-check-input" type="radio" name="theme" value="dark">
+                                            <img src="{{ asset('assets/shopeepay.png') }}" alt="dark">
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -251,12 +285,118 @@
                     </div>
                 </div>
 
-
             </div>
             <div class="card-footer border-0 mb-5">
-                <a href="#" id="btnAddToCart" class="btn btn-success bg-success bg-gradient w-100">Bayar Sekarang -
+                <a href="#" id="btnAddToCart" class="btn text-white bg-danger bg-gradient w-100">Bayar Sekarang -
                     Rp. 30.0000</a>
+                <a href="{{ route('owner') }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Kembali Belanja</a>
+            </div>
+        </div>
+    </section> --}}
+    <section id="checkout" class="">
+        <div class="card border-0 h-100">
+            <div class="card-body">
 
+                <div class="card">
+                    <div class="card-body">
+                        <small>Order Summary</small>
+
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Total Item</td>
+                                    <td class="text-end">4 items</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="p-0">
+                                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                                            <div class="accordion-item border-0">
+                                                <h2 class="accordion-header">
+                                                    <button class="accordion-button bg-white shadow-none" type="button"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                                                        aria-controls="panelsStayOpen-collapseOne">
+                                                        List Item
+                                                    </button>
+                                                </h2>
+                                                <div id="panelsStayOpen-collapseOne"
+                                                    class="accordion-collapse collapse show">
+                                                    <div class="accordion-body py-0 px-2">
+
+                                                        <div class="hstack justify-content-between">
+                                                            <ol class="mt-2">
+                                                                <li><span>Char PB (1x)</span></li>
+                                                                <li><span>Valorant cheat (2x)</span></li>
+                                                                <li><span>Ninja Saga (1x)</span></li>
+                                                            </ol>
+    
+                                                            <ul class="mt-2" style="list-style-type: none">
+                                                                <li><span>Rp. 20.000</span></li>
+                                                                <li><span>Rp. 10.000</span></li>
+                                                                <li><span>Rp. 30.000</span></li>
+                                                            </ul>
+
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Fee platform</td>
+                                    <td class="text-end">Rp. 10.000</td>
+                                </tr>
+                                <tr>
+                                    <th>Total</th>
+                                    <td class="text-end fw-bold">Rp. 30.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card border-0 mt-2">
+                    <div class="card-body card-form-input">
+                        <form action="" method="post">
+                            <div class="form-group">
+                                <label for="">Email</label>
+                                <input class="form-control shadow-none" type="email" name="" id="">
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="">Nama</label>
+                                <input class="form-control shadow-none" type="text" name="" id=""
+                                    required>
+                            </div>
+
+                            <div class="payment-method mt-2">
+                                <div class="form-group">
+                                    <label for="">Pilih Pembayaran</label>
+                                    <div class="hstack mt-2" id="theme_profile">
+                                        <label>
+                                            <input class="form-check-input" type="radio" name="theme" value="light">
+                                            <img src="{{ asset('assets/ovo.jpg') }}" alt="light">
+                                        </label>
+                                        <label>
+                                            <input class="form-check-input" type="radio" name="theme" value="dark">
+                                            <img src="{{ asset('assets/qris.png') }}" alt="dark">
+                                        </label>
+                                        <label>
+                                            <input class="form-check-input" type="radio" name="theme" value="dark">
+                                            <img src="{{ asset('assets/shopeepay.png') }}" alt="dark">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-footer border-0">
+                <a href="#" id="btnAddToCart" class="btn text-white bg-danger bg-gradient w-100">Bayar Sekarang - Rp. 30.0000</a>
+                <a href="{{ route('owner') }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Kembali Belanja</a>
             </div>
         </div>
     </section>

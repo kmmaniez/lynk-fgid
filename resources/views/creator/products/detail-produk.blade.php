@@ -199,11 +199,38 @@
     </script>
 </html> --}}
 @extends('layouts.products')
-
+@push('styles')
+    <style>
+        .wrapper{
+            overflow-y: hidden;
+        }
+    </style>
+@endpush
 @section('produk')
-    <section id="produk" class="px-2 mt-2">
+    <section id="produk-detail" class="">
+        <div class="card border-0 h-100">
+            <img src="{{ asset('assets/bg-3.jpg') }}" style="width: 100%; height: 240px;"
+                class="rounded-none" alt="...">
+            <div class="card-body">
+                <h2 class="mb-3">Joki Game Valorant</h2>
+                <div class="form-group">
+                    <label for=""><small>Berapa yang akan anda bayar</small></label>
+                    <input type="number" class="form-control shadow-none" step="200" min="3000" name="" id="">
+                </div>
+                <div class="form-group mt-3">
+                    <label for=""><small class="text-secondary fw-semibold">Deskripsi</small></label>
+                    <span class="d-block mt-2">Deskripsi produk</span>
+                </div>
+            </div>
+            <div class="card-footer border-0">
+                <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">Beli Sekarang</a>
+                <a href="{{ route('owner') }}" id="" class="btn mt-2 w-100">Kembali</a>
+            </div>
+        </div>
+    </section>
+    {{-- <section id="produk" class="px-2 mt-2">
 
-        <div class="card h-100">
+        <div class="card border-0 h-100">
             <img src="{{ asset('assets/user2.jpg') }}" style="width: 100%; height: 240px;"
                 class="card-img-top" alt="...">
             <div class="card-body px-2">
@@ -223,5 +250,5 @@
 
             </div>
         </div>
-    </section>
+    </section> --}}
 @endsection

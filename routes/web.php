@@ -87,7 +87,7 @@ Route::prefix('awkarin')->group(function () {
     })->name('owner');
     Route::get('/detail', function () {
         return view('creator.products.detail-produk');
-    });
+    })->name('detail');
     
 });
 
