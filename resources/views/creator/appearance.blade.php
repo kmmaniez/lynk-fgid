@@ -79,12 +79,12 @@
                         <div class="hstack gap-3 mt-2" id="theme_profile">
                             <label>
                                 <input class="form-check-input" type="radio" name="theme" value="light" checked>
-                                <img src="{{ asset('assets/default-col.png') }}" width="164" height="164" alt="light">
+                                <img src="{{ asset('assets/light-theme.png') }}" width="164" height="164" alt="light">
                                 <span>Light</span>
                             </label>
                             <label>
                                 <input class="form-check-input" type="radio" name="theme" value="dark">
-                                <img src="{{ asset('assets/grid.png') }}" width="164" height="164" alt="dark">
+                                <img src="{{ asset('assets/dark-theme.png') }}" width="164" height="164" alt="dark">
                                 <span>Dark</span>
                             </label>
                         </div>
