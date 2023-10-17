@@ -10,14 +10,15 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="detail">
-                                <span class="fw-semibold">Tanggal : 24/10/2023</span>
-                                <div class="list-item my-2">
-                                    <span class="d-block">Detail Item :</span>
+                                {{-- <span class="fw-semibold">Tanggal : 24/10/2023</span> --}}
+                                <div class="list-item">
+                                    <span class="">Detail Item :</span>
+                                    <span>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</span>
                                     <ul class="m-0">
-                                        <li>Joki Valorant (1x) | Rp. 20.000</li>
-                                        @if ($i%3===0)
+                                        {{-- <li>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</li> --}}
+                                        {{-- @if ($i%3===0)
                                         <li>Jasa Social Media (4x) | Rp. 5.000</li>
-                                        @endif
+                                        @endif --}}
                                     </ul>
                                 </div>
                                 <span class="d-block"><strong>Total : Rp. 25.000</strong></span>

@@ -21,7 +21,8 @@
         }
         body{
             display: flex;
-            background-color: rgb(227, 226, 255);
+            /* background-color: rgb(227, 226, 255); */
+            background-color: #121212;
             justify-content: center;
         }
         .bg-dark-cover{
@@ -56,13 +57,15 @@
         }
         .wrapper{
             width: 820px;
-            height: 100vh;
-            border: 1px solid #e1e1e1;
-            background-color: #fff;
+            /* height: 100vh; */
+            min-height: 100vh;
+            max-height: max-content;
+            /* border: 1px solid #e1e1e1; */
+            /* background-color: #fff; */
             margin: 0 auto;
             /* overflow: hidden; */
-            /* overflow-y: scroll;  */
-            /* overflow-x: hidden; */
+            /* overflow-y: scroll; 
+            overflow-x: hidden; */
             position: relative;
         }
         footer{
@@ -73,31 +76,6 @@
             position: fixed;
             bottom: 0;
             padding: 8px 0;
-        }
-        #coverprofile{
-            content: '';
-            background: url('{{ asset("assets/user6.jpg") }}');
-            object-fit: cover;
-            background-size: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        #coverprofile::after{
-            content: '';
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            z-index: 1;
-            left: 0;
-            background-color: rgba(25, 25, 25, 0.615);
-        }
-        .header span{
-            color: #fff;
-            text-shadow: 0 0 10px rgb(38, 38, 38);
         }
         section{
             padding: 0px 16px 48px 16px;
@@ -169,14 +147,14 @@
 </head>
 
 <body>
-    <div class="wrapper" style="">
+    <div class="wrapper {{ (Request::routeIs('owners') ? 'bg-dark' : 'bg-white') }}" style="">
 
         <nav class="navbar px-4 bg-primary sticky-top bg-body-tertiary">
               <a class="navbar-brand" href="{{ route('admin') }}">
                 <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150"
                     class="d-inline-block align-text-top">
             </a>
-            @if (!Request::routeIs('checkout') && !Request::routeIs('owner'))
+            @if (Request::routeIs('detail'))
             <div class="cart">
                 <i data-feather="shopping-cart" class="text-success"></i> 
             </div>
@@ -491,7 +469,7 @@
         </div>
         @endif
 
-        @if (Request::routeIs('owner'))
+        @if (Request::routeIs('owner') || Request::routeIs('light'))
         <footer class="text-dark text-center text-uppercase fw-semibold">
             <span>FGID Community</span>
         </footer>

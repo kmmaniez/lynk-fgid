@@ -180,7 +180,8 @@
     </style> --}}
     <style>
         .wrapper{
-            overflow-y: hidden;
+            /* height: max-content; */
+            /* overflow-y: hidden; */
         }
     </style>
 @endpush
@@ -394,7 +395,7 @@
                 </div>
 
             </div>
-            <div class="card-footer border-0">
+            <div class="card-footer bg-white border-0">
                 <a href="#" id="btnAddToCart" class="btn text-white bg-danger bg-gradient w-100">Bayar Sekarang - Rp. 30.0000</a>
                 <a href="{{ route('owner') }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Kembali Belanja</a>
             </div>
