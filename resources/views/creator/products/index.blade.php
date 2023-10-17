@@ -201,6 +201,34 @@
             text-shadow: 0 0 10px rgb(38, 38, 38);
         }
     </style> --}}
+    <style>
+        .header span{
+            user-select: none;
+            color: #fff;
+            text-shadow: 0 0 10px rgb(38, 38, 38);
+        }
+        #coverprofile{
+            content: '';
+            /* background: url('{{ asset("assets/user6.jpg") }}'); */
+            object-fit: cover;
+            background-size: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        #coverprofile::after{
+            content: '';
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            background-color: rgba(25, 25, 25, 0.615);
+        }
+    </style>
 @endpush
 @section('produk')
     {{-- <section id="wrap" class="bg-dark">
@@ -346,7 +374,7 @@
     <section id="wrap" class="bg-dark">
         <div class="header" style="">
             <div class="card rounded-0 border-0 text-center position-relative" style="z-index: 1">
-                <div id="coverprofile"></div>
+                <div id="coverprofile" style="background: url('{{ asset('assets/user6.jpg') }}')"></div>
                 <div class="card-body vstack gap-3 align-items-center">
                     <img src="{{ asset('assets/user6.jpg') }}" style="width: 5rem; height: 5rem;" 
                         class="rounded-circle border border-secondary-subtle border-3 object-fit-cover" alt="...">
