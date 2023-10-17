@@ -222,7 +222,7 @@
                     <span class="d-block mt-2">Deskripsi produk</span>
                 </div>
             </div>
-            <div class="card-footer border-0">
+            <div class="card-footer bg-white border-0">
                 <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">Beli Sekarang</a>
                 <a href="{{ route('owner') }}" id="" class="btn mt-2 w-100">Kembali</a>
             </div>
