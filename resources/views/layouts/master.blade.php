@@ -152,10 +152,10 @@
                         <a href="{{ route('history') }}" class="nav-link {{ (Request::routeIs('history') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">History
                             Settings</a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{ route('payout') }}" class="nav-link {{ (Request::routeIs('payout') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Payout
                             Settings</a>
-                    </li>
+                    </li> --}}
                 </div>
 
                 <li>
