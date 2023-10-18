@@ -18,8 +18,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'username',
         'name',
         'email',
+        'phone',
+        'coverimage',
+        'photo',
+        'description',
+        'account_type',
+        'theme',
         'password',
     ];
 
@@ -42,4 +49,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    
+    public function banks()
+    {
+        return $this->hasOne(BankAccount::class);
+    }
+
+    
 }
