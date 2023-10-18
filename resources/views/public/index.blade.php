@@ -134,12 +134,14 @@
         section{
             color: #fff;
         }
-        section .card-style{
+        .card-style{
             background-color: #191d20;
+            /* background-color: blueviolet; */
+            padding-bottom: 16px;
             color: #fff;
             box-shadow: 0px 0px 24px #191b1e;
         }
-        section .card-style:is(:hover){
+        .card-style:is(:hover){
             outline: 3px solid salmon;
             cursor: pointer;
         }
@@ -153,9 +155,6 @@
             #avatar{
                 display: none;
             }
-            .card-body span{
-                display: none;
-            }
 
             section#creators .card-title{
                 margin-top: 0;
@@ -163,7 +162,9 @@
             #card-benefit:is(:hover){
                 transform: none;
             }
-
+            .card-style{
+                padding-bottom: 0;
+            }
             section#creators .card-text{
                 display: none;
             }
@@ -250,28 +251,25 @@
         <section id="creators" class="mt-5">
             <h2>Featured Streamers & Gamers</h2>
             <span>Discover the best streaming entertaiment</span>
-
             <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
                 {{-- row-cols-md-5 --}}
-                @for ($i = 1; $i <= 6; $i++)
-                    <div class="col">
-                        <a href="{{ route('owner') }}" class="text-decoration-none">
-                            <div class="card card-style h-100 rounded-4 border-0">
-                                <img id="img-cover" src="{{ asset('assets/user' . $i . '.jpg') }}" style="width: 100%; height: 120px;"
-                                    class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
-                                <div class="card-body position-relative">
-                                    <img id="avatar" src="{{ asset('assets/user' . $i . '.jpg') }}"
-                                        class="rounded-circle object-fit-cover border border-white border-3"
-                                        style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
-                                    <h5 class="card-title">Creator {{ $i }}</h5>
-                                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                        Sunt, aspernatur!</p>
-                                    <span class="badge rounded-pill px-2">Singer</span>
-                                </div>
+                @foreach ($creators as $creator)
+                <div class="col">
+                    <a href="{{ route('public.user', $creator->username) }}" class="text-decoration-none">
+                        <div class="card card-style rounded-4 border-0 h-100">
+                            <img id="img-cover" src="{{ asset('assets/user1.jpg') }}" style="width: 100%; height: 120px;"
+                                class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
+                            <div class="card-body position-relative">
+                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/user1.jpg') }}"
+                                    class="rounded-circle object-fit-cover border border-white border-3"
+                                    style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
+                                <h5 class="card-title">{{ $creator->username }}</h5>
+                                <p class="card-text text-dark-subtle">{{ $creator->description }}</p>
                             </div>
-                        </a>
-                    </div>
-                @endfor
+                        </div>
+                    </a>
+                </div>
+                @endforeach
             </div>
         </section>
 
