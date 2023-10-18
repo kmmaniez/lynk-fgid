@@ -99,6 +99,7 @@
             background-color: #191d20;
             color: #fff;
             box-shadow: 0px 0px 24px #191b1e;
+            padding-bottom: 16px;
         }
         section{
             color: #fff;
@@ -142,6 +143,9 @@
             text-shadow: 0px 8px 16px #191d20;
         }
         @media (max-width: 820px) {
+            h5{
+                font-size: 1rem;
+            }
             section#hero{
                 height: max-content;
                 background-image: none;
@@ -167,6 +171,9 @@
             }
             #card-benefit:is(:hover){
                 transform: none;
+            }
+            .card{
+                padding-bottom: 0;
             }
 
             .card-text{
@@ -203,53 +210,48 @@
             <span>Discover the best streaming entertaiment</span>
 
             <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
-                @for ($i = 1; $i <= 10; $i++)
-                    <div class="col">
-                        <a href="/awkarin" class="text-decoration-none">
-                            <div class="card h-100 rounded-4 border-0">
-                                <img src="{{ asset('assets/user' . rand(1,6) . '.jpg') }}" loading="lazy" style="width: 100%; height: 120px;"
-                                    class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
-                                <div class="card-body position-relative">
-                                    <img id="avatar" src="{{ asset('assets/user' . rand(1,6) . '.jpg') }}"
-                                        class="rounded-circle object-fit-cover border border-white border-3"
-                                        style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
-                                    <h5 class="card-title">Creator {{ $i }}</h5>
-                                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                        Sunt, aspernatur!</p>
-                                    <span class="badge rounded-pill px-2">Singer</span>
-                                </div>
+                @foreach ($creatorFeatured as $creator)
+                <div class="col">
+                    <a href="{{ route('public.user', $creator->username) }}" title="{{ $creator->username }}" class="text-decoration-none">
+                        <div class="card h-100 rounded-4 border-0">
+                            <img src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/user1.jpg') }}" loading="lazy" style="width: 100%; height: 120px;"
+                                class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
+                            <div class="card-body position-relative">
+                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/user1.jpg') }}"
+                                    class="rounded-circle border border-white border-3"
+                                    style="width: 96px; height: 96px;" loading="lazy" alt="creator-avatar" srcset="">
+                                <h5 class="card-title">{{ $creator->username }}</h5>
+                                <p class="card-text">{{ $creator->description }}</p>
+                                {{-- <span class="badge rounded-pill px-2">Singer</span> --}}
                             </div>
-                        </a>
-
-                    </div>
-                @endfor
+                        </div>
+                    </a>
+                </div>
+                @endforeach
             </div>
         </section>
 
         <section id="recently" class="mt-5 py-4">
             <h2>Recently Joined</h2>
             <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
-                @for ($i = 1; $i <= 10; $i++)
-                    <div class="col">
-                        <a href="/awkarin" class="text-decoration-none">
 
-                            <div id="card-recent" class="card h-100 rounded-4 border-0">
-                                <img src="{{ asset('assets/user' . rand(1,6) . '.jpg') }}" loading="lazy" style="width: 100%; height: 120px;"
-                                    class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
-                                <div class="card-body position-relative">
-                                    <img id="avatar" src="{{ asset('assets/user' . rand(1,6) . '.jpg') }}"
-                                        class="rounded-circle object-fit-cover border border-white border-3"
-                                        style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
-                                    <h5 class="card-title">Creator {{ $i }}</h5>
-                                    <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                                        Sunt, aspernatur!</p>
-                                    <span class="badge rounded-pill px-2">Singer</span>
-                                </div>
+                @foreach ($creatorRecents as $creator)
+                <div class="col">
+                    <a href="{{ route('public.user', $creator->username) }}" class="text-decoration-none">
+                        <div id="card-recent" class="card card-style h-100 rounded-4 border-0">
+                            <img src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/user1.jpg') }}" loading="lazy" style="width: 100%; height: 120px;"
+                                class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="Photo">
+                            <div class="card-body position-relative">
+                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/user1.jpg') }}"
+                                    class="rounded-circle object-fit-cover border border-white border-3"
+                                    style="width: 96px; height: 96px;" loading="lazy" alt="creator-avatar" srcset="">
+                                <h5 class="card-title">{{ $creator->username }}</h5>
+                                <p class="card-text">{{ $creator->description }}</p>
                             </div>
-                        </a>
-
-                    </div>
-                @endfor
+                        </div>
+                    </a>
+                </div>
+                @endforeach
             </div>
         </section>
     </div>
