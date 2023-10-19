@@ -67,10 +67,7 @@
             font-size: 12px;
             font-weight: normal;
         }
-        .card{
-            /* outline: 2px solid #eaeaea; */
-        }
-        .card:is(:hover){
+        section#creators .card:is(:hover), section#recently .card:is(:hover){
             outline: 3px solid salmon;
             cursor: pointer;
         }
@@ -95,7 +92,7 @@
                 display: none;
             }
         }
-        .card{
+        section#creators .card, section#recently .card{
             background-color: #191d20;
             color: #fff;
             box-shadow: 0px 0px 24px #191b1e;
@@ -114,7 +111,7 @@
         .container{
             overflow-x: hidden;
         }
-        .card-title{
+        section#creators .card-title, section#recently .card-title{
             margin-top: 48px;
         }
 
@@ -162,17 +159,17 @@
             #avatar{
                 display: none;
             }
-            .card-body span{
+            section#creators .card-body span, section#recently .card-body span{
                 display: none;
             }
 
-            section .card-title{
+            section#creators .card-title, section#recently .card-title{
                 margin-top: 0;
             }
             #card-benefit:is(:hover){
                 transform: none;
             }
-            .card{
+            section#creators .card, section#recently .card{
                 padding-bottom: 0;
             }
 
@@ -182,6 +179,40 @@
             .row-benefit{
                 row-gap: 8px;
             }
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .searchbox::-webkit-scrollbar{
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .searchbox {
+            -ms-overflow-style: none; 
+            scrollbar-width: none; 
+        }
+        .searchbox{
+            width: 100%;
+            /* height: 180px; */
+            min-height: 100%;
+            max-height: 180px;
+            /* display: none; */
+            visibility: hidden;
+            /* height: 180px; */
+            overflow-y: scroll;
+            /* scroll-snap-align: x mandatory; */
+            position: absolute;
+            /* bottom: -11.5rem; */
+            transform: translateY(0.5rem);
+            left: 0;
+        }
+        .searchbox.show{
+            /* visibility: visible; */
+            /* height: 180px; */
+            /* transform: translateY(0.5rem); */
+            /* transition: all 500ms linear; */
+        }
+        .searchbox .card:nth-child(odd){
+            /* background-color: red; */
         }
     </style>
 @endpush
@@ -194,15 +225,32 @@
                 <h1>Discover Creators, Inspire Content </h1>
 
                 <div class="position-relative mt-3 mb-3">
-                    <input type="text" class="form-control shadow-none border-danger w-100 pe-2 py-3" placeholder="Search...    " aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <input id="search-input" type="text" class="form-control shadow-none border-danger w-100 pe-2 py-3" placeholder="Search..." aria-label="Recipient's username" aria-describedby="button-addon2">
                     <button id="claim" class="btn btn-md btn-danger fw-bold position-absolute" style="width: 120px;" type="button" id="button-addon2">Search</button>
+                    <div class="searchbox vstack gap-2 p-2 bg-white rounded-1">
+                        {{-- <div class="card">
+                            <div class="card-body">
+                                <span>Lorem ipsum dolor sit amet.</span>
+                            </div>
+                        </div> --}}
+                        {{-- <div class="card">
+                            <div class="card-body">
+                                <span>Lorem ipsum dolor sit amet.</span>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <span>Lorem ipsum dolor sit amet.</span>
+                            </div>
+                        </div><div class="card">
+                            <div class="card-body">
+                                <span>Lorem ipsum dolor sit amet.</span>
+                            </div>
+                        </div> --}}
+                    </div>
                 </div>
 
             </div>
-            {{-- <div class="preview flex-grow-1">
-                <img src="{{ asset('assets/valorant.jpg') }}" class="object-fit-contain" style="width: 100%; height: 600px;"
-                    alt="" srcset="">
-            </div> --}}
         </section>
 
         <section id="creators" class="mt-5">
@@ -218,7 +266,7 @@
                                 class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
                             <div class="card-body position-relative">
                                 <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/user1.jpg') }}"
-                                    class="rounded-circle border border-white border-3"
+                                    class="rounded-circle object-fit-cover border border-white border-3"
                                     style="width: 96px; height: 96px;" loading="lazy" alt="creator-avatar" srcset="">
                                 <h5 class="card-title">{{ $creator->username }}</h5>
                                 <p class="card-text">{{ $creator->description }}</p>
@@ -256,3 +304,90 @@
         </section>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        const btn = document.querySelector('#claim');
+        const searchbox = document.querySelector('.searchbox');
+
+        $('#search-input').on('change', (e) => {
+            fetch('/search?username=' + e.target.value)
+                .then(response => response.json())
+                .then(data => {
+                    // const users = data.user;
+                    $('.searchbox').css('visibility', 'visible');
+                    let listUsers = [];
+                    $('.searchbox').empty()
+                    if (data.user.length > 0) {
+                        listUsers.push(...data.user)
+                        // $.each(listUsers, function(index, results) {
+                        //     console.log(results);
+                        //     let card = `
+                        //     <div class="card result-item">
+                        //         <div class="card-body">
+                        //             <span>${results.username}</span>
+                        //         </div>
+                        //     </div>
+                        //     `;
+                        //     $('.searchbox').append(card);
+                        // });
+
+                        listUsers.forEach(item => {
+                            let url = item.photo;
+                            let photoUrl = url.replace('public','storage');
+                            let card = `
+                            <div class="card result-item">
+                                <div class="card-body hstack gap-3">
+                                    <img src="${photoUrl}"
+                                    class="rounded-2 object-fit-cover"
+                                    style="width: 48px; height: 48px;" loading="lazy" alt="" srcset="">
+                                    <a href="/@${item.username}" class="text-decoration-none">${item.username}</a>
+                                </div>
+                            </div>
+                            `;
+                            $('.searchbox').append(card);
+                        });
+                    }else{
+                        $('.searchbox').html(`
+                            <div class="card empty">
+                                <div class="card-body">
+                                    <span>${data.message}</span>
+                                </div>
+                            </div>
+                        `);
+                    }
+
+                    if (e.target.textLength === 0) {
+                        listUsers = [];
+                        $('.searchbox').html(`
+                            <div class="card empty">
+                                <div class="card-body">
+                                    <span>No Results Found!</span>
+                                </div>
+                            </div>
+                        `);
+                    };
+                    console.log(data);
+                })
+            // $('.searchbox').css('visibility', 'visible');
+        })
+
+        $('#claim').on('click', (e) => {
+            e.preventDefault();
+                const card = `
+                <div class="card">
+                    <div class="card-body">
+                        <span>Lorem ipsum dolor sit amet.</span>
+                    </div>
+                </div>
+                `;
+                $('.searchbox').append(card);
+            })
+
+        $('.searchbox').on('mouseleave', (e) => {
+            $('.searchbox').css('visibility', 'hidden');
+        })
+        // $('#search-input').on('keyup', function() {
+        //     $('#searchbox').css('visibility', 'visible');
+        // });
+    </script>
+@endpush
