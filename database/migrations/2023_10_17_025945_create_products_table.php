@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            $table->string('slug')->nullable();
+            $table->string('slug');
             $table->string('thumbnail')->nullable();
             $table->string('images')->nullable();
             $table->string('description')->nullable();
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('min_price')->nullable();
             $table->integer('max_price')->nullable();
             $table->text('messages')->nullable();
-            $table->enum('CTA',[self::CTA])->default(self::CTA[0]);
+            $table->enum('cta_text',[self::CTA])->default(self::CTA[0]);
             $table->enum('layout',[self::LAYOUT])->default(self::LAYOUT[0]);
             $table->timestamps();
         });
