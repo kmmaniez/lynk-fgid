@@ -69,8 +69,7 @@
         <div class="card border-0">
             <div class="card-body">
                 <h3>Create Link</h3>
-                @dump($errors)
-                {{-- @dump($user) --}}
+                
                 <form id="form" action="{{ route('products.linkupdate', $product->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
