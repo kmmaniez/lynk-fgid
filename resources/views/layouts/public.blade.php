@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bootstrap demo</title>
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> --}}
 
     <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap5/css/bootstrap.min.css') }}">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
@@ -97,19 +96,22 @@
 
       <nav class="navbar navbar-expand-lg sticky-top" style="height: 4rem;">
         <div class="container d-flex justify-content-between">
-          <a class="navbar-brand" href="#">
+          <a class="navbar-brand" href="/">
             <img src="{{ asset('assets/logo.png') }}" id="logo" alt="Logo" class="d-inline-block align-text-top">
           </a>
           @auth
+          <div class="hstack">
+            <span class=""><a href="{{ route('public.discover') }}" class="text-white text-decoration-none" id="">Discover</a></span>
             <form action="{{ route('logout') }}" method="post">
               @csrf
               <button id="btnLogin" class="btn btn-md rounded-pill px-4">Logout</button>
             </form>
+          </div>
           @endauth
 
           @guest
           <div class="hstack">
-            <span class=""><a href="{{ route('discover') }}" class="text-white text-decoration-none" id="">Discover</a></span>
+            <span class=""><a href="{{ route('public.discover') }}" class="text-white text-decoration-none" id="">Discover</a></span>
             <a href="{{ route('login') }}" id="btnLogin" class="btn btn-md rounded-pill">Login</a>
           </div>
           
@@ -144,6 +146,10 @@
         feather.replace();
     </script>
     <script src="{{ asset('assets/vendor/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets') }}/vendor/jquery/jquery.min.js"></script>
+    <script src="{{ asset('assets') }}/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    @stack('scripts')
     
   </body>
 </html>
