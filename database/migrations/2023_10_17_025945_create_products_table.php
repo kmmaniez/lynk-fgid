@@ -17,7 +17,8 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            $table->string('slug');
+            $table->enum('type',['link','digital']);
+            $table->string('slug')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('images')->nullable();
             $table->string('description')->nullable();
