@@ -52,13 +52,17 @@
                         <div class="card-header bg-transparent">
                             <div class="hstack justify-content-between">
                                 <span>Rekening Pembayaran</span>
-                                <a href="{{ route('manage-rekening') }}" title="Manage Rekening Pembayaran"
+                                <a href="{{ route('profile.manage-rekening') }}" title="Manage Rekening Pembayaran"
                                     class="text-decoration-none text-success fw-medium"><i data-feather="credit-card"
                                         style="width: 16px; height:16px;"></i> Manage Rekening</a>
                             </div>
                         </div>
                         <div class="card-body">
-                            <small class="text-secondary">anda belum mengatur rekening pembayaran</small>
+                            @if ($user->banks)
+                                <p>{{ $user->banks->bank_name }}</p>
+                            @else
+                                <small class="text-secondary">anda belum mengatur rekening pembayaran</small>
+                            @endif
                         </div>
                     </div>
     

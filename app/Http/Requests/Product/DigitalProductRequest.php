@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Product;
 
 use App\Enums\CtaEnum;
-use App\Enums\ProductEnum;
+use App\Enums\LayoutEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -14,7 +14,7 @@ class DigitalProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**

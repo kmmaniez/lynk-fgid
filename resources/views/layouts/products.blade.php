@@ -21,9 +21,11 @@
         }
         body{
             display: flex;
-            /* background-color: rgb(227, 226, 255); */
-            background-color: #121212;
+            /* background-color: #121212; */
             justify-content: center;
+        }
+        .bg-light-cover{
+            background-color: rgb(227, 226, 255);
         }
         .bg-dark-cover{
             background-color: #121212;
@@ -146,261 +148,30 @@
     @stack('styles')
 </head>
 
-<body>
-    <div class="wrapper {{ (Request::routeIs('owners') ? 'bg-dark' : 'bg-white') }}" style="">
+<body 
+    class="{{ ($user->theme == "light") ? 'bg-light-cover' : 'bg-dark'}}">
+
+    <div class="wrapper {{ ($user->theme == "light") ? 'bg-white' : 'bg-dark-cover' }}" style="">
 
         <nav class="navbar px-4 bg-primary sticky-top bg-body-tertiary">
               <a class="navbar-brand" href="{{ route('admin') }}">
                 <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150"
                     class="d-inline-block align-text-top">
             </a>
-            @if (Request::routeIs('detail'))
+            @if (Request::routeIs('public.userproduct'))
             <div class="cart">
                 <i data-feather="shopping-cart" class="text-success"></i> 
             </div>
             @endif
         </nav>
 
-        {{-- <main> --}}
-        {{-- <section id="wrap" class="bg-dark">
-            <div class="header" style="">
-                <div class="card rounded-0 border-0 text-center position-relative" style="z-index: 1">
-                    <div id="coverprofile"></div>
-                    <div class="card-body vstack gap-3 align-items-center">
-                        <img src="{{ asset('assets/user6.jpg') }}" style="width: 5rem; height: 5rem;" 
-                            class="rounded-circle border border-secondary-subtle border-3 object-fit-cover" alt="...">
-                        <span><strong>@username</strong></span>
-                        <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, adipisci?</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="list-products mt-2">
-                <div class="row gap-2">
-                    <div class="col-12">
-                        <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card bg-dark-cover text-center">
-                                <div class="card-body">
-                                    <span>Lorem ipsum adipisicing elit. Repellat!</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12">
-                        <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card bg-dark-cover ">
-                                <div class="card-body d-flex flex-start align-items-center gap-3">
-                                    <img src="{{ asset('assets/user1.jpg') }}" style="width: 4rem; height: 4rem;" class="card-img-top" alt="...">
-                                    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat!</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col">
-                                <a href="/awkarin/detail" class="text-decoration-none">
-                                    <div class="card bg-dark-cover  h-100">
-                                        <img src="{{ asset('assets/user1.jpg') }}" style="width: 100%; height: 120px;"
-                                            class="card-img-top object-fit-cover" alt="...">
-                                        <div class="card-body">
-                                            <h6>Judul</h6>
-                                            <span><strong>Rp. 5.000</strong></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col">
-                                <a href="/awkarin/detail" class="text-decoration-none">
-                                    <div class="card bg-dark-cover h-100">
-                                        <img src="{{ asset('assets/user3.jpg') }}" style="width: 100%; height: 120px;"
-                                            class="card-img-top object-fit-cover" alt="...">
-                                        <div class="card-body">
-                                            <h6>Judul</h6>
-                                            <span><strong>Rp. 5.000</strong></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card bg-dark-cover  h-100">
-                                <img src="{{ asset('assets/user2.jpg') }}" style="width: 100%; height: 240px;"
-                                    class="card-img-top object-fit-cover" alt="...">
-                                <div class="card-body">
-                                    <h6>Judul</h6>
-                                    <span><strong>Rp. 5.000</strong></span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12">
-                        <a href="/awkarin/detail" class="text-decoration-none">
-                            <div class="card bg-dark-cover  text-center">
-                                <div class="card-body">
-                                    <span>Lorem ipsum adipisicing elit. Repellat!</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-6">
-                                <a href="/awkarin/detail" class="text-decoration-none">
-                                    <div class="card bg-dark-cover h-100">
-                                        <img src="{{ asset('assets/user6.jpg') }}" style="width: 100%; height: 120px;"
-                                            class="card-img-top object-fit-cover" alt="...">
-                                        <div class="card-body">
-                                            <h6>Judul</h6>
-                                            <span><strong>Rp. 5.000</strong></span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section> --}}
         @yield('produk')
 
-        {{-- <section id="checkout" class="">
-            <div class="card border-0 h-100">
-                <div class="card-body">
-    
-                    <div class="card">
-                        <div class="card-body">
-                            <small>Order Summary</small>
-    
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>Total Item</td>
-                                        <td class="text-end">4 items</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" class="p-0">
-                                            <div class="accordion" id="accordionPanelsStayOpenExample">
-                                                <div class="accordion-item border-0">
-                                                    <h2 class="accordion-header">
-                                                        <button class="accordion-button bg-white shadow-none" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                                            aria-controls="panelsStayOpen-collapseOne">
-                                                            List Item
-                                                        </button>
-                                                    </h2>
-                                                    <div id="panelsStayOpen-collapseOne"
-                                                        class="accordion-collapse collapse show">
-                                                        <div class="accordion-body py-0 px-2">
-    
-                                                            <div class="hstack justify-content-between">
-                                                                <ol class="mt-2">
-                                                                    <li><span>Char PB (1x)</span></li>
-                                                                    <li><span>Valorant cheat (2x)</span></li>
-                                                                    <li><span>Ninja Saga (1x)</span></li>
-                                                                </ol>
-        
-                                                                <ul class="mt-2" style="list-style-type: none">
-                                                                    <li><span>Rp. 20.000</span></li>
-                                                                    <li><span>Rp. 10.000</span></li>
-                                                                    <li><span>Rp. 30.000</span></li>
-                                                                </ul>
-    
-                                                            </div>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fee platform</td>
-                                        <td class="text-end">Rp. 10.000</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total</th>
-                                        <td class="text-end fw-bold">Rp. 30.000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-    
-                    <div class="card border-0 mt-2">
-                        <div class="card-body card-form-input">
-                            <form action="" method="post">
-                                <div class="form-group">
-                                    <label for="">Email</label>
-                                    <input class="form-control shadow-none" type="email" name="" id="">
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label for="">Nama</label>
-                                    <input class="form-control shadow-none" type="text" name="" id=""
-                                        required>
-                                </div>
-    
-                                <div class="payment-method mt-2">
-                                    <div class="form-group">
-                                        <label for="">Pilih Pembayaran</label>
-                                        <div class="hstack mt-2" id="theme_profile">
-                                            <label>
-                                                <input class="form-check-input" type="radio" name="theme" value="light">
-                                                <img src="{{ asset('assets/ovo.jpg') }}" alt="light">
-                                            </label>
-                                            <label>
-                                                <input class="form-check-input" type="radio" name="theme" value="dark">
-                                                <img src="{{ asset('assets/qris.png') }}" alt="dark">
-                                            </label>
-                                            <label>
-                                                <input class="form-check-input" type="radio" name="theme" value="dark">
-                                                <img src="{{ asset('assets/shopeepay.png') }}" alt="dark">
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-    
-                </div>
-                <div class="card-footer border-0">
-                    <a href="#" id="btnAddToCart" class="btn text-white bg-danger bg-gradient w-100">Bayar Sekarang - Rp. 30.0000</a>
-                    <a href="{{ route('owner') }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Kembali Belanja</a>
-                </div>
-            </div>
-        </section> --}}
-        {{-- </main> --}}
-        {{-- <section id="produk-detail" class="">
-            <div class="card border-0 h-100">
-                <img src="{{ asset('assets/bg-3.jpg') }}" style="width: 100%; height: 240px;"
-                    class="rounded-none" alt="...">
-                <div class="card-body">
-                    <h2 class="mb-3">Joki Game Valorant</h2>
-                    <div class="form-group">
-                        <label for=""><small>Berapa yang akan anda bayar</small></label>
-                        <input type="number" class="form-control shadow-none" step="200" min="3000" name="" id="">
-                    </div>
-                    <div class="form-group mt-3">
-                        <label for=""><small class="text-secondary fw-semibold">Deskripsi</small></label>
-                        <span class="d-block mt-2">Deskripsi produk</span>
-                    </div>
-                </div>
-                <div class="card-footer border-0">
-                    <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">Beli Sekarang</a>
-                    <a href="{{ route('owner') }}" id="" class="btn mt-2 w-100">Kembali</a>
-                </div>
-            </div>
-        </section> --}}
-
-        @if (Request::routeIs('detail'))
+        @if (Request::routeIs('public.userproduct'))
         <div class="cart-info">
             <div id="card-detail" class="card w-100">
                 <div class="card-body">
-                    <p class="mt-2">Keranjang Belanja</p>
+                    <p class="mt-2">Shopping Cart</p>
                     <div class="keterangan-order">
                         <div class="list-item vstack mt-2 mb-2 gap-2 px-2" style="height: 11rem; overflow-y: scroll; scroll-behavior: smooth;">
         
@@ -469,8 +240,8 @@
         </div>
         @endif
 
-        @if (Request::routeIs('owner') || Request::routeIs('light'))
-        <footer class="text-dark text-center text-uppercase fw-semibold">
+        @if (Request::routeIs('public.user') || Request::routeIs('light'))
+        <footer class="text-dark bg-white text-center text-uppercase fw-semibold">
             <span>FGID Community</span>
         </footer>
             
