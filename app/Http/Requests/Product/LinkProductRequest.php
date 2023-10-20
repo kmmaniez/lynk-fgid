@@ -24,7 +24,7 @@ class LinkProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required','string'],
+            'name' => ['required','string'],
             'thumbnail' => ['nullable','image','mimes:png,jpg,jpeg','max:2048'],
             'url' => ['required','url'],
             'layout' => ['required', new Enum(LayoutEnum::class)],
