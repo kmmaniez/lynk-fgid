@@ -7,6 +7,9 @@
         .produk-action .card{
             height: 10rem;
         }
+        .bg-danger-dark{
+            background-color: #fd6060;
+        }
         .produk-detail:is(:hover){
             background-color: #fff5f5;
         }
@@ -99,9 +102,50 @@
             <div class="card border-0">
                 <div class="card-body px-2">
                     <span class="fs-3">List produk</span>
-
+                    {{-- @dump($products) --}}
                     <div class="vstack gap-2 mt-3">
-                        @for ($i=0; $i < 12; $i++)
+                        @forelse ($products as $product)
+                        <div class="card produk-detail">
+                            
+                                <a 
+                                @if ($product->type->value === "link")
+                                    href="{{ route('products.linkedit', $product->id) }}" 
+                                @else
+                                    href="{{ route('products.digitaledit', $product->id) }}" 
+                                @endif
+                                    title="{{ $product->name }}" class="text-decoration-none text-dark"
+                                >
+                                
+                                <div class="card-body ps-3 d-flex flex-start align-items-center gap-3">
+                                    @if ($product->thumbnail)
+                                        <img 
+                                        @if ($product->type->value == "link")
+                                            src="{{ Storage::url($product->thumbnail) }}" 
+                                        @else
+                                            src="{{ Storage::url('tes/'. json_decode($product->images)[0]) }}" 
+                                        @endif
+                                            style="width: 4rem; height: 3rem;" class="card-img-top" alt="Thumbnail"
+                                        >
+                                    @endif
+                                    <div class="hstack w-100">
+                                        <div class="vstack gap-1">
+                                            <span class="title">{{ $product->name }}</span>
+                                            <span class="badge bg-danger-dark rounded-0" style="width: max-content">{{ Str::upper($product->type?->value) }}</span>
+
+                                            {{-- @if ($product->images)
+                                                @foreach (json_decode($product->images) as $image)
+                                                    <img src="{{ Storage::url('tes/'.$image) }}" width="48" height="48" alt="" srcset="">
+                                                @endforeach
+                                            @endif --}}
+                                        </div>
+                                        <i id="icon" class="icon text-secondary" data-feather="arrow-up-right"></i>
+                                    </div>
+                                </div>
+                        </div>
+                        @empty
+                        <span>Daftar produk digital atau link akan muncul di sini!</span>
+                        @endforelse
+                        {{-- @for ($i=0; $i < 3; $i++)
                         <div class="card produk-detail">
                             <a href="/awkarin" target="_blank" class="text-decoration-none text-dark">
                                 <div class="card-body ps-3 d-flex flex-start align-items-center gap-3">
@@ -111,13 +155,13 @@
                                     class="card-img-top" alt="...">
                                     @endif
                                     <div class="hstack justify-content-between w-100">
-                                        <span class="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat!</span>
+                                        <span class="title">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure, blanditiis.</span>
                                         <i id="icon" class="icon text-secondary" data-feather="arrow-up-right"></i>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                        @endfor
+                        @endfor --}}
                     </div>
                 </div>
             </div>
