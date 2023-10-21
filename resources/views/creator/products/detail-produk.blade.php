@@ -214,17 +214,17 @@
             <div class="card-body">
                 <h2 class="mb-3">Joki Game Valorant</h2>
                 <div class="form-group">
-                    <label for=""><small>Berapa yang akan anda bayar</small></label>
+                    <label for=""><small>How much you will pay the product</small></label>
                     <input type="number" class="form-control shadow-none" step="200" min="3000" name="" id="">
                 </div>
                 <div class="form-group mt-3">
-                    <label for=""><small class="text-secondary fw-semibold">Deskripsi</small></label>
+                    <label for=""><small class="text-secondary fw-semibold">Description</small></label>
                     <span class="d-block mt-2">Deskripsi produk</span>
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">Beli Sekarang</a>
-                <a href="{{ route('owner') }}" id="" class="btn mt-2 w-100">Kembali</a>
+                <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">Buy Now</a>
+                <a href="{{ route('public.user', request()->route()->originalParameters()['user']) }}" id="" class="btn mt-2 w-100">Back</a>
             </div>
         </div>
     </section>
