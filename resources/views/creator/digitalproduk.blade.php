@@ -75,7 +75,7 @@
                     width: 100%;
                 } */
         }
-        #theme_profile span{
+        #layout span{
             display: block;
             text-align: center;
             margin-top: 0.5rem;
@@ -110,60 +110,60 @@
         <div class="card border-0 pb-0">
             <div class="card-body">
                 <h3>Add digital produk</h3>
-                <form action="" method="post">
+                @dump($errors)
+                <form action="{{ route('products.digitalstore') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group mb-3">
-                        <label id="custom" for="upload">Upload Thumbnail <i data-feather="image"></i></label>
-                        <input type="file" id="upload" hidden>
+                        <label id="custom" for="thumbnail">Upload Thumbnail <i data-feather="image"></i></label>
+                        <input type="file" name="thumbnail" id="thumbnail" hidden>
                     </div>
                     
                     <div class="form-group mb-3">
-                        <label id="custom" for="upload">Upload gambar <i data-feather="image"></i></label>
-                        <input type="file" multiple id="upload">
+                        <label id="custom" for="images">Upload gambar <i data-feather="image"></i></label>
+                        <input type="file" name="images" multiple id="images">
                     </div>
     
                     <div class="mb-3">
-                        <label for="formGroupExampleInput" class="form-label">Nama Produk</label>
-                        <input type="text" class="form-control" name="title_link" id="title" placeholder="Nama Produk">
+                        <label for="name" class="form-label">Nama Produk</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Nama Produk">
                     </div>
     
                     <div class="mb-3">
-                        <label for="formGroupExampleInput" class="form-label">Deskripsi Produk</label>
-                        <input type="text" class="form-control" name="url_link" id="title"
-                            placeholder="Deskripsi Produk">
+                        <label for="description" class="form-label">Deskripsi Produk</label>
+                        <input type="text" class="form-control" name="description" id="description" placeholder="Deskripsi Produk">
                     </div>
     
                     <div class="mb-3 py-2">
-                        <label for="formGroupExampleInput" class="form-label">Link File/Produk</label>
-                        <input type="url" class="form-control" id="formGroupExampleInput"
-                            placeholder="drive.google.com/file/fgid">
+                        <label for="url" class="form-label">Link File/Produk</label>
+                        <input type="url" class="form-control" name="url" id="url" placeholder="drive.google.com/file/fgid">
                     </div>
     
                     <div class="form-group mb-3">
                         <div class="row">
                             <div class="col-sm-12">
-                                <label for="formGroupExampleInput" class="form-label">Harga Minimal</label>
+                                <label for="min_price" class="form-label">Price Minimal</label>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text text-secondary" id="basic-addon1">Rp</span>
-                                    <input type="number" min="1000" step="100" class="form-control" placeholder="1000"
-                                        aria-label="Username" aria-describedby="basic-addon1">
+                                    <span class="input-group-text text-secondary">Rp</span>
+                                    <input type="number" name="min_price" id="min_price" class="form-control" placeholder="1000"
+                                        aria-label="min_price">
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <label for="formGroupExampleInput" class="form-label">Harga Rekomendasi</label>
+                                <label for="max_price" class="form-label">Price Rekomendasi</label>
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text text-secondary" id="basic-addon1">Rp</span>
-                                    <input type="number" min="1500" step="100" class="form-control" placeholder="1500"
-                                        aria-label="Username" aria-describedby="basic-addon1">
+                                    <span class="input-group-text text-secondary">Rp</span>
+                                    <input type="number" name="max_price" id="max_price" class="form-control" placeholder="1500"
+                                        aria-label="max_price">
                                 </div>
                             </div>
                         </div>
                         <small style="font-size: 14px;" class="text-success"><em>Harga rekomendasi <strong>harus lebih besar
                                     dari minimal harga</strong></em></small>
                     </div>
+
                     <div class="mb-3">
                         <div class="popover-group">
-                            <label for="exampleFormControlTextarea1" class="form-label">Pesan Customer</label>
+                            <label for="messages" class="form-label">Pesan Customer</label>
                             <button type="button" id="popover-custom-message" class="btn btn-sm border-0"
                                 data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top">
                                 <i data-feather="info"></i>
@@ -173,86 +173,53 @@
                                 <span class="">Pesan ini akan dikirim ke customer, setelah melakukan pembayaran.</span>
                             </div>
                         </div>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea class="form-control" name="messages" id="messages" rows="3"></textarea>
                     </div>
     
                     <div class="mb-3">
                         <div class="popover-group">
-                            <label for="">Kalimat Call To Action</label>
+                            <label for="cta_text">Kalimat Call To Action</label>
                             <button type="button" class="btn btn-sm border-0" data-bs-container="body" data-bs-toggle="popover"
                                 data-bs-placement="top" data-bs-content="Kalimat ini untuk mengajak membeli produk anda">
                                 <i data-feather="info"></i>
                             </button>
                         </div>
-                        <select class="form-control mt-2 shadow-none" name="" id="">
+                        <select class="form-control mt-2 shadow-none" name="cta_text" id="cta_text">
                             <option class="d-none" value="">Pilih Kalimat CTA</option>
-                            <option value="">Beli Sekarang</option>
-                            <option value="">Saya mau ini</option>
-                            <option value="">Support creator</option>
+                            <option value="0">I Want this</option>
+                            <option value="1">Support Creator</option>
+                            <option value="2">Beli Sekarang</option>
+                            <option value="6">Book Now</option>
                         </select>
+                        @if (session()->has('cta_text'))
+                            <small class="text-danger">{{ session()->get('cta_text') }}</small>
+                        @endif
                     </div>
 
-                    {{-- <div class="mb-3">
-                        <label for="" class="d-block">Style</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                            <label class="form-check-label" for="inlineRadio1">1</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                            <label class="form-check-label" for="inlineRadio2">2</label>
-                          </div>
-                          <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3" disabled>
-                            <label class="form-check-label" for="inlineRadio3">3 (disabled)</label>
-                          </div>
-                    </div> --}}
-
-                    {{-- <div class="mb-2 pb-2">
-                        <span class="d-block mb-2">Layout</span>
-
-                        <div class="hstack gap-3">
-                            <label>
-                                <input class="form-check-input" type="radio" name="test" value="small" checked>
-                                <img src="{{ asset('assets/default-col.png') }}" width="164" height="164" alt="Option 1">
-                              </label>
-                              
-                              <label>
-                                <input class="form-check-input" type="radio" name="test" value="big">
-                                <img src="{{ asset('assets/grid.png') }}" width="164" height="164" alt="Option 2">
-                              </label>
-                              
-                              <label>
-                                <input class="form-check-input" type="radio" name="test" value="big">
-                                <img src="{{ asset('assets/large-image.png') }}" width="164" height="164" alt="Option 2">
-                              </label>
-
-                        </div>
-                    </div> --}}
                     <div class="form-group">
-                        <label for="theme_profile">Layout</label>
-                        <div class="hstack gap-3 mt-2" id="theme_profile">
+                        <label for="layout">Layout</label>
+                        <div class="hstack gap-3 mt-2" id="layout">
                             <label>
-                                <input class="form-check-input" type="radio" name="theme" value="light" checked>
+                                <input class="form-check-input" type="radio" name="layout" value="default" checked>
                                 <img src="{{ asset('assets/default-col.png') }}" width="164" height="164" alt="light">
                                 <span>Default</span>
                             </label>
                             <label>
-                                <input class="form-check-input" type="radio" name="theme" value="dark">
-                                <img src="{{ asset('assets/grid.png') }}" width="164" height="164" alt="dark">
+                                <input class="form-check-input" type="radio" name="layout" value="grid">
+                                <img src="{{ asset('assets/grid.png') }}" width="164" height="164" alt="grid">
                                 <span>Grid Image</span>
                             </label>
                             <label>
-                                <input class="form-check-input" type="radio" name="theme" value="dark">
-                                <img src="{{ asset('assets/large-image.png') }}" width="164" height="164" alt="dark">
+                                <input class="form-check-input" type="radio" name="layout" value="large">
+                                <img src="{{ asset('assets/large-image.png') }}" width="164" height="164" alt="large">
                                 <span>Large Image</span>
                             </label>
                         </div>
                     </div>
     
                     <div class="vstack mt-3 gap-2 w-100">
-                        <button class="btn bg-danger fw-semibold text-uppercase bg-gradient text-white w-100">Tambah Produk</button>
-                        <a href="{{ route('admin') }}" class="btn w-100 fw-medium">Cancel</a>
+                        <button class="btn bg-danger fw-semibold text-uppercase bg-gradient text-white w-100">Add Product</button>
+                        <a href="{{ route('admin') }}" class="btn w-100 fw-medium">Back</a>
                     </div>
                 </form>
             </div>
