@@ -208,16 +208,18 @@
             text-shadow: 0 0 10px rgb(38, 38, 38);
         }
         #coverprofile{
-            content: '';
+            /* content: ''; */
             /* background: url('{{ asset("assets/user6.jpg") }}'); */
-            object-fit: cover;
-            background-size: 100%;
-            background-position: center;
-            background-repeat: no-repeat;
+            /* object-fit: contain; */
+            /* background-size: 100%; */
+            /* background-position: center; */
+            /* background-repeat: no-repeat; */
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 800px;
+            height: 100px; 
+            left: -6px;
             z-index: -1;
+            /* size cover 800 x 200 */
         }
         #coverprofile::after{
             content: '';
@@ -227,6 +229,32 @@
             z-index: 1;
             left: 0;
             background-color: rgba(25, 25, 25, 0.615);
+        }
+        .card-cover{
+            /* background-color: red; */
+            overflow: hidden;
+        }
+        section{
+            min-height: calc(100% - 4rem);
+        }
+        #tes{
+            /* 800 x 200 profile */
+            /* width: 100%; */
+            width: 800px;
+            height: 200px;
+            position: absolute;
+            object-fit: fill;
+            z-index: -1;
+        }
+        .card-cover::after{
+            content: '';
+            width: 100%;
+            height: 100%;
+            top: 0;
+            position: absolute;
+            left: 0;
+            background-color: rgba(25, 25, 25, 0.615);
+            z-index: -1;
         }
     </style>
 @endpush
@@ -371,33 +399,64 @@
             </div>
 
     </section> --}}
-    <section id="wrap" class="bg-dark">
+    <section id="wrap" class="">
         <div class="header" style="">
-            <div class="card rounded-0 border-0 text-center position-relative" style="z-index: 1">
-                <div id="coverprofile" style="background: url('{{ asset('assets/user6.jpg') }}')"></div>
+            <div class="card card-cover rounded-0 border-0 text-center position-relative" style="z-index: 1">
+                <img id="tes" src="{{ ($user->coverimage) ? Storage::url($user->coverimage) : asset('assets/user6.jpg') }}" alt="" srcset="">
+                {{-- <div id="coverprofile" style="background: url('{{ ($user->coverimage) ? Storage::url($user->coverimage) : asset('assets/user6.jpg') }}')"></div> --}}
                 <div class="card-body vstack gap-3 align-items-center">
-                    <img src="{{ asset('assets/user6.jpg') }}" style="width: 5rem; height: 5rem;" 
+                    <img src="{{ ($user->photo) ? Storage::url($user->photo) : asset('assets/user2.jpg') }}" style="width: 5rem; height: 5rem;" 
                         class="rounded-circle border border-secondary-subtle border-3 object-fit-cover" alt="...">
-                    <span><strong>@username</strong></span>
-                    <span>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Atque, adipisci?</span>
+                    <span><strong>{{ '@'.$user->username }}</strong></span>
+                    <span>{{ $user->description }}</span>
                 </div>
             </div>
         </div>
 
         <div class="list-products mt-2">
             <div class="row gap-2">
+                {{-- @dump($products) --}}
+                @foreach ($products as $product)
                 <div class="col-12">
-                    <a href="/awkarin/detail" class="text-decoration-none">
-                        <div class="card bg-dark-cover text-center">
+                    <a href="{{ ($product->slug) ? $product->slug : $product->url }}" title="{{ $product->name }}" class="text-decoration-none">
+
+                        @if ($product->layout === "large")
+                        <div class="card {{ ($user->theme == "light") ? 'bg-white' : 'bg-dark text-white' }} h-100">
+                            <img src="{{ ($product->thumbnail) ? Storage::url($product->thumbnail) : asset('assets/user2.jpg') }}" style="width: 100%; height: 240px;"
+                                class="card-img-top" alt="...">
                             <div class="card-body">
+                                <h6>{{ $product->name }} | LARGE</h6>
+                                <span><strong>RP. {{ $product->min_price }}</strong></span>
+                            </div>
+                        </div>
+
+                        @elseif ($product->layout === "grid")
+                        <span>GRID</span>
+
+                        @else
+                        <div class="card {{ ($user->theme == "light") ? 'bg-white' : 'bg-dark text-white' }}">
+                            <div class="card-body text-center">
+                                <span>{{ $product->name }} | DEFAULT</span>
+                            </div>
+                        </div>
+                        @endif
+                        
+                    </a>
+                </div>
+                    {{-- @dump($product->name) --}}
+                @endforeach
+                {{-- <div class="col-12">
+                    <a href="/awkarin/detail" class="text-decoration-none">
+                        <div class="card bg-dark-cover">
+                            <div class="card-body text-center">
                                 <span>Lorem ipsum adipisicing elit. Repellat!</span>
                             </div>
                         </div>
                     </a>
-                </div>
-                <div class="col-12">
+                </div> --}}
+                {{-- <div class="col-12">
                     <a href="/awkarin/detail" class="text-decoration-none">
-                        <div class="card bg-dark-cover ">
+                        <div class="card bg-dark-cover">
                             <div class="card-body d-flex flex-start align-items-center gap-3">
                                 <img src="{{ asset('assets/user1.jpg') }}" style="width: 4rem; height: 4rem;" class="card-img-top" alt="...">
                                 <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat!</span>
@@ -435,7 +494,7 @@
                 </div>
                 <div class="col-12">
                     <a href="/awkarin/detail" class="text-decoration-none">
-                        <div class="card bg-dark-cover  h-100">
+                        <div class="card bg-dark-cover h-100">
                             <img src="{{ asset('assets/user2.jpg') }}" style="width: 100%; height: 240px;"
                                 class="card-img-top object-fit-cover" alt="...">
                             <div class="card-body">
@@ -469,7 +528,7 @@
                             </a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </section>
