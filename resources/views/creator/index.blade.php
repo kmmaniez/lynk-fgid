@@ -122,10 +122,10 @@
                                         @if ($product->type->value == "link")
                                             src="{{ Storage::url($product->thumbnail) }}" 
                                         @else
-                                            src="{{ Storage::url('tes/'. json_decode($product->images)[0]) }}" 
-                                        @endif
+                                            src="{{ Storage::url('tes/'. $product->images[0]) }}" 
+                                            @endif
                                             style="width: 4rem; height: 3rem;" class="card-img-top" alt="Thumbnail"
-                                        >
+                                            >
                                     @endif
                                     <div class="hstack w-100">
                                         <div class="vstack gap-1">
