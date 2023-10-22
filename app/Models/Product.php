@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CtaEnum;
 use App\Enums\ProductTypeEnum;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -30,8 +31,10 @@ class Product extends Model
 
     protected $casts = [
         'type' => ProductTypeEnum::class,
+        'cta_text' => CtaEnum::class,
         'min_price' => 'integer',
         'max_price' => 'integer',
+        'images' => 'array',
     ];
 
     public function users()
