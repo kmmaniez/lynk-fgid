@@ -82,6 +82,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::post('/digitalproduk', 'store')->name('products.digitalstore');
     Route::get('/digitalproduk/{product}/edit', 'edit')->name('products.digitaledit');
     Route::patch('/digitalproduk/{product}/edit', 'update')->name('products.digitalupdate');
+    Route::delete('/digitalproduk/destroy/{product}', 'destroy')->name('products.digitaldestroy');
     // Route::post('/orders', 'store');
 
     // LINK PRODUCT
