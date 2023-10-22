@@ -134,6 +134,7 @@
             <div class="card-body">
                 <h3>Add digital produk new</h3>
                 @dump($errors)
+                @dump(Session::get('error'))
                 <form action="{{ route('products.digitalstore') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
@@ -157,9 +158,9 @@
                                 <a href="#" id="remove-list" class="position-absolute top-0 start-100 translate-middle badge border border-light border-2 rounded-circle bg-danger p-2" style="z-index: 1"><i data-feather="x" class="fa-2"></i></a>
                             </div> --}}
                         </div>
-                        <a href="#" id="addimg" class="btn btn-primary">tes</a>
                         <label for="images">Upload Images <i data-feather="image"></i></label>
-                        <input type="file" name="images[]" id="images" accept="image/*" multiple hidden>
+                        {{-- accept="image/*" --}}
+                        <input type="file" name="images[]" id="images" multiple hidden>
                     </div>
 
                     <div class="mb-3">
@@ -266,7 +267,6 @@
     </section>
 @endsection
 @push('scripts')
-    {{-- <script src="{{ asset('assets/vendor/bootstrap-5.3.1/js/dist/popover.js') }}"></script> --}}
     <script>
         const popoverCustomMessage = document.getElementById('popover-custom-message');
         const contentMessage = document.getElementById('popover-custom-content');
@@ -287,8 +287,6 @@
         })
 
         $(document).ready(function(){
-            // console.log('before');
-            // console.log($('#list-images'));
             let count = 0;
             $('#images').change(function(e) {
                 e.preventDefault()
@@ -302,38 +300,17 @@
                             <img id="displayimg" src="${reader.result}" width="116" height="118" alt="" srcset="">
                             <span data-img="${index + 1}" id="remove-list" class="remove-list position-absolute top-0 start-100 translate-middle badge border border-light border-2 rounded-circle bg-danger" style="z-index: 1">X</span>
                             <input name="img[]" value="${reader.result}" hidden>
-                        </div>
+                            </div>
                         `;
+                            // <input name="img[]" value="${reader.result}" hidden>
                         // <img id="displayimg" data-img="${index + 1}" src="${reader.result}" width="116" height="118" alt="" srcset="">
                         $('#list-images').append(img);
-                        // console.log(reader.result);
-                        // $('.text').append(`<p>${reader.readAsDataURL(imageFiles[index])}</p>`)
-                        // const wrapper = document.createElement('div');
-                        // wrapper.classList.add('item','position-relative','rounded-2')
-                        // wrapper.style.width = 'max-content';
-                        
-                        // const img = document.createElement('img');
-                        // img.setAttribute('id','displayimg')
-                        // img.setAttribute('src',`${reader.result}`)
-                        // img.setAttribute('width','116')
-                        // img.setAttribute('height','118')
-        
-                        // const href = document.createElement('a');
-                        
-                        // href.textContent = 'X'
-                        // href.setAttribute('id','remove-list')
-                        // href.setAttribute('data-img',`${index + 1}`)
-                        // href.classList.add('remove-list','position-absolute','top-0','start-100','translate-middle', 'badge' ,'border', 'border-light', 'border-2', 'rounded-circle', 'bg-danger','position-relative','rounded-2')
-                        // href.setAttribute('href','www.google.com');
-                        // href.style.zIndex = '1';
-        
-                        // wrapper.appendChild(img)
-                        // wrapper.appendChild(href)
-                        // listimage.appendChild(wrapper)
                     });
+                    console.log(e.target);
                     console.log('count '+count);
                     count++;
                 }
+                console.log(e.target);
             })
         })
         $('#list-images').on('click', (e) => {
