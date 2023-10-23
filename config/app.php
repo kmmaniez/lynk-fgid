@@ -169,7 +169,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        Darryldecode\Cart\CartServiceProvider::class,
+        // Darryldecode\Cart\CartServiceProvider::class,
+        Jackiedo\Cart\CartServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,7 +186,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'Cart' => Darryldecode\Cart\Facades\CartFacade::class
+        // 'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
+        'Carts' => Jackiedo\Cart\Facades\Cart::class,
     ])->toArray(),
 
 ];

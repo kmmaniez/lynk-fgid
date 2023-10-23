@@ -1,4 +1,4 @@
-@extends('creator.index')
+@extends('layouts.master')
 
 @section('content')
            <div class="card border-0 mt-3">

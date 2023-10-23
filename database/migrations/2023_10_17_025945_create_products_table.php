@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\CtaEnum;
+use App\Enums\ProductTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,16 +13,17 @@ return new class extends Migration
      */
     public const CTA = ['I Want this','Support Creator','Beli Sekarang','Book Now'];
     public const LAYOUT = ['default','grid','large'];
+    public const PRODUCT_TYPE = ['link','digital'];
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            $table->enum('type',['link','digital']);
+            $table->enum('type',[self::PRODUCT_TYPE]);
             $table->string('slug')->nullable();
             $table->string('thumbnail')->nullable();
-            $table->string('images')->nullable();
+            $table->longText('images')->nullable();
             $table->string('description')->nullable();
             $table->string('url')->nullable();
             $table->integer('min_price')->nullable();

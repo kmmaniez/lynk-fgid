@@ -27,15 +27,14 @@ class PublicController extends Controller
 
     public function show(User $user) : View 
     {
-        // $products = $user->products;
-        $products = Product::with('users')->where('user_id','=',$user->id)->latest()->get();
+        $products = $user->products()->latest()->get();
+        // $products = Product::with('users')->where('user_id','=',$user->id)->latest()->get();
         return view('creator.products.index', compact('user','products'));
     }
     
     public function showProducts(User $user, $slug) 
     {
         return view('creator.products.detail-produk', compact('user'));
-        // return view('creator.products.index', compact('user'));
     }
 
     public function search(Request $request) 
@@ -61,4 +60,8 @@ class PublicController extends Controller
             ]);
         }
     }
+
+
+    // CART
+
 }
