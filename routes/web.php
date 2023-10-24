@@ -65,7 +65,7 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/discover', 'discover')->name('public.discover');
     Route::get('/@{user:username}', 'show')->name('public.user');
     Route::get('/search', 'search')->name('public.search');
-    Route::get('/@{user:username}/{slug}', 'showProducts')->name('public.userproduct');
+    // Route::get('/@{user:username}/{slug}', 'showProducts')->name('public.userproduct');
 
 });
 
@@ -76,7 +76,9 @@ Route::controller(DashboardController::class)->middleware('auth')->group(functio
 });
 Route::controller(ProductController::class)->group(function () {
 
-    Route::get('/aw', 'tes');
+    // DETAIL PRODUCT WITH USERS
+    Route::get('/@{user:username}/{product}', 'product_user')->name('products.detailuser');
+
     // DIGITAL PRODUCT
     Route::get('/digitalproduk', 'index')->name('products.digitalindex');
     Route::post('/digitalproduk', 'store')->name('products.digitalstore');
@@ -95,7 +97,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::delete('/link/destroy/{product}', 'destroy_link')->name('products.linkdestroy');
 
     // DELETE IMAGE
-    Route::post('/link/delete-image/{product}', 'delete_image')->name('products.deleteimage');
+    Route::post('/delete-image/{product}', 'delete_image')->name('products.deleteimage');
 });
 
 
