@@ -33,7 +33,7 @@ class DigitalProductRequest extends FormRequest
             'min_price' => ['required','numeric'],
             'max_price' => ['required','numeric','gte:min_price'],
             'messages' => ['nullable'],
-            // 'cta_text' => ['required', new Enum(CtaEnum::class)],
+            'cta_text' => ['required', new Enum(CtaEnum::class)],
             'layout' => ['required', new Enum(LayoutEnum::class)],
         ];
     }

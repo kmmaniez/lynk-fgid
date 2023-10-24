@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->bigInteger('phone')->nullable();
             $table->string('coverimage')->nullable();
-            $table->string('photo')->nullable();
+            $table->string('photo')->default('public/users/default.jpg')->nullable();
             $table->string('description')->nullable();
             $table->enum('account_type',['standart','best'])->nullable();
             $table->enum('theme',['dark','light'])->default('light');
