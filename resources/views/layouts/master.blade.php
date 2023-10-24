@@ -122,7 +122,9 @@
             <div class="toggle-sidebar bg-danger">
                 <i data-feather="chevrons-right" class="feathers text-white"></i>
             </div>
-            <span class="fs-4">Hello @usernames</span>
+            @auth
+            <span class="fs-4">Hello <a href="{{ route('public.user', Auth::user()->username) }}" class="text-decoration-none">{{ '@'.Auth::user()->username }}</a></span>
+            @endauth
             <hr>
             <ul class="nav nav-pills flex-column gap-1 mb-auto">
                 <li class="nav-item">
@@ -138,30 +140,25 @@
                     <small class="text-body-tertiary text-uppercase fw-bold mb-2">Settings</small>
 
                     <li>
-                        <a href="{{ route('account') }}" class="nav-link {{ (Request::routeIs('account') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Account
+                        <a href="{{ route('profile.account') }}" class="nav-link {{ (Request::routeIs('account') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Account
                             Settings</a>
                     </li>
-                    {{-- <li>
-                        <a href="{{ route('account') }}" class="nav-link {{ (Request::routeIs('account') ? 'fw-semibold active' : 'text-secondary') }}">Affiliate
-                            Settings</a>
-                    </li> --}}
                     <li>
                         <a href="{{ route('earning') }}" class="nav-link {{ (Request::routeIs('earning') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Earning Settings</a>
                     </li>
                     <li>
-                        <a href="{{ route('history') }}" class="nav-link {{ (Request::routeIs('history') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">History
+                        <a href="{{ route('history') }}" class="nav-link {{ (Request::routeIs('history') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Settlement
                             Settings</a>
                     </li>
-                    {{-- <li>
-                        <a href="{{ route('payout') }}" class="nav-link {{ (Request::routeIs('payout') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Payout
-                            Settings</a>
-                    </li> --}}
                 </div>
 
                 <li>
-                    <a href="#" class="nav-link text-secondary  link-body-emphasis">
-                        Logout
-                    </a>
+                    @auth
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="nav-link text-start text-secondary link-body-emphasis w-100" type="submit">Logout</button>
+                    </form>
+                    @endauth
                 </li>
             </ul>
         </div>
@@ -173,6 +170,9 @@
     </div>
 
     <script src="{{ asset('assets/vendor/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
+    
+    <script src="{{ asset('assets') }}/vendor/jquery/jquery.min.js"></script>
+    <script src="{{ asset('assets') }}/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <script>
         const sidebar = document.getElementsByClassName('sidebar');
