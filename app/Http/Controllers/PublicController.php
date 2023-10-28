@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Jackiedo\Cart\Facades\Cart;
 
 class PublicController extends Controller
 {
@@ -34,7 +35,7 @@ class PublicController extends Controller
     
     public function showProducts(User $user, $slug) 
     {
-        return view('creator.products.detail-produk', compact('user'));
+        // return view('creator.products.detail-produk', compact('user'));
     }
 
     public function search(Request $request) 
@@ -63,5 +64,22 @@ class PublicController extends Controller
 
 
     // CART
-
+    public function addProduct(Request $request)
+    {
+        $prod = Product::find($request->id);
+        $cart = Cart::name('shopping')->useForCommercial();
+        dd($request->all());
+        $cart->addItem([
+            'id'       => $prod->id,
+            'title'    => $prod->name,
+            'quantity' => $request->jml,
+            'price'    => $prod->min_price,
+            'total_price'    => $request->jml * $prod->min_price,
+            'extra_info' => [
+                'date_time' => [
+                    'added_at' => time(),
+                ]
+            ]
+        ]);
+    }
 }
