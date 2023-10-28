@@ -173,6 +173,9 @@
             }
             
         }
+        #write_username{
+            color: #989898;
+        }
     </style>
 @endpush
 
@@ -216,7 +219,7 @@
 
                 <div class="position-relative mb-3">
                     <input type="text" class="form-control border-danger w-100 pe-2 py-3"
-                        placeholder="lynkclone.id/username" aria-label="Recipient's username"
+                        placeholder="lynkclone.id/username" value="lynkclone.id/" id="write_username" aria-label="Recipient's username"
                         aria-describedby="button-addon2">
                     <button id="claim" class="btn btn-md btn-danger fw-bold position-absolute" style="width: 120px;"
                         type="button" id="button-addon2">Claim</button>
@@ -422,3 +425,17 @@
         </section>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        $('#write_username').on('focus keyup mouseenter', function(e) {
+            $(this).css({
+                'color':'#000'
+            })
+
+            $('#claim').on('click', (e) => {
+                localStorage.setItem('username', $(this).val())
+                window.location.href = "{{ route('register') }}"
+            })
+        })
+    </script>
+@endpush

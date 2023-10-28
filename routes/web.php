@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\Creators\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +69,8 @@ Route::controller(PublicController::class)->group(function () {
     Route::get('/search', 'search')->name('public.search');
     // Route::get('/@{user:username}/{slug}', 'showProducts')->name('public.userproduct');
 
+    // CART
+
 });
 
 Route::controller(DashboardController::class)->middleware('auth')->group(function () {
@@ -77,7 +81,7 @@ Route::controller(DashboardController::class)->middleware('auth')->group(functio
 Route::controller(ProductController::class)->group(function () {
 
     // DETAIL PRODUCT WITH USERS
-    Route::get('/@{user:username}/{product}', 'product_user')->name('products.detailuser');
+    // Route::get('/@{user:username}/{product}', 'product_user')->name('products.detailuser');
 
     // DIGITAL PRODUCT
     Route::get('/digitalproduk', 'index')->name('products.digitalindex');
@@ -137,6 +141,39 @@ Route::prefix('awkarin')->group(function () {
     })->name('detail');
     
 });
+
+// Route::get('/@{user:username}/{product}', [CartController::class, 'index'])->name('products.detailuser');
+// Route::prefix('cart')->group(function () {
+    
+    
+//     Route::controller(CartController::class)->group(function () {    
+//         Route::get('/', 'index_clone');
+//         Route::get('/getdata', 'getAllItems')->name('cart.getitems');
+//         Route::post('/add', 'store')->name('addcart');
+//         Route::get('/update', 'update');
+//         Route::get('/remove', 'destroy');
+//         Route::post('/removeitems', 'remove_items')->name('cart.removeitem');
+//     });
+// });
+
+Route::get('/@{user:username}/{product}', [TestController::class, 'index'])->name('products.detailuser');
+
+Route::prefix('cart')->group(function () {
+    Route::controller(TestController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/tes', 'index_clone');
+        Route::get('/item', 'getAllItems')->name('cart.getitems');
+        Route::post('/', 'store')->name('addcart');
+        Route::patch('/', 'update')->name('cart.update');
+        Route::post('/remove', 'remove_item')->name('cart.removeitem');
+        Route::get('/destroy', 'destroy')->name('cart.destroy');
+    });
+});
+
+Route::get('/tes', function() {
+    return view('admin.dashboard');
+});
+
 
 Route::get('/checkout', function () {
     return view('creator.products.checkout');

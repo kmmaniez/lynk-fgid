@@ -70,11 +70,13 @@
                         <img id="coverdisplay" src="{{ ($user->coverimage) ? Storage::url($user->coverimage) : asset('assets/user1.jpg') }}" class="object-fit-cover card-img-top" alt="Cover profile">
                         <input class="form-control shadow-none mt-2" type="file" name="coverimage" id="coverimage" accept="image/*" hidden>
                         <label id="custom" for="coverimage">{{ ($user->coverimage) ? 'Change Cover' : 'Upload Cover' }} <i data-feather="image"></i></label>
+                        <small class="text-danger fw-semibold mt-2">Cover size : 800x200 px</small>    
                     </div>
                     <div class="form-group vstack align-items-center">
-                        <img id="photodisplay" src="{{ ($user->photo) ? Storage::url($user->photo) : asset('assets/user2.jpg') }}" class="profile-img card-img-top rounded-circle border border-secondary-tertiary border-5" alt="Foto profile">
+                        <img id="photodisplay" src="{{ ($user->photo) ? Storage::url($user->photo) : asset('assets/user2.jpg') }}" class="profile-img card-img-top object-fit-cover rounded-circle border border-secondary-tertiary border-5" alt="Foto profile">
                         <input class="form-control shadow-none" type="file" name="photo" id="photo" accept="image/*" hidden>
                         <label id="custom" for="photo">{{ ($user->photo) ? 'Change Photo' : 'Upload Photo' }} <i data-feather="image"></i></label>
+                        <small class="text-danger fw-semibold mt-2">Photo size : 500x500 px</small>
                     </div>
                     <div class="form-group">
                         <label for="description">Profile description</label>

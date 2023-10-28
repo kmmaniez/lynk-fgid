@@ -143,6 +143,22 @@
             transition: all 500ms cubic-bezier(0.455, 0.03, 0.515, 0.955);
             filter: blur(4px);
         }
+        span#total-cart{
+            position: absolute;
+            font-size: 12px;
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: salmon;
+            /* border: 1.5px solid #000; */
+            /* padding: 4px; */
+            color: #000;
+            border-radius: 50%;
+            right: -6px;
+            top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
         <script src="{{ asset('assets/feather-icons/dist/feather.js') }}"></script>
     @stack('styles')
@@ -153,29 +169,62 @@
 
     <div class="wrapper {{ ($user->theme == "light") ? 'bg-white' : 'bg-dark-cover' }}" style="">
 
-        <nav class="navbar px-4 bg-primary sticky-top bg-body-tertiary">
-              <a class="navbar-brand" href="{{ route('admin') }}">
-                <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150"
-                    class="d-inline-block align-text-top">
-            </a>
-            @if (Request::routeIs('public.userproduct'))
-            <div class="cart">
-                <i data-feather="shopping-cart" class="text-success"></i> 
-            </div>
+        <nav class="navbar {{ (Request::routeIs('products.detailuser')) ? 'ps-2 pe-4' : 'px-4' }} bg-primary sticky-top bg-body-tertiary">
+            @if (!Request::routeIs('products.detailuser'))
+                <a class="navbar-brand" href="{{ route('admin') }}">
+                    <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150" class="d-inline-block align-text-top">
+                </a>
+            @else
+                <a class="navbar-brand" href="{{ route('public.user', request()->route()->originalParameters()['user']) }}">
+                    <i data-feather="arrow-left" class="text-danger"></i> {{ '@'.request()->route()->originalParameters()['user'] }}
+                </a>
+                <div class="cart position-relative">
+                    <i data-feather="shopping-cart" class="text-danger"></i> 
+                    <span id="total-cart"></span>
+                </div>
             @endif
         </nav>
 
         @yield('produk')
 
-        @if (Request::routeIs('public.userproduct'))
+        @if (Request::routeIs('products.detailuser'))
         <div class="cart-info">
             <div id="card-detail" class="card w-100">
                 <div class="card-body">
-                    <p class="mt-2">Shopping Cart</p>
-                    <div class="keterangan-order">
-                        <div class="list-item vstack mt-2 mb-2 gap-2 px-2" style="height: 11rem; overflow-y: scroll; scroll-behavior: smooth;">
-        
+                    <span class="mt-2">Shopping Cart</span>
+                    <div class="keterangan-order mt-3">
+                        <div class="list-item vstack mt-2 mb-2 gap-2 p-2" style="overflow-y: scroll; scroll-behavior: smooth;">
+
+                            {{-- @forelse ($cartitems as $key => $item)
                             <div class="card" style="height: 6rem;">
+                                <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-3">
+                                    <img src="{{ asset('assets/user1.jpg') }}" 
+                                    style="width: 4rem; height: 4rem;" class="card-img-top" alt="...">
+        
+                                    <div class="vstack justify-content-between">
+                                        <span class="d-block">{{ $item->getDetails()->get('title') }}</span>
+                                        <span class="d-block fw-semibold">Rp. {{ $item->getDetails()->get('price') }}</span>
+                                    </div>
+                                    
+                                    <div id="item-action" class="vstack align-items-end justify-content-between">
+                                        <span class="d-block">Qty : {{ $item->getDetails()->get('quantity') }}</span>
+        
+                                        <span class="button-group">
+                                            <a href="#" id="btnIncreaseQty" data-id="{{ $key }}" class="px-2 fs-2">+</a>
+                                            <a href="#" id="btnDescreaseQty" class="px-2 fs-2">-</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            @empty
+                            <div class="card" style="">
+                                <div class="card-body ps-2 pe-2">
+                                    <span>Your cart is empty!</span>
+                                </div>
+                            </div>
+                            @endforelse --}}
+        
+                            {{-- <div class="card" style="height: 6rem;">
                                 <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-3">
                                     <img src="{{ asset('assets/user1.jpg') }}" 
                                     style="width: 4rem; height: 4rem;" class="card-img-top" alt="...">
@@ -194,46 +243,29 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div>
-        
-                            <div class="card" style="height: 6rem;">
-                                <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-3">
-                                    <img src="{{ asset('assets/user1.jpg') }}" 
-                                    style="width: 4rem; height: 4rem;" class="card-img-top" alt="...">
-        
-                                    <div class="vstack justify-content-between">
-                                        <span class="d-block">Judul Produk</span>
-                                        <span class="d-block fw-semibold">Rp. 5.000</span>
-                                    </div>
-                                    
-                                    <div id="item-action" class="vstack align-items-end justify-content-between">
-                                        <span class="d-block">Qty : 2</span>
-        
-                                        <span class="button-group">
-                                            <a href="#" class="px-2 fs-2">+</a>
-                                            <a href="#" class="px-2 fs-2">-</a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> --}}
         
                         </div>
                         <table class="table">
                             <tbody>
                                 <tr>
                                     <th>Total Item</th>
-                                    <td class="text-end">5</td>
+                                    <td class="text-end"></td>
+                                </tr>
+                                <tr>
+                                    <th>Total Quantity</th>
+                                    <td class="text-end"></td>
                                 </tr>
                                 <tr>
                                     <th>Total Price</th>
-                                    <td class="text-end">Rp. 10.000</td>
+                                    <td class="text-end"></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="vstack gap-2">
                         <a href="{{ route('checkout') }}" target="_blank" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a>
-                        <a href="#" id="continueBtn" class="btn btn-md btn-outline-danger w-100">Continue Shopping</a>
+                        <a href="#" id="btnContinue" class="btn btn-md btn-outline-danger w-100">Continue Shopping</a>
                     </div>
                 </div>
             </div>
@@ -258,24 +290,314 @@
 </body>
     <script>
         const BtnAddToCart = $('#btnAddToCart');
+        const BtnContinue = $('#btnContinue');
+        const listItem = $('.list-item');
+        const iconCart = $('.icon-cart');
+        const userPayVal = $('#user_pay_product');
+        const userPayError = $('#user_pay_error');
+        const productId = $('#productId');
+        const quantity = $('#quantity');
+        const btnIncreaseQty = $('#btnIncreaseQty');
+        const btnDecreaseQty = $('#btnDecreaseQty');
+
         const cart = $('.cart');
         cart.on('click', () => {
-            let show = $('.cart-info').hasClass('show');
-            if (!show) {
-                $('.cart-info').addClass('show')
-            }else{
+            // let show = $('.cart-info').hasClass('show');
+            // if (!show) {
+            //     $('.cart-info').addClass('show')
+            // }else{
+            //     $('.cart-info').removeClass('show')
+            // }
+        })
+
+        $(document).ready(function(){
+
+            $.ajax({
+                url: "{{ route('cart.getitems') }}",
+                method: 'GET',
+                success: (res) => {
+                    const {data} = res;
+                    $('#total-cart').text(data.total_item)
+                }
+            })
+
+            cart.on('click', (e) => {
+                let show = $('.cart-info').hasClass('show');
+                // console.log($('.list-item').children());
+                if (!show) {
+                    $('.cart-info').addClass('show')
+                    if (!listItem.children().length > 0) {
+                        showCartItems();
+                    }
+                }else{
+                    $('.cart-info').removeClass('show')
+                    $('.list-item').children().remove()
+                    // console.log($('.list-item > div.card'));
+                }
+            })
+            BtnContinue.on('click', (e) => {
+                e.preventDefault();
                 $('.cart-info').removeClass('show')
+                $('.list-item').children().remove()
+                userPayVal.val('')
+            })
+
+            // console.log($('.list-item').children());
+        })
+        // $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnIncreaseQty', function(e){
+        $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnRemoveItem', function(e){
+            e.preventDefault()
+            if (confirm('Delete this item from your cart ?')) {
+                removeCartItem($(this).data('id'))
+                $('#total-cart').text('0')
             }
         })
 
+        $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnIncreaseQty', function(e){
+            e.preventDefault()
+            if (confirm('Add item again in your cart ?')) {
+                // removeCartItem($(this).data('id'))
+                // $('#total-cart').text('0')
+                console.log($(this).data());
+                $.ajax({
+                    url: "{{ route('cart.update') }}",
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        _method: 'PATCH',
+                        id: $(this).data('id'),
+                        type: 'increase'
+                    },
+                    success: (res) => {
+                        $('.list-item').children().remove()
+                        showCartItems();
+                    }
+                })
+            }
+        })
+        $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnDecreaseQty', function(e){
+            e.preventDefault()
+            if (confirm('Update your cart ?')) {
+                // removeCartItem($(this).data('id'))
+                // $('#total-cart').text('0')
+                console.log($(this).data('id'));
+                $.ajax({
+                    url: "{{ route('cart.update') }}",
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        _method: 'PATCH',
+                        id: $(this).data('id'),
+                        type: 'decrease'
+                    },
+                    success: (res) => {
+                        $('.list-item').children().remove()
+                        showCartItems();
+                    }
+                })
+            }
+        })
+
+        let showError = false;
+
         BtnAddToCart.on('click', (e) => {
             e.preventDefault();
-            $('.cart-info').addClass('show');
+            
+            $('.list-item').children().remove()
+            addToCart();
+            showCartItems();
+
+            // $.ajax({
+            //     url: "{{ route('cart.getitems') }}",
+            //     method: 'GET',
+            //     success: (res) => {
+            //         const data = JSON.parse(res.data);
+            //         const {items} = data;
+            //         // console.log(data);
+            //         const itemCount = JSON.parse(res.data);
+
+            //         if (Object.keys(items).length > 0) {
+            //             // filled cart
+            //             console.log(data);
+            //             $.each(items, function(idx, product){
+            //             console.log(product);
+            //             const card = `
+            //             <div class="card" style="height: 6rem;">
+            //                 <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-3">
+            //                     <img src="{{ asset('assets/user1.jpg') }}" 
+            //                     style="width: 4rem; height: 4rem;" class="card-img-top" alt="...">
+    
+            //                     <div class="vstack justify-content-between">
+            //                         <span class="d-block">${product.title}</span>
+            //                         <span class="d-block fw-semibold">Rp. ${product.price}</span>
+            //                     </div>
+                                
+            //                     <div id="item-action" class="vstack align-items-end justify-content-between">
+            //                         <span class="d-block">Qty : ${product.quantity}</span>
+    
+            //                         <span class="button-group">
+            //                             <a href="#" id="btnIncreaseQty" data-id="${product.hash}" class="px-2 fs-2">+</a>
+            //                             <a href="#" id="btnDescreaseQty" class="px-2 fs-2">-</a>
+            //                         </span>
+            //                     </div>
+            //                 </div>
+            //             </div>
+            //             `;
+            //             listItem.append(card)
+            //             $('.keterangan-order > table > tbody > tr > td:nth(0)').text(data.items_count)
+            //             $('.keterangan-order > table > tbody > tr > td:nth(1)').text(data.quantities_sum)
+            //             $('.keterangan-order > table > tbody > tr > td:nth(3)').text(data.subtotal)
+            //         })
+            //         }else{
+            //             const card = `
+            //              <div class="card card-empty" style="">
+            //                  <div class="card-body ps-2 pe-2">
+            //                      <span>Your cart is empty!</span>
+            //                  </div>
+            //              </div>
+            //              `;
+            //             listItem.css({
+            //                 'height':'5rem',
+            //             }).append(card)
+            //         }
+            //         console.log(Object.keys(items).length);
+            //         console.log($('.keterangan-order > table > tbody > tr > td:nth(1)').text());
+            //     },
+            //     err: (err) => {
+            //         console.log(err);
+            //     }
+            // })
         })
+        
         $('#continueBtn').on('click', () => {
             $('.cart-info').removeClass('show')
         })
         feather.replace();
 
+        function addToCart() {
+            $.ajax({
+                url: "{{ route('addcart') }}",
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: productId.val(),
+                    quantity: quantity.val(),
+                    user_pay: userPayVal.val(),
+                    hash: userPayVal.data('key')
+                },
+                success: (res) => {
+                    // console.log(res);
+                    // console.log(res.update);
+                    // console.log(res.keyhash);
+                    // userPayVal.attr('data-key', res.keyhash)
+                    if (res.code == 201) {
+                        userPayError.text(res.messages)
+                        userPayError.css('display','block');
+                    }else{
+                        userPayVal.val('')
+                        userPayError.text('')
+                        userPayError.css('display','none');
+                        $('.cart-info').addClass('show');
+                    }
+                },
+                err: (err) => {
+                    console.log(err);
+                }
+            })
+        }
+
+        // $('#btnRemoveItem').on('click', (e) => {
+        //     e.preventDefault();
+        //     console.log($(this));
+        // })
+
+        function removeCartItem(id) {
+            $.ajax({
+                url: "{{ route('cart.removeitem') }}",
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    cart_id: id,
+                },
+                success: (res) => {
+                    // console.log(res);
+                    $('.list-item').children().remove()
+                    showCartItems();
+                }
+            })
+        }
+
+        function showCartItems(){
+            $.ajax({
+                url: "{{ route('cart.getitems') }}",
+                method: 'GET',
+                success: (res) => {
+                    const {data} = res;
+
+                    if (Object.keys(data.cart).length > 0) {
+                        // filled cart
+                        listItem.css({
+                            'height':'11rem',
+                        })
+                        $.each(data.cart, function(idx, product){
+                            let card = `
+                            <div class="card" style="height: 6rem;">
+                                <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-3">
+                                    
+                                    <img src="/${product.attributes.image}" style="width: 4rem; height: 4rem;" class="card-img-top" alt="image">
+        
+                                    <div class="vstack justify-content-between">
+                                        <span class="d-block">${product.name}</span>
+                                        <span class="d-block fw-semibold">Rp. ${product.price}</span>
+                                    </div>
+                                    
+                                    <div id="item-action" class="vstack align-items-end justify-content-between">
+                                        <span class="d-block">Qty : ${product.quantity}</span>
+        
+                                        <span class="button-group">
+                                            <a href="#" id="btnIncreaseQty" title="increase" data-id="${product.id}" class="px-2 fs-2 text-decoration-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus text-success"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>    
+                                            </a>
+                                            <a href="#" id="btnDecreaseQty" title="decrease" data-id="${product.id}" class="px-2 fs-2 text-decoration-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus text-success"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </a>
+                                            <a href="#" id="btnRemoveItem" title="remove" data-id="${product.id}" class="px-2 fs-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash text-danger"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                            // listItem.remove('.card')
+                            listItem.append(card)
+                            $('.keterangan-order > table > tbody > tr > td:nth(0)').text(data.total_item)
+                            $('.keterangan-order > table > tbody > tr > td:nth(1)').text(data.total_quantity)
+                            $('.keterangan-order > table > tbody > tr > td:nth(2)').text(`Rp ${data.total_price}`)
+                            $('#total-cart').text(data.total_item)
+                        })
+                    }else{
+                        const card = `
+                         <div class="card card-empty" style="">
+                             <div class="card-body ps-2 pe-2">
+                                 <span>Your cart is empty!</span>
+                             </div>
+                         </div>
+                         `;
+                        $('.keterangan-order > table > tbody > tr > td:nth(0)').text('0')
+                        $('.keterangan-order > table > tbody > tr > td:nth(1)').text('0')
+                        $('.keterangan-order > table > tbody > tr > td:nth(2)').text('0')
+                        listItem.css({
+                            'height':'5rem',
+                        }).append(card)
+                    }
+                },
+                err: (err) => {
+                    console.log(err);
+                }
+            })
+        }
+        
     </script>
+    @stack('scripts')
 </html>

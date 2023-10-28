@@ -9,6 +9,7 @@ use App\Enums\ProductTypeEnum;
 use App\Http\Requests\Product\DigitalProductRequest;
 use App\Http\Requests\Product\LinkProductRequest;
 use App\Models\Product;
+use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,11 @@ class ProductController extends Controller
     public function index()
     {
         // return view('creator.digitalproduk');
+        // $file = Storage::files('public/tes')[0];
+        // $aw = Storage::mimeType('public/tes/'.$file);
+        // dump(Storage::files('public/tes')[0], $file, $aw);
+
+        // dump(array_column(CtaEnum::cases(),'value','name'), CtaEnum::cases());
         return view('creator.product.create-digital');
     }
 
@@ -42,40 +48,30 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DigitalProductRequest $request)
     {
         // DigitalProductRequest
         // $img = $request->img;
         // $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','',$img));
         // Storage::disk('public')->put('rea/img_'. Str::random(10).'.png', $base);
-        $arrImages = array(...$request->img);
-        $pathImg = array();
-        foreach ($request->img as $key => $image) {
-            $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','', $image));
-            $imgname = date('HisdmY').'_'.Str::random(5).'.png';
-            $aw = Storage::disk('public')->put('tes/'. $imgname, $base);
-            // dump($aw);
-            array_push($pathImg,$imgname);
-            // $imageName = date('HisdmY').'_'.Str::random(5).'.png';
-            // $imagePath = Storage::putFileAs('tes/', $base, $imageName);
-            // dump($imagePath);
-        }
-        // dump($pathImg);
-        // dd($request->all(), $arrImages);
-        if ($request->hasFile('thumbnail')) {
-            $pathThumbnail = $request->file('thumbnail');
+        $pathImages = array();
+        if ($request->has('img')) {
+            $pattern = '(data:application)';
+            for ($i=0; $i < count($request->img); $i++) { 
+                if (preg_match($pattern, $request->img[$i])) {
+                    return redirect()->back()->with('error','Please upload valid file!');
+                }
+            }
+
+            foreach ($request->img as $key => $image) {
+                $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','', $image));
+                $imgname = date('HisdmY').'_'.Str::random(5).'.png';
+                Storage::disk('public')->put('tes/'.$imgname, $base);
+                array_push($pathImages,$imgname);
+            }
+            
         }
 
-        // if ($request->hasFile('images')) {
-        //     $pathImages = $request->file('images');
-        // }
-
-        if (!array_key_exists($request->cta_text, CtaEnum::cases())) {
-            // return redirect()->back()->with('cta_text','The cta text field is required.');
-            // dump(ProductEnum::cases());  
-            // echo 'ada';
-        }
-        // die;
         try {
             $ea = Product::create([
                 'user_id' => auth()->user()->id,
@@ -83,14 +79,15 @@ class ProductController extends Controller
                 'name' => $request->name,
                 'slug' => self::generateSlug(7),
                 // 'thumbnail' => ($request->thumbnail) ? $pathThumbnail : 'public/products/default.jpg',
-                'thumbnail' => ($request->img) ? $pathImg[0] : 'public/products/default.jpg',
-                'images' => ($request->img) ? json_encode($pathImg) : NULL,
+                'thumbnail' => ($request->img) ? $pathImages[0] : 'public/tes/default.jpg',
+                // 'images' => ($request->img) ? json_encode($pathImages) : NULL,
+                'images' => ($request->img) ? $pathImages : NULL,
                 'description' => $request->description,
                 'url' => $request->url,
                 'min_price' => $request->min_price,
                 'max_price' => $request->max_price,
                 'messages' => ($request->messages) ? $request->messages : NULL,
-                'cta_text' => ($request->cta_text) ? $request->cta_text : 0,
+                'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                 'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
             ]);
         } catch (\Throwable $th) {
@@ -105,7 +102,8 @@ class ProductController extends Controller
         // dd($request->all());
         if ($request->hasFile('thumbnail')) {
 
-            $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
+            // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
+            $thumbnailName = date('HisdmY') . '_' . Str::random(5);
             $thumbnailPath = FileService::store(
                 'public/products', 
                 $request->file('thumbnail'),
@@ -115,7 +113,7 @@ class ProductController extends Controller
             try {
                 Product::create([
                     ...$request->validated(),
-                    'type' => ProductTypeEnum::PRODUCT_LINK,
+                    // 'type' => ProductTypeEnum::PRODUCT_LINK,
                     'user_id' => auth()->user()->id,
                     'thumbnail' => $thumbnailPath,
                 ]);
@@ -169,7 +167,20 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        // dump($product->images);
         $user = request()->user();
+        $arr = ["04163523102023_n0yJP.png", //0
+                "04163523102023_jOt1Z.png", //1
+                "04163523102023_33UKl.png", //2
+                "04163523102023_xz5yl.png" //3
+            ];
+        // dump($arr);
+        // $index = 1;
+        // if (array_key_exists($index, $arr)) {
+        //     unset($arr[$index]);
+        //     $arr = array_values($arr);
+        // }
+        // dump($arr);
         return view('creator.product.update-digital', compact('product', 'user'));
     }
 
@@ -183,17 +194,39 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(DigitalProductRequest $request, Product $product)
     {
-        if ($request->hasFile('thumbnail')) {
+        // DigitalProductRequest
+        $currentUserId = $request->user()->id;
+        $pathImages = array();
 
-            if ($product->thumbnail) {
-                Storage::delete($product->thumbnail);
+        if ($request->has('img')) {
+            $pattern = '(data:application)';
+            for ($i=0; $i < count($request->img); $i++) { 
+                if (preg_match($pattern, $request->img[$i])) {
+                    return redirect()->back()->with('error','Please upload valid file!');
+                }
             }
-            $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->title)) . '.' . $request->thumbnail->extension();
+
+            foreach ($request->img as $key => $image) {
+                // $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','', $image));
+                $imgname = date('HisdmY').'_'.Str::random(5).'.png';
+                // Storage::disk('public')->put('tes/'.$imgname, $base);
+                array_push($pathImages,$imgname);
+            }
+            
+        
+            // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->title)) . '.' . $request->thumbnail->extension();
             // $thumbnailPath = Storage::putFileAs('public/products', $request->file('thumbnail'), $thumbnailName);
             // $thumbnailPath = FileService::store('public/products', $request->file('thumbnail'), $thumbnailName);
 
+            // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
+            // $thumbnailPath = FileService::store(
+            //     'public/products', 
+            //     $request->file('thumbnail'),
+            //     $request->thumbnail->extension(), 
+            //     $thumbnailName
+            // );
             // Product::create([
             //     'user_id' => auth()->user()->id,
             //     'slug' => 2,
@@ -202,15 +235,27 @@ class ProductController extends Controller
             //     'url' => $request->url,
             //     'layout' => $request->layout,
             // ]);
+            echo ' ada gmbr';
+
+            // $product->where('user_id', $currentUserId)->where('id',$product->id)->update([
+            //     ...$request->validated(),
+            //     'thumbnail' => $thumbnailPath,
+            // ]);
         }else{
-            Product::create([
-                'user_id' => auth()->user()->id,
-                'slug' => 'aduh',
-                'name' => $request->title,
-                'url' => $request->url,
-                'layout' => $request->layout,
+            // Product::create([
+            //     'user_id' => auth()->user()->id,
+            //     'slug' => 'aduh',
+            //     'name' => $request->title,
+            //     'url' => $request->url,
+            //     'layout' => $request->layout,
+            // ]);
+            echo 'gk ada gmbr';
+            $product->where('user_id', $currentUserId)->where('id',$product->id)->update([
+                ...$request->validated(),
             ]);
         }
+        dd($request->all(), $pathImages);
+
     }
 
 
@@ -244,14 +289,6 @@ class ProductController extends Controller
                 // 'url' => $request->url,
                 // 'layout' => $request->layout,
             ]);
-            // Product::create([
-            //     'user_id' => auth()->user()->id,
-            //     'slug' => 'aduh',
-            //     'name' => $request->title,
-            //     'url' => $request->url,
-            //     'layout' => $request->layout,
-            // ]);
-            // dd($request->all());
         }
 
         return redirect()->route('admin')->with('success','Data updated');
@@ -262,7 +299,17 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        // $arr = [1,2,3,4];
+        // dump($arr, array_shift($arr), $arr);
+        // die;
+        // dd($product);
+        if ($product->images) {
+            foreach ($product->images as $key => $value) {
+                Storage::delete('public/tes/'. $value);
+            }
+        }
+        $product->delete();
+        return redirect()->route('admin');
     }
 
     public function destroy_link(Product $product)
@@ -277,18 +324,60 @@ class ProductController extends Controller
 
     public function delete_image(Request $request, Product $product)
     {
-        if ($product->thumbnail) {
-            Storage::delete($product->thumbnail);
-            
-            $product->where('user_id', $request->user_id)->where('id', $product->id)->update([
-                'thumbnail' => NULL,
+        $oldImg = [...$product->images];
+        $listImages = [...$product->images];
+        $indexImage = $request->image;
+
+        if ($request->has('image')) {
+
+            if (array_key_exists($indexImage, $listImages)) {
+                unset($listImages[$indexImage]);
+                $listImages = array_values($listImages);
+                Storage::delete('public/tes/'. $product->images[$indexImage]);
+            }
+
+            $product->where('user_id', $request->user()->id)->where('id', $product->id)->update([
+                'thumbnail' => $listImages ? $listImages[0] : NULL,
+                'images' => (count($listImages) > 0) ? json_encode($listImages) : NULL,
             ]);
-            
+
+            return response()->json([
+                'img' => $request->image,
+                'old_img' => $oldImg,
+                'new_img' => $listImages,
+            ]);
+        }else{
             return response()->json([
                 'data' => $product,
                 'req' => $request->all(),
+                'aw' => 'kosong',
+                'img' => $request->image,
+                'old_img' => $oldImg,
+                'new_img' => $listImages,
+                'leng_old' => count($oldImg),
+                'leng_new' => count($listImages),
             ]);
         }
+        // if ($product->thumbnail) {
+        //     // Storage::delete($product->thumbnail);
+            
+        //     // $product->where('user_id', $request->user_id)->where('id', $product->id)->update([
+        //     //     'thumbnail' => NULL,
+        //     // ]);
+        //     return response()->json([
+        //         'data' => $product,
+        //         // 'img' => $product->images[$request->data_img],
+        //         'req' => $request->all(),
+        //         'aw' => 'ada',
+        //     ]);
+        // }else{
+        //     return response()->json([
+        //         'data' => $product,
+        //         'req' => $request->all(),
+        //         'aw' => 'kosong'
+        //     ]);
+        // }
+
     }
 
     // Generate random slug
@@ -296,20 +385,10 @@ class ProductController extends Controller
     {
         // digital product = 7 length
         // link product = 6 length
+        $userId = request()->user()->id;
         $alphanum = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         $str = '';
 
-        // $slugExist = Product::where('slug','aduh')->first();
-        // $status = false;
-        // $a = 0;
-        // do {
-        //     echo $a++.'<br>';
-        //     if ($slugExist) {
-        //         $status = true;
-        //         echo 'STOPPED '.$a++.'<br>';
-        //         continue;
-        //     }
-        // } while ($status != true);
         for ($i=0; $i < $length; $i++) { 
             $str .= $alphanum[rand(0, strlen($alphanum) - 1)];
         }
@@ -337,6 +416,12 @@ class ProductController extends Controller
         // }
     }
     
+    public function product_user(User $user, Product $product) {
+        // echo 'ok';
+        // dd($user,$product);
+        return view('creator.products.detail-produk', compact('user', 'product'));
+    }
+
     public function tes() {
         return view('creator.product.tes');
     }
