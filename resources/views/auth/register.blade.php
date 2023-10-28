@@ -56,4 +56,15 @@
             </x-primary-button>
         </div>
     </form>
+    @push('scripts')
+        <script>
+            const inputUsername = document.getElementById('username');
+
+            if (localStorage.length > 0) {
+                // const username = localStorage.getItem('username')
+                // inputUsername.value = username.split('').splice(13).join('')
+                inputUsername.value = localStorage.getItem('username').split('').splice(13).join('')
+            }
+        </script>
+    @endpush
 </x-guest-layout>
