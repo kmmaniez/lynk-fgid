@@ -122,9 +122,13 @@
                                         @if ($product->type->value == "link")
                                             src="{{ Storage::url($product->thumbnail) }}" 
                                         @else
-                                            src="{{ Storage::url('tes/'. $product->images[0]) }}" 
+                                            @if ($product->images)
+                                                src="{{ Storage::url('tes/'. $product->images[0]) }}" 
+                                            @else
+                                                src="{{ Storage::url($product->thumbnail) }}" 
                                             @endif
-                                            style="width: 4rem; height: 3rem;" class="card-img-top" alt="Thumbnail"
+                                        @endif
+                                            style="width: 4rem; height: 3rem;" class="card-img-top object-fit-fill rounded-1" alt="Thumbnail"
                                             >
                                     @endif
                                     <div class="hstack w-100">
