@@ -196,11 +196,12 @@ class ProductController extends Controller
      */
     public function update(DigitalProductRequest $request, Product $product)
     {
-        // DigitalProductRequest
-        $currentUserId = $request->user()->id;
         $pathImages = array();
+        $oldImageProduct = $product->images;
 
         if ($request->has('img')) {
+
+            // check valid base64 file image, if false will back and give errors
             $pattern = '(data:application)';
             for ($i=0; $i < count($request->img); $i++) { 
                 if (preg_match($pattern, $request->img[$i])) {
@@ -208,54 +209,60 @@ class ProductController extends Controller
                 }
             }
 
+            // save new images
             foreach ($request->img as $key => $image) {
-                // $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','', $image));
-                $imgname = date('HisdmY').'_'.Str::random(5).'.png';
-                // Storage::disk('public')->put('tes/'.$imgname, $base);
-                array_push($pathImages,$imgname);
+                $pattern = '#^data:image/\w+;base64,#i';
+                if (preg_match($pattern, $image)) {
+                    $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','', $image));
+                    $imgname = date('HisdmY').'_'.Str::random(5).'.png';
+                    Storage::disk('public')->put('tes/'.$imgname, $base);
+                    array_push($pathImages,$imgname);
+                }
+            }
+
+            if ($product->images) {
+                $newProductImages = array_merge($oldImageProduct, $pathImages);
+                try {
+                    $product->update([
+                        'name' => $request->name,
+                        'thumbnail' => $newProductImages[0],
+                        'images' => $newProductImages,
+                        'description' => $request->description,
+                        'url' => $request->url,
+                        'min_price' => $request->min_price,
+                        'max_price' => $request->max_price,
+                        'messages' => ($request->messages) ? $request->messages : NULL,
+                        'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
+                        'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
+                    ]);
+
+                } catch (\Throwable $th) {
+                    throw $th;
+                }
+
+            }else{
+                try {
+                    $product->update([
+                        'name' => $request->name,
+                        'thumbnail' => ($request->img) ? $pathImages[0] : 'public/tes/default.jpg',
+                        'images' => ($request->img) ? $pathImages : NULL,
+                        'description' => $request->description,
+                        'url' => $request->url,
+                        'min_price' => $request->min_price,
+                        'max_price' => $request->max_price,
+                        'messages' => ($request->messages) ? $request->messages : NULL,
+                        'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
+                        'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
+                    ]);
+    
+                } catch (\Throwable $th) {
+                    throw $th;
+                }
             }
             
-        
-            // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->title)) . '.' . $request->thumbnail->extension();
-            // $thumbnailPath = Storage::putFileAs('public/products', $request->file('thumbnail'), $thumbnailName);
-            // $thumbnailPath = FileService::store('public/products', $request->file('thumbnail'), $thumbnailName);
-
-            // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
-            // $thumbnailPath = FileService::store(
-            //     'public/products', 
-            //     $request->file('thumbnail'),
-            //     $request->thumbnail->extension(), 
-            //     $thumbnailName
-            // );
-            // Product::create([
-            //     'user_id' => auth()->user()->id,
-            //     'slug' => 2,
-            //     'thumbnail' => $thumbnailPath,
-            //     'name' => $request->title,
-            //     'url' => $request->url,
-            //     'layout' => $request->layout,
-            // ]);
-            echo ' ada gmbr';
-
-            // $product->where('user_id', $currentUserId)->where('id',$product->id)->update([
-            //     ...$request->validated(),
-            //     'thumbnail' => $thumbnailPath,
-            // ]);
-        }else{
-            // Product::create([
-            //     'user_id' => auth()->user()->id,
-            //     'slug' => 'aduh',
-            //     'name' => $request->title,
-            //     'url' => $request->url,
-            //     'layout' => $request->layout,
-            // ]);
-            echo 'gk ada gmbr';
-            $product->where('user_id', $currentUserId)->where('id',$product->id)->update([
-                ...$request->validated(),
-            ]);
         }
-        dd($request->all(), $pathImages);
 
+        return redirect()->route('admin');
     }
 
 

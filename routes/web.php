@@ -6,6 +6,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\UserController;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -109,9 +112,9 @@ Route::get('/order', function () {
     return view('creator.order');
 })->name('order');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
 
@@ -170,9 +173,24 @@ Route::prefix('cart')->group(function () {
     });
 });
 
-Route::get('/tes', function() {
-    return view('admin.dashboard');
+Route::prefix('dashboard')->group(function () {
+    
+    Route::get('/', function() {
+        $total_user = User::all()->count();
+        $total_product = Product::all()->count();
+        return view('admin.dashboard', compact('total_user','total_product'));
+    })->name('dashboard');
+
+    Route::controller(UserController::class)->prefix('users')->group(function () {
+        Route::get('/', 'index')->name('user.index');
+        Route::get('/getallusers', 'getAllUsers')->name('user.getusers');
+    });
+
+
+
 });
+
+
 
 
 Route::get('/checkout', function () {

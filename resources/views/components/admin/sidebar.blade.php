@@ -11,7 +11,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item {{ (request()->is('/') || request()->is('dashboard')) ? 'active' : '' }}">
-                <a class="nav-link" href="/">
+                <a class="nav-link" href="{{ route('dashboard') }}">
                     <i class="fas fa-fw fa-desktop"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -28,9 +28,15 @@
 
             {{-- <li class="nav-item {{ (request()->is('supplier*')) ? 'active' : '' }}"> --}}
             <li class="nav-item">
-                <a class="nav-link" href="/supplier">
+                <a class="nav-link" href="{{ route('user.index') }}">
                     <i class="fas fa-fw fa-user"></i>
-                    <span>Data Creator</span></a>
+                    <span>Data User</span></a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link" href="/supplier">
+                    <i class="fas fa-fw fa-credit-card"></i>
+                    <span>Payment Settlement</span></a>
             </li>
             
             <!-- Divider -->
@@ -51,4 +57,3 @@
 
         </ul>
         <!-- End of Sidebar -->
-        
