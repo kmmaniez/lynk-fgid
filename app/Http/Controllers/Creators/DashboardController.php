@@ -15,6 +15,8 @@ class DashboardController extends Controller
         $currentUser = auth()->user();
         return view('creator.index',[
             'products' => Product::with('users')->where('user_id','=',$currentUser->id)->latest()->get()
+            // 'products' => Product::with('users')->where('user_id','=',$currentUser->id)->get()
+            // 'products' => Product::with('users')->where('user_id','=',$currentUser->id)->orderBy('created_at','ASC')->get()
         ]);
     }
 
