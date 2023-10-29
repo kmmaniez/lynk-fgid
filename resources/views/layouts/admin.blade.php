@@ -23,6 +23,7 @@
     <link href="{{ url('sb-admin/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 
     {{-- @endif --}}
+    @stack('styles')
 
 </head>
 
@@ -46,7 +47,10 @@
                 <!-- End Top bar Component -->
 
                 <!-- Begin Page Content -->
-                @yield('konten')
+                <div class="container-fluid">
+                    @yield('konten')
+
+                </div>
                 <!-- /.container-fluid -->
 
             </div>
@@ -78,6 +82,7 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ url('sb-admin/js/demo/datatables-demo.js') }}"></script>
+    @stack('scripts')
 
 </body>
 
