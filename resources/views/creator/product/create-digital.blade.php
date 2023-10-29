@@ -55,29 +55,8 @@
         #popover-custom-content {
             display: none;
         }
-        label#custom {
-        /* color: white; */
-        /* padding: 0.5rem; */
-        /* font-family: sans-serif;
-        border-radius: 0.3rem; */
-        /* cursor: pointer;
-        margin-top: 1rem; */
-        }
 
 
-        @media (max-width: 768px) {
-            input.form-control {
-                width: 100%;
-            }
-
-            /* textarea.form-control{
-                    width: 100%;
-                } */
-
-            /* .input-group {
-                    width: 100%;
-                } */
-        }
         #layout span{
             display: block;
             text-align: center;
@@ -118,13 +97,66 @@
             /* padding: 4px; */
             background-color: #eaeaea;
         }
-        label#custom {
-            /* margin-top: 1.25rem; */
+        /* label#custom {
+            margin-top: 1.25rem;
             padding: 2rem;
             border: 2px dotted #ff7676;
             border-radius: 8px;
             cursor: pointer;
             text-align: center;
+        } */
+        label#custom {
+            width: 116px;
+            /* height: 118px; */
+            height: 118px;
+            padding: 1rem;
+            border: 2px dotted #ff7676;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            flex-shrink: 0;
+        }
+        #titlethumb{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        #list-images{
+            width: max-content;
+            position: relative;
+            height: max-content;
+            /* padding: 8px; */
+        }
+        #form-image{
+            height: max-content;
+            display: flex;
+            gap: 2rem;
+        }
+        @media (max-width: 820px) {
+            input.form-control {
+                width: 100%;
+            }
+            #form-image{
+                height: max-content;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                /* align-items: center; */
+                gap: 8px;
+            }
+            #list-images{
+                width: 100%;
+                position: relative;
+                height: max-content;
+            }
+            label#custom{
+                order: 2;
+            }
         }
     </style>
 @endpush
@@ -132,35 +164,16 @@
     <section id="digital-produk">
         <div class="card border-0 pb-0">
             <div class="card-body">
-                <h3>Add digital produk new</h3>
-                @dump($errors)
-                @dump(Session::get('error'))
+                <h3>Add product digital</h3>
+
                 <form action="{{ route('products.digitalstore') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
-                    {{-- <div class="form-group hstack gap-3 justify-content-between align-items-center">
-                        <div class="box position-relative rounded-2">
-                            <img id="displaythumbnail" src="{{ asset('assets/user2.jpg') }}" class="position-relative rounded-1" style="width: 120px; height: 100px;">
-                            <a href="#" id="removeimg" class="position-absolute top-0 start-100 translate-middle badge border border-light border-2 rounded-circle bg-danger p-2" style="z-index: 1"><i data-feather="x" class="fa-2"></i></a>
-                        </div> 
-                        <div class="form-upload">
-                            <label id="custom" class="position-relative" for="thumbnail"><i data-feather="image"></i>Upload</label>
-                            <input type="file" name="thumbnail" id="thumbnail" accept="image/*" multiple hidden>
-                        </div>
-                    </div> --}}
-
-                    <div class="text">
-                    </div>
-                    <div class="form-group hstack mb-3">
+                    <div id="form-image" class="form-group mt-3 mb-3 p-1">
+                        <label id="custom" for="images">Upload Images <i data-feather="image"></i></label>
+                        <input type="file" name="images[]" id="images" accept="image/*" multiple hidden>
                         <div id="list-images" class="mb-2 hstack flex-wrap gap-1">
-                            {{-- <div class="item position-relative rounded-2" style="width: max-content;">
-                                <img id="displayimg" src="{{ asset('assets/user2.jpg') }}" width="116" height="118" alt="" srcset="">
-                                <a href="#" id="remove-list" class="position-absolute top-0 start-100 translate-middle badge border border-light border-2 rounded-circle bg-danger p-2" style="z-index: 1"><i data-feather="x" class="fa-2"></i></a>
-                            </div> --}}
                         </div>
-                        <label for="images">Upload Images <i data-feather="image"></i></label>
-                        {{-- accept="image/*" --}}
-                        <input type="file" name="images[]" id="images" multiple hidden>
                     </div>
 
                     <div class="mb-3">
@@ -226,10 +239,13 @@
                         </div>
                         <select class="form-control mt-2 shadow-none" name="cta_text" id="cta_text">
                             <option class="d-none" value="">Pilih Kalimat CTA</option>
-                            <option value="0">I Want this</option>
+                            {{-- <option value="0">I Want this</option>
                             <option value="1">Support Creator</option>
                             <option value="2">Beli Sekarang</option>
-                            <option value="3">Book Now</option>
+                            <option value="3">Book Now</option> --}}
+                            @foreach(App\Enums\CtaEnum::values() as $key => $enum)
+                                <option value="{{ $key }}">{{ $key }}</option>
+                            @endforeach
                         </select>
                         @if (session()->has('cta_text'))
                             <small class="text-danger">{{ session()->get('cta_text') }}</small>
@@ -239,7 +255,19 @@
                     <div class="form-group">
                         <label for="layout">Layout</label>
                         <div class="hstack gap-3 mt-2" id="layout">
-                            <label>
+                            @php
+                                $arrAsset = ['assets/default-col.png','assets/grid.png','assets/large-image.png'];
+                                $index = 0;
+                            @endphp
+                            @foreach(App\Enums\LayoutEnum::values() as $key => $layout)
+                                {{-- <option value="{{ $key }}">{{ $key }}</option> --}}
+                                <label>
+                                    <input class="form-check-input" type="radio" name="layout" value="{{ $key }}" {{ ($index === 0) ? 'checked' : '' }}>
+                                    <img src="{{ asset($arrAsset[$index++]) }}" width="164" height="164" alt="Layout">
+                                    <span>{{ Str::ucfirst($key) }}</span>
+                                </label>
+                            @endforeach
+                            {{-- <label>
                                 <input class="form-check-input" type="radio" name="layout" value="default" checked>
                                 <img src="{{ asset('assets/default-col.png') }}" width="164" height="164" alt="default">
                                 <span>Default</span>
@@ -253,7 +281,7 @@
                                 <input class="form-check-input" type="radio" name="layout" value="large">
                                 <img src="{{ asset('assets/large-image.png') }}" width="164" height="164" alt="large">
                                 <span>Large Image</span>
-                            </label>
+                            </label> --}}
                         </div>
                     </div>
     
@@ -285,9 +313,18 @@
             html: true,
             content: contentMessage,
         })
+        
+        window.onresize = (e) => {
+            if (window.innerWidth <= 820) {
+                $('#form-image').css('align-items','center')
+            }else{
+                $('#form-image').css('align-items','flex-start')
+            }
+        }
 
         $(document).ready(function(){
-            let count = 0;
+            const label = `<small id="titlethumb" class="bg-danger rounded-2 text-white text-center p-1">Thumbnail</small>`;
+
             $('#images').change(function(e) {
                 e.preventDefault()
                 const imageFiles = e.target.files;
@@ -296,38 +333,35 @@
                     reader.readAsDataURL(imageFiles[index]);
                     reader.addEventListener('load', () => {
                         const img = `
-                        <div class="item position-relative rounded-2" data-item="${index + 1}" style="width: max-content;">
-                            <img id="displayimg" src="${reader.result}" width="116" height="118" alt="" srcset="">
+                        <div class="item position-relative" data-item="${index + 1}" style="width: max-content;">
+                            <img id="displayimg" class="rounded-2" src="${reader.result}" width="116" height="118" alt="" srcset="">
                             <span data-img="${index + 1}" id="remove-list" class="remove-list position-absolute top-0 start-100 translate-middle badge border border-light border-2 rounded-circle bg-danger" style="z-index: 1">X</span>
                             <input name="img[]" value="${reader.result}" hidden>
-                            </div>
+                        </div>
                         `;
-                            // <input name="img[]" value="${reader.result}" hidden>
-                        // <img id="displayimg" data-img="${index + 1}" src="${reader.result}" width="116" height="118" alt="" srcset="">
                         $('#list-images').append(img);
+                        if (index === 0) {
+                            $('#list-images').children('.item:first:not(:has(small))').append(label)
+                        }
                     });
-                    console.log(e.target);
-                    console.log('count '+count);
-                    count++;
                 }
-                console.log(e.target);
             })
         })
+        
         $('#list-images').on('click', (e) => {
             $(this).on('click', (ev) => {
                 // ev.preventDefault();
                 ev.stopImmediatePropagation();
                 const elemData = ev.target.dataset.img;
                 if (elemData) {
-                    console.log(ev.target.parentElement);
-                    console.log(imagesFile);
-                    if (listimage.hasChildNodes) {
-                        listimage.removeChild(ev.target.parentElement)
+                    if(confirm("Delete images ?")){
+                        if (listimage.hasChildNodes) {
+                            listimage.removeChild(ev.target.parentElement)
+                            $('#list-images').children('.item:first:not(:has(small))').append(label)
+                        }
                     }
                 }
-                // console.log(ev.target.dataset.img);
             })
-            // console.log($(this).o);
         })
 
         $('#removeimg').on('click', (e) => {
@@ -337,28 +371,7 @@
                 $('#thumbnaildisplay').css('display','none');
                 $('.box').css('display','none');
                 $('.form-upload').css('display','block');
-                console.log(thumbnailFile.files);
             }
         })
-        
-        $('#thumbnail').change(function() {
-            let reader = new FileReader();
-            reader.onload = (e) => {
-                $('.box').css('display','block');
-                $('.form-upload').css('display','none');
-
-                $('#displaythumbnail').attr('src', e.target.result);
-                $('#thumbnaildisplay').attr('src', e.target.result);
-                $('#thumbnaildisplay').css({
-                    'display':'block',
-                    'width':'120px',
-                    'height':'100px'
-                })
-            }
-            // arrayFiles.push(...thumbnailFile.files)
-            reader.readAsDataURL(this.files[0]);
-            console.log(this);
-            // console.log(arrayFiles);
-        });
     </script>
 @endpush
