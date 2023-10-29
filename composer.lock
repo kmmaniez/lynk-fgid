@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83beb97a815c288206f66fa023979d3c",
+    "content-hash": "01b835cf1a451f2a9105d031dade6f56",
     "packages": [
         {
             "name": "brick/math",
@@ -1032,71 +1032,6 @@
                 }
             ],
             "time": "2023-08-27T10:19:19+00:00"
-        },
-        {
-            "name": "jackiedo/cart",
-            "version": "3.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/JackieDo/Laravel-Cart.git",
-                "reference": "438bbcf72851c49e6f472635f12a10fe2406b5bd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/JackieDo/Laravel-Cart/zipball/438bbcf72851c49e6f472635f12a10fe2406b5bd",
-                "reference": "438bbcf72851c49e6f472635f12a10fe2406b5bd",
-                "shasum": ""
-            },
-            "require": {
-                "laravel/framework": "^10.0|^9.0|^8.0|^7.0|^6.0|^5.0",
-                "php": ">=5.6.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.0|^0.9",
-                "orchestra/testbench": "^8.0|^7.0|^6.0|^5.0|^4.0|^3.0",
-                "phpunit/phpunit": "^9.0|^8.0|^7.0|^6.0|^5.0|^4.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Jackiedo\\Cart\\CartServiceProvider"
-                    ],
-                    "aliases": {
-                        "Cart": "Jackiedo\\Cart\\Facades\\Cart"
-                    }
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/Helpers/helpers.php"
-                ],
-                "psr-4": {
-                    "Jackiedo\\Cart\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jackie Do",
-                    "email": "anhvudo@gmail.com"
-                }
-            ],
-            "description": "A package used to create and manage carts (such as shopping, recently viewed, compared items...) in Laravel application.",
-            "keywords": [
-                "cart",
-                "laravel",
-                "shopping",
-                "shoppingcart"
-            ],
-            "support": {
-                "issues": "https://github.com/JackieDo/Laravel-Cart/issues",
-                "source": "https://github.com/JackieDo/Laravel-Cart/tree/3.0.4"
-            },
-            "time": "2023-02-19T22:06:20+00:00"
         },
         {
             "name": "laravel/framework",
@@ -5822,6 +5757,90 @@
                 "source": "https://github.com/webmozarts/assert/tree/1.11.0"
             },
             "time": "2022-06-03T18:03:27+00:00"
+        },
+        {
+            "name": "yajra/laravel-datatables-oracle",
+            "version": "v10.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yajra/laravel-datatables.git",
+                "reference": "b4943a3ee422e0a390d85a4cb01dee9360137b61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yajra/laravel-datatables/zipball/b4943a3ee422e0a390d85a4cb01dee9360137b61",
+                "reference": "b4943a3ee422e0a390d85a4cb01dee9360137b61",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^9|^10",
+                "illuminate/filesystem": "^9|^10",
+                "illuminate/http": "^9|^10",
+                "illuminate/support": "^9|^10",
+                "illuminate/view": "^9|^10",
+                "php": "^8.0.2"
+            },
+            "require-dev": {
+                "nunomaduro/larastan": "^2.4",
+                "orchestra/testbench": "^8",
+                "yajra/laravel-datatables-html": "^9.3.4|^10"
+            },
+            "suggest": {
+                "yajra/laravel-datatables-buttons": "Plugin for server-side exporting of dataTables.",
+                "yajra/laravel-datatables-editor": "Plugin to use DataTables Editor (requires a license).",
+                "yajra/laravel-datatables-export": "Plugin for server-side exporting using livewire and queue worker.",
+                "yajra/laravel-datatables-fractal": "Plugin for server-side response using Fractal.",
+                "yajra/laravel-datatables-html": "Plugin for server-side HTML builder of dataTables."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "10.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Yajra\\DataTables\\DataTablesServiceProvider"
+                    ],
+                    "aliases": {
+                        "DataTables": "Yajra\\DataTables\\Facades\\DataTables"
+                    }
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helper.php"
+                ],
+                "psr-4": {
+                    "Yajra\\DataTables\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arjay Angeles",
+                    "email": "aqangeles@gmail.com"
+                }
+            ],
+            "description": "jQuery DataTables API for Laravel 4|5|6|7|8|9|10",
+            "keywords": [
+                "datatables",
+                "jquery",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/yajra/laravel-datatables/issues",
+                "source": "https://github.com/yajra/laravel-datatables/tree/v10.10.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yajra",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-10-04T02:26:02+00:00"
         }
     ],
     "packages-dev": [
