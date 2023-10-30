@@ -1,183 +1,5 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap5/css/bootstrap.min.css') }}">
-    <style>
-        section#produk{
-           top: 4rem; 
-           bottom:0; 
-           right:0; 
-           z-index:-1;
-           height: calc(100vh - 4rem);
-        }
-        @media (max-width: 768px) {
-            section#produk{
-                width: 100%;
-            }
-        }
-        body{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #eaeaea;
-        }
-        #wrapper{
-            position: relative;
-            height: 100vh;
-            width: 800px;
-        }
-    </style>
-</head>
-
-<body>
-    <div id="wrapper" class="bg-white p-0" style="">
-        <nav class="navbar border-bottom navbar-expand-lg ps-3 d-flex justify-content-between" style="height: 4rem;">
-            <a class="navbar-brand" href="{{ route('admin') }}">
-                <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150"
-                    class="d-inline-block align-text-top">
-            </a>
-        </nav>
-
-        <section id="produk" class="">
-            <div class="card border-0 h-100">
-                <div class="card-body">
-
-                    <div class="card">
-                        <div class="card-body">
-                            <small>Order Summary</small>
-
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>Total Item</td>
-                                        <td class="text-end">4 items</td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="item">
-                                                <span>List Item</span>
-                                                <ol class="mt-2">
-                                                    <li><span>Char PB (1x)</span></li>
-                                                    <li><span>Valorant cheat (2x)</span></li>
-                                                    <li><span>Ninja Saga (1x)</span></li>
-                                                </ol>
-                                            </div>
-                                        </td>
-                                        <td class="text-end">
-                                            <div class="item">
-                                                <span class="invisible">4</span>
-                                                <ul class="mt-2" style="list-style-type: none;">
-                                                    <li><span>Rp. 20.000</span></li>
-                                                    <li><span>Rp. 10.000</span></li>
-                                                    <li><span>Rp. 30.000</span></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fee platform</td>
-                                        <td class="text-end">Rp. 10.000</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Total</th>
-                                        <td class="text-end fw-bold">Rp. 30.000</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="card border-0 mt-2">
-                        <div class="card-body">
-                            <form action="" method="post">
-                                <div class="form-group">
-                                    <label for="">Email</label>
-                                    <input class="form-control shadow-none" type="email" name="" id="">
-                                </div>
-                                <div class="form-group mt-2">
-                                    <label for="">Nama</label>
-                                    <input class="form-control shadow-none" type="text" name="" id="" required>
-                                </div>
-
-                                <div class="payment-method">
-                                    <div class="form-group">
-                                        <label for="">Nama</label>
-                                        <input type="radio" class="form-control" name="" id="">
-                                        <input type="radio" class="form-control" name="" id="">
-                                        <input type="radio" class="form-control" name="" id="">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-
-                </div>
-                <div class="card-footer border-0 mb-5">
-                        <a href="#" id="btnAddToCart" class="btn btn-success bg-success bg-gradient w-100">Bayar Sekarang - Rp. 30.0000</a>
-
-                </div>
-            </div>
-        </section>
-        
-    </div>
-
-    <script src="{{ asset('assets/vendor/bootstrap5/js/bootstrap.bundle.min.js') }}"></script>
-
-    <script src="{{ asset('assets') }}/vendor/jquery/jquery.min.js"></script>
-    <script src="{{ asset('assets') }}/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-</body>
-    <script>
-    </script>
-</html> --}}
 @extends('layouts.products')
 @push('styles')
-    {{-- <style>
-
-        .kotak{
-            width: 100px;
-            height: 50px;
-            background-color: salmon;
-        }
-        [type=radio] { 
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        /* IMAGE STYLES */
-        [type=radio] + img {
-            cursor: pointer;
-            width: 96px;
-            height: 48px;
-        }
-
-        /* CHECKED STYLES */
-        [type=radio]:checked + img {
-            background-color: #fff;
-            outline: 1px solid #3e9f72;
-            border-radius: 4px;
-        }
-        .payment-method .form-group .hstack{
-            justify-content: flex-start;
-            gap: 1.5rem;
-        }
-        @media (max-width: 768px) {
-            .card-form-input{
-                padding: 8px 0px;
-            }
-            .payment-method .form-group .hstack{
-                justify-content: space-between;
-            }
-            
-        }
-    </style> --}}
     <style>
         .wrapper{
             /* height: max-content; */
@@ -186,127 +8,18 @@
     </style>
 @endpush
 @section('produk')
-    {{-- <section id="produk" class="">
-        <div class="card border-0 h-100">
-            <div class="card-body">
-
-                <div class="card">
-                    <div class="card-body">
-                        <small>Order Summary</small>
-
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>Total Item</td>
-                                    <td class="text-end">4 items</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2" class="p-0">
-                                        <div class="accordion" id="accordionPanelsStayOpenExample">
-                                            <div class="accordion-item border-0">
-                                                <h2 class="accordion-header">
-                                                    <button class="accordion-button bg-white  shadow-none" type="button"
-                                                        data-bs-toggle="collapse"
-                                                        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                                        aria-controls="panelsStayOpen-collapseOne">
-                                                        List Item
-                                                    </button>
-                                                </h2>
-                                                <div id="panelsStayOpen-collapseOne"
-                                                    class="accordion-collapse collapse show">
-                                                    <div class="accordion-body py-0 px-2">
-
-                                                        <div class="hstack justify-content-between">
-                                                            <ol class="mt-2">
-                                                                <li><span>Char PB (1x)</span></li>
-                                                                <li><span>Valorant cheat (2x)</span></li>
-                                                                <li><span>Ninja Saga (1x)</span></li>
-                                                            </ol>
-    
-                                                            <ul class="mt-2" style="list-style-type: none">
-                                                                <li><span>Rp. 20.000</span></li>
-                                                                <li><span>Rp. 10.000</span></li>
-                                                                <li><span>Rp. 30.000</span></li>
-                                                            </ul>
-
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Fee platform</td>
-                                    <td class="text-end">Rp. 10.000</td>
-                                </tr>
-                                <tr>
-                                    <th>Total</th>
-                                    <td class="text-end fw-bold">Rp. 30.000</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="card border-0 mt-2">
-                    <div class="card-body card-form-input">
-                        <form action="" method="post">
-                            <div class="form-group">
-                                <label for="">Email</label>
-                                <input class="form-control shadow-none" type="email" name="" id="">
-                            </div>
-                            <div class="form-group mt-2">
-                                <label for="">Nama</label>
-                                <input class="form-control shadow-none" type="text" name="" id=""
-                                    required>
-                            </div>
-
-                            <div class="payment-method mt-2">
-                                <div class="form-group">
-                                    <label for="">Pilih Pembayaran</label>
-                                    <div class="hstack mt-2" id="theme_profile">
-                                        <label>
-                                            <input class="form-check-input" type="radio" name="theme" value="light">
-                                            <img src="{{ asset('assets/ovo.jpg') }}" alt="light">
-                                        </label>
-                                        <label>
-                                            <input class="form-check-input" type="radio" name="theme" value="dark">
-                                            <img src="{{ asset('assets/qris.png') }}" alt="dark">
-                                        </label>
-                                        <label>
-                                            <input class="form-check-input" type="radio" name="theme" value="dark">
-                                            <img src="{{ asset('assets/shopeepay.png') }}" alt="dark">
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </div>
-            <div class="card-footer border-0 mb-5">
-                <a href="#" id="btnAddToCart" class="btn text-white bg-danger bg-gradient w-100">Bayar Sekarang -
-                    Rp. 30.0000</a>
-                <a href="{{ route('owner') }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Kembali Belanja</a>
-            </div>
-        </div>
-    </section> --}}
     <section id="checkout" class="">
-        <div class="card border-0 h-100">
-            <div class="card-body">
 
+        <div class="card border-0 h-100" style="border-radius: 0">
+            <div class="card-body">
                 <div class="card">
                     <div class="card-body">
                         <small>Order Summary</small>
-
                         <table class="table">
                             <tbody>
                                 <tr>
                                     <td>Total Item</td>
-                                    <td class="text-end">4 items</td>
+                                    <td class="text-end" id="totalitem"></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2" class="p-0">
@@ -325,16 +38,20 @@
                                                     <div class="accordion-body py-0 px-2">
 
                                                         <div class="hstack justify-content-between">
-                                                            <ol class="mt-2">
-                                                                <li><span>Char PB (1x)</span></li>
+                                                            <ol class="mt-2" id="cartitems">
+                                                                {{-- @foreach ($cartitems as $item)
+                                                                <li><span>{{ $item->name }} ({{ $item->quantity }}x)</span></li>
                                                                 <li><span>Valorant cheat (2x)</span></li>
                                                                 <li><span>Ninja Saga (1x)</span></li>
+                                                                @endforeach --}}
                                                             </ol>
     
-                                                            <ul class="mt-2" style="list-style-type: none">
-                                                                <li><span>Rp. 20.000</span></li>
+                                                            <ul class="mt-2" id="cartprice" style="list-style-type: none">
+                                                                {{-- @foreach ($cartitems as $item)
+                                                                <li><span>Rp. {{ $item->quantity * $item->price }}</span></li>
                                                                 <li><span>Rp. 10.000</span></li>
                                                                 <li><span>Rp. 30.000</span></li>
+                                                                @endforeach --}}
                                                             </ul>
 
                                                         </div>
@@ -347,11 +64,11 @@
                                 </tr>
                                 <tr>
                                     <td>Fee platform</td>
-                                    <td class="text-end">Rp. 10.000</td>
+                                    <td class="text-end" id="feeplatform"></td>
                                 </tr>
                                 <tr>
                                     <th>Total</th>
-                                    <td class="text-end fw-bold">Rp. 30.000</td>
+                                    <td class="text-end fw-bold" id="totalprice"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -361,30 +78,31 @@
                 <div class="card border-0 mt-2">
                     <div class="card-body card-form-input">
                         <form action="" method="post">
+                            @csrf
+
                             <div class="form-group">
-                                <label for="">Email</label>
-                                <input class="form-control shadow-none" type="email" name="" id="">
+                                <label for="email">Email</label>
+                                <input class="form-control shadow-none" type="email" name="email" id="email" required>
                             </div>
                             <div class="form-group mt-2">
-                                <label for="">Nama</label>
-                                <input class="form-control shadow-none" type="text" name="" id=""
-                                    required>
+                                <label for="name">Name</label>
+                                <input class="form-control shadow-none" type="text" name="name" id="name" required>
                             </div>
 
                             <div class="payment-method mt-2">
                                 <div class="form-group">
                                     <label for="">Pilih Pembayaran</label>
-                                    <div class="hstack mt-2" id="theme_profile">
+                                    <div class="hstack mt-2" id="choose_payment">
                                         <label>
-                                            <input class="form-check-input" type="radio" name="theme" value="light">
+                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="ovo">
                                             <img src="{{ asset('assets/ovo.jpg') }}" alt="light">
                                         </label>
                                         <label>
-                                            <input class="form-check-input" type="radio" name="theme" value="dark">
+                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="qris">
                                             <img src="{{ asset('assets/qris.png') }}" alt="dark">
                                         </label>
                                         <label>
-                                            <input class="form-check-input" type="radio" name="theme" value="dark">
+                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="shopee">
                                             <img src="{{ asset('assets/shopeepay.png') }}" alt="dark">
                                         </label>
                                     </div>
@@ -395,10 +113,66 @@
                 </div>
 
             </div>
-            <div class="card-footer bg-white border-0">
-                <a href="#" id="btnAddToCart" class="btn text-white bg-danger bg-gradient w-100">Bayar Sekarang - Rp. 30.0000</a>
-                <a href="{{ route('owner') }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Kembali Belanja</a>
+            <div class="card-footer border-0">
+                <a href="#" id="btnPay" class="btn text-white bg-danger bg-gradient w-100"></a>
+                <a href="{{ route('public.user', $userProduct[0]->username) }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Back to Shopping</a>
             </div>
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        const btnPayment = $('#btnPay');
+        const feePlatform = $('#feeplatform');
+        const cartItems = $('#cartitems');
+        const cartPrice = $('#cartprice');
+        const totalItem = $('#totalitem');
+        const totalPrice = $('#totalprice');
+
+        $(function(){
+            fetchCart()
+        })
+
+        $('#choose_payment').children().on('change', (e) =>{
+            $.ajax({
+                url: "{{ route('cart.checkfee') }}?type="+e.target.value,
+                method: 'GET',
+                cache: false,
+                success: (res) => {
+                    const {cart} = res;
+                    btnPayment.text('Bayar Sekarang - Rp. '+res.payment_fee)
+                    totalPrice.text(res.payment_fee)
+                    feePlatform.text(res.payment_fee)
+                },
+                error: (res) => {
+                    console.log(res);
+                }
+            })
+        })
+
+        function fetchCart() {
+            $.ajax({
+                url: "{{  route('cart.getitems')  }}",
+                method: 'GET',
+                success: (res) => {
+                    const {cart} = res.data;
+                    btnPayment.text('Bayar Sekarang - Rp. '+res.data.total_price)
+                    totalItem.text(res.data.total_item)
+                    totalPrice.text(res.data.total_price)
+                    feePlatform.text(res.data.payment_fee)
+                    
+                    for (const product in cart) {
+                        const listItems = `<li><span>${cart[product].name} (${cart[product].quantity}x)</span></li>`;
+                        const listPrice = `<li><span>Rp. ${cart[product].price}</span></li>`;
+
+                        cartPrice.append(listPrice)
+                        cartItems.append(listItems)
+                    }
+                },
+                error: (res) => {
+                    console.log(res);
+                }
+            })
+        }
+    </script>
+@endpush
