@@ -168,6 +168,8 @@ Route::prefix('cart')->group(function () {
         Route::get('/item', 'getAllItems')->name('cart.getitems');
         Route::post('/', 'store')->name('addcart');
         Route::patch('/', 'update')->name('cart.update');
+        Route::get('/checkout', 'checkout_items')->name('cart.checkout');
+        Route::get('/checkFee', 'check_fee_items')->name('cart.checkfee');
         Route::post('/remove', 'remove_item')->name('cart.removeitem');
         Route::get('/destroy', 'destroy')->name('cart.destroy');
     });
