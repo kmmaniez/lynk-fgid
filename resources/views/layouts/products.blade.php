@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -165,9 +164,9 @@
 </head>
 
 <body 
-    class="{{ ($user->theme == "light") ? 'bg-light-cover' : 'bg-dark'}}">
+    class="{{ ($user->theme == "light" || Request::routeIs('cart.checkout')) ? 'bg-light-cover' : 'bg-dark'}}">
 
-    <div class="wrapper {{ ($user->theme == "light") ? 'bg-white' : 'bg-dark-cover' }}" style="">
+    <div class="wrapper {{ ($user->theme == "light" || Request::routeIs('cart.checkout')) ? 'bg-white' : 'bg-dark-cover' }}" style="">
 
         <nav class="navbar {{ (Request::routeIs('products.detailuser')) ? 'ps-2 pe-4' : 'px-4' }} bg-primary sticky-top bg-body-tertiary">
             @if (!Request::routeIs('products.detailuser'))
@@ -176,7 +175,7 @@
                 </a>
             @else
                 <a class="navbar-brand" href="{{ route('public.user', request()->route()->originalParameters()['user']) }}">
-                    <i data-feather="arrow-left" class="text-danger"></i> {{ '@'.request()->route()->originalParameters()['user'] }}
+                    <i data-feather="arrow-left" class="text-danger"></i> {{ '@'.request()->route()->originalParameters()['user'] }} | {{ $user->id }}
                 </a>
                 <div class="cart position-relative">
                     <i data-feather="shopping-cart" class="text-danger"></i> 
@@ -263,8 +262,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="vstack gap-2">
-                        <a href="{{ route('checkout') }}" target="_blank" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a>
+                    <div class="vstack gap-2" id="btnGroup">
+                        {{-- <a href="{{ route('cart.checkout') }}" target="_blank" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a> --}}
                         <a href="#" id="btnContinue" class="btn btn-md btn-outline-danger w-100">Continue Shopping</a>
                     </div>
                 </div>
@@ -299,16 +298,7 @@
         const quantity = $('#quantity');
         const btnIncreaseQty = $('#btnIncreaseQty');
         const btnDecreaseQty = $('#btnDecreaseQty');
-
         const cart = $('.cart');
-        cart.on('click', () => {
-            // let show = $('.cart-info').hasClass('show');
-            // if (!show) {
-            //     $('.cart-info').addClass('show')
-            // }else{
-            //     $('.cart-info').removeClass('show')
-            // }
-        })
 
         $(document).ready(function(){
 
@@ -317,6 +307,8 @@
                 method: 'GET',
                 success: (res) => {
                     const {data} = res;
+                    // console.log('awal');
+                    // console.log(res);
                     $('#total-cart').text(data.total_item)
                 }
             })
@@ -337,12 +329,14 @@
             })
             BtnContinue.on('click', (e) => {
                 e.preventDefault();
+                // const link = `
+                // <a href="{{ route('cart.checkout') }}" target="_blank" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a>
+                // `;
                 $('.cart-info').removeClass('show')
                 $('.list-item').children().remove()
                 userPayVal.val('')
             })
 
-            // console.log($('.list-item').children());
         })
         // $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnIncreaseQty', function(e){
         $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnRemoveItem', function(e){
@@ -356,9 +350,6 @@
         $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnIncreaseQty', function(e){
             e.preventDefault()
             if (confirm('Add item again in your cart ?')) {
-                // removeCartItem($(this).data('id'))
-                // $('#total-cart').text('0')
-                console.log($(this).data());
                 $.ajax({
                     url: "{{ route('cart.update') }}",
                     method: 'POST',
@@ -375,12 +366,10 @@
                 })
             }
         })
+
         $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnDecreaseQty', function(e){
             e.preventDefault()
             if (confirm('Update your cart ?')) {
-                // removeCartItem($(this).data('id'))
-                // $('#total-cart').text('0')
-                console.log($(this).data('id'));
                 $.ajax({
                     url: "{{ route('cart.update') }}",
                     method: 'POST',
@@ -391,8 +380,12 @@
                         type: 'decrease'
                     },
                     success: (res) => {
+                        // console.log('decrease');
+                        // console.log(res);
                         $('.list-item').children().remove()
                         showCartItems();
+                        $('#btnGroup').children('a:first').remove()
+
                     }
                 })
             }
@@ -469,9 +462,7 @@
             // })
         })
         
-        $('#continueBtn').on('click', () => {
-            $('.cart-info').removeClass('show')
-        })
+        
         feather.replace();
 
         function addToCart() {
@@ -483,13 +474,11 @@
                     id: productId.val(),
                     quantity: quantity.val(),
                     user_pay: userPayVal.val(),
-                    hash: userPayVal.data('key')
+                    creator_id: '{{ $user->id }}'
                 },
                 success: (res) => {
+                    // console.log('add cart');
                     // console.log(res);
-                    // console.log(res.update);
-                    // console.log(res.keyhash);
-                    // userPayVal.attr('data-key', res.keyhash)
                     if (res.code == 201) {
                         userPayError.text(res.messages)
                         userPayError.css('display','block');
@@ -505,11 +494,6 @@
                 }
             })
         }
-
-        // $('#btnRemoveItem').on('click', (e) => {
-        //     e.preventDefault();
-        //     console.log($(this));
-        // })
 
         function removeCartItem(id) {
             $.ajax({
@@ -533,7 +517,9 @@
                 method: 'GET',
                 success: (res) => {
                     const {data} = res;
-
+                    // console.log('show');
+                    // console.log(res);
+                    // console.log(data.cart);
                     if (Object.keys(data.cart).length > 0) {
                         // filled cart
                         listItem.css({
@@ -576,6 +562,13 @@
                             $('.keterangan-order > table > tbody > tr > td:nth(2)').text(`Rp ${data.total_price}`)
                             $('#total-cart').text(data.total_item)
                         })
+
+                        const link = `
+                        <a href="{{ route('cart.checkout') }}" target="_blank" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a>
+                        `;
+                        if ($('#btnGroup').children().length < 2) {
+                            $('#btnGroup').prepend(link)
+                        }
                     }else{
                         const card = `
                          <div class="card card-empty" style="">
@@ -583,13 +576,16 @@
                                  <span>Your cart is empty!</span>
                              </div>
                          </div>
-                         `;
+                        `;
+                        $('#total-cart').text(data.cart.length)
                         $('.keterangan-order > table > tbody > tr > td:nth(0)').text('0')
                         $('.keterangan-order > table > tbody > tr > td:nth(1)').text('0')
                         $('.keterangan-order > table > tbody > tr > td:nth(2)').text('0')
                         listItem.css({
                             'height':'5rem',
                         }).append(card)
+                        
+                        // console.log($('#btnGroup').children('a:first:has(#checkoutBtn)'));
                     }
                 },
                 err: (err) => {
