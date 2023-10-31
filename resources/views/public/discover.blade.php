@@ -319,25 +319,16 @@
                     $('.searchbox').empty()
                     if (data.user.length > 0) {
                         listUsers.push(...data.user)
-                        // $.each(listUsers, function(index, results) {
-                        //     console.log(results);
-                        //     let card = `
-                        //     <div class="card result-item">
-                        //         <div class="card-body">
-                        //             <span>${results.username}</span>
-                        //         </div>
-                        //     </div>
-                        //     `;
-                        //     $('.searchbox').append(card);
-                        // });
-
                         listUsers.forEach(item => {
-                            let url = item.photo;
-                            let photoUrl = url.replace('public','storage');
+                            let url, photoUrl;
+                            if (item.photo) {
+                                url = item.photo;
+                                photoUrl = url.replace('public','storage');
+                            }
                             let card = `
                             <div class="card result-item">
                                 <div class="card-body hstack gap-3">
-                                    <img src="${photoUrl}"
+                                    <img src="${(photoUrl) ? photoUrl : 'assets/profile.png' }"
                                     class="rounded-2 object-fit-cover"
                                     style="width: 48px; height: 48px;" loading="lazy" alt="" srcset="">
                                     <a href="/@${item.username}" class="text-decoration-none">${item.username}</a>
@@ -366,9 +357,7 @@
                             </div>
                         `);
                     };
-                    console.log(data);
                 })
-            // $('.searchbox').css('visibility', 'visible');
         })
 
         $('#claim').on('click', (e) => {
