@@ -66,5 +66,8 @@ class User extends Authenticatable
         return $this->hasOne(BankAccount::class);
     }
 
-    
+    public function settlements()
+    {
+        return $this->hasMany(Settlement::class);
+    }    
 }
