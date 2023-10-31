@@ -75,7 +75,7 @@
                     <div class="card border-0 p-0">
                         {{-- style="height: 10rem;" --}}
                         <div class="card-body">
-                            <a href="/appearance" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="layout"></i> Appearance</a>
+                            <a href="{{ route('profile.appearance') }}" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="layout"></i> Appearance</a>
                         </div>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                     <div class="card border-0 p-0">
                         {{-- style="height: 10rem;" --}}
                         <div class="card-body">
-                            <a href="/createlink" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="link"></i> Link</a>
+                            <a href="{{ route('products.linkindex') }}" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="link"></i> Link</a>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                     <div class="card border-0 p-0">
                         {{-- style="height: 10rem;" --}}
                         <div class="card-body">
-                            <a href="/digitalproduk" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="shopping-bag"></i> Digital Product</a>
+                            <a href="{{ route('products.digitalindex') }}" class="btn btn-outline-danger h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="shopping-bag"></i> Digital Product</a>
                         </div>
                     </div>
                 </div>
