@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignUlid('product_id')->constrained(); 
             // $table->foreignUlid('product_id')->references('id')->on('products')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->bigInteger('duitku_order_id');
             $table->integer('total_item');
-            $table->string('customer_email');
-            $table->string('payment_options');
-            $table->string('payment_status');
-            $table->date('date_transaction');
+            $table->integer('total_price');
+            $table->string('customer_info');
+            $table->string('payment_method');
+            $table->string('payment_status')->default('pending');
+            $table->string('redirect_url');
+            $table->timestamp('transaction_created');
+            $table->timestamp('transaction_finished')->nullable();
             $table->timestamps();
         });
     }
