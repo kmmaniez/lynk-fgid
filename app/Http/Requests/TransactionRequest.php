@@ -11,7 +11,7 @@ class TransactionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,11 +23,14 @@ class TransactionRequest extends FormRequest
     {
         return [
             'product_id' => ['required'],
-            'total_item' => ['required','integer'],
-            'customer_email' => ['required','email'],
-            'payment_options' => ['required','string'],
-            'payment_status' => ['required'],
-            'date_transaction' => ['required','date'],
+            'duitku_order_id' => ['required'],
+            'total_item' => ['required'],
+            'total_price' => ['required'],
+            'customer_info' => ['nullable','string'],
+            'payment_method' => ['required'],
+            'payment_url' => ['nullable','string'],
+            'transaction_created' => ['required'],
+            'transaction_finished' => ['nullable'],
         ];
     }
 }
