@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Settlement extends Model
 {
     use HasFactory;
+    protected $with = ['users'];
 
     protected $fillable = [
         'user_id',
         'payout_date',
         'payout_amount',
     ];
+
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
