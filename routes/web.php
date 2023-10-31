@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Creators\DashboardController;
+use App\Http\Controllers\Payment\DuitkuController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
@@ -39,31 +40,18 @@ use Illuminate\Support\Facades\Route;
 //     return view('creator.digitalproduk');
 // });
 
-Route::get('/payment-history', function () {
-    return view('creator.paymenthistory');
-})->name('payout');
 
-Route::get('/earning', function (Request $request) {
-    return view('creator.earning',[
-        'user' => $request->user(),
-    ]);
-})->name('earning');
-
-Route::get('/history', function () {
-    return view('creator.history');
-})->name('history');
 
 // Route::get('/manage-rekening', function () {
 //     return view('creator.manage-rekening');
 // })->name('manage-rekening');
 
-Route::get('/statistik',function () {
-    return view('creator.statistik');
-})->name('statistik');
 
 // Route::get('/admin', function () {
 //     return view('creator.index');
 // })->name('admin');
+
+// ROUTE PUBLIC / LANDING PAGE
 Route::controller(PublicController::class)->group(function () {
 
     Route::get('/', 'index')->name('public.index');
@@ -73,77 +61,113 @@ Route::controller(PublicController::class)->group(function () {
     // Route::get('/@{user:username}/{slug}', 'showProducts')->name('public.userproduct');
 
     // CART
-
 });
 
-Route::controller(DashboardController::class)->middleware('auth')->group(function () {
+// ROUTE PRODUCT BY USER
+Route::get('/@{user:username}/{product}', [TestController::class, 'index'])->name('products.detailuser');
 
-    Route::get('/admin', 'index')->name('admin');
-
-});
-Route::controller(ProductController::class)->group(function () {
-
-    // DETAIL PRODUCT WITH USERS
-    // Route::get('/@{user:username}/{product}', 'product_user')->name('products.detailuser');
-
-    // DIGITAL PRODUCT
-    Route::get('/digitalproduk', 'index')->name('products.digitalindex');
-    Route::post('/digitalproduk', 'store')->name('products.digitalstore');
-    Route::get('/digitalproduk/{product}/edit', 'edit')->name('products.digitaledit');
-    Route::patch('/digitalproduk/{product}/edit', 'update')->name('products.digitalupdate');
-    Route::delete('/digitalproduk/destroy/{product}', 'destroy')->name('products.digitaldestroy');
-    // Route::post('/orders', 'store');
-
-    // LINK PRODUCT
-    Route::get('/createlink', 'index_link')->name('products.linkindex');
-    Route::get('/createlink/{product:slug}/edit', 'index_link')->name('products.linkindex');
-    Route::get('/link/{product}/edit', 'edit_link')->name('products.linkedit');
-    Route::patch('/link/{product}/edit', 'update_link')->name('products.linkupdate');
+Route::prefix('creator')->middleware('auth')->group(function () {
     
-    Route::post('/createlink', 'store_link')->name('products.linkstore');
-    Route::delete('/link/destroy/{product}', 'destroy_link')->name('products.linkdestroy');
+    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/home', [DashboardController::class, 'index'])->name('admin');
 
-    // DELETE IMAGE
-    Route::post('/delete-image/{product}', 'delete_image')->name('products.deleteimage');
+    Route::controller(ProductController::class)->group(function () {
+    
+        // DETAIL PRODUCT WITH USERS
+        // Route::get('/@{user:username}/{product}', 'product_user')->name('products.detailuser');
+    
+        // DIGITAL PRODUCT
+        Route::get('/digital', 'index')->name('products.digitalindex');
+        Route::post('/digital', 'store')->name('products.digitalstore');
+        Route::get('/digital/{product}/edit', 'edit')->name('products.digitaledit');
+        Route::patch('/digital/{product}/edit', 'update')->name('products.digitalupdate');
+        Route::delete('/digital/destroy/{product}', 'destroy')->name('products.digitaldestroy');
+    
+        // LINK PRODUCT
+        Route::get('/link', 'index_link')->name('products.linkindex');
+        Route::post('/link/create', 'store_link')->name('products.linkstore');
+        Route::get('/link/{product}/edit', 'edit_link')->name('products.linkedit');
+        Route::patch('/link/{product}/edit', 'update_link')->name('products.linkupdate');
+        Route::delete('/link/destroy/{product}', 'destroy_link')->name('products.linkdestroy');
+    
+        // DELETE IMAGE
+        Route::post('/delete-image/{product}', 'delete_image')->name('products.deleteimage');
+    });
+
+    Route::controller(ProfileController::class)->group(function () {
+        // ACCOUNT & APPEARANCE
+        Route::get('/account', 'edit')->name('profile.account');
+        Route::get('/appearance', 'edit_appearance')->name('profile.appearance');
+    
+        // REKENING
+        Route::get('/manage-rekening', 'edit_bank')->name('profile.manage-rekening');
+        Route::patch('/manage-rekening', 'update_bank')->name('profile.update-rekening');
+    
+        Route::get('/profile', 'edit')->name('profile.edit');
+        Route::patch('/profile', 'update')->name('profile.update');
+        Route::delete('/profile', 'destroy')->name('profile.destroy');
+    });
+
+    // Route::middleware('auth')->group(function () {
+
+    //     // ACCOUNT & APPEARANCE
+    //     Route::get('/account', [ProfileController::class, 'edit'])->name('profile.account');
+    //     Route::get('/appearance', [ProfileController::class, 'edit_appearance'])->name('profile.appearance');
+    
+    //     // REKENING
+    //     Route::get('/manage-rekening', [ProfileController::class, 'edit_bank'])->name('profile.manage-rekening');
+    //     Route::patch('/manage-rekening', [ProfileController::class, 'update_bank'])->name('profile.update-rekening');
+    
+    //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // });
+
+    Route::get('/payment-history', function () {
+        return view('creator.paymenthistory');
+    })->name('payout');
+    
+    Route::get('/earning', function (Request $request) {
+        return view('creator.earning',[
+            'user' => $request->user(),
+        ]);
+    })->name('earning');
+    
+    Route::get('/history', function () {
+        return view('creator.history');
+    })->name('history');
+
+
+    Route::get('/statistik',function () {
+        return view('creator.statistik');
+    })->name('statistik');
+
+    Route::get('/order', function () {
+        return view('creator.order');
+    })->name('order');
+
 });
 
 
-Route::get('/order', function () {
-    return view('creator.order');
-})->name('order');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
 
-    // ACCOUNT & APPEARANCE
-    Route::get('/account', [ProfileController::class, 'edit'])->name('profile.account');
-    Route::get('/appearance', [ProfileController::class, 'edit_appearance'])->name('profile.appearance');
+// Route::get('/tes', function () {
+//     return view('public.tes');
+// });
 
-    // REKENING
-    Route::get('/manage-rekening', [ProfileController::class, 'edit_bank'])->name('profile.manage-rekening');
-    Route::patch('/manage-rekening', [ProfileController::class, 'update_bank'])->name('profile.update-rekening');
-
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-Route::get('/tes', function () {
-    return view('public.tes');
-});
-
-Route::prefix('awkarin')->group(function () {
-    Route::get('/', function () {
-        return view('creator.products.index');
-    })->name('owner');
-    Route::get('/detail', function () {
-        return view('creator.products.detail-produk');
-    })->name('detail');
+// Route::prefix('awkarin')->group(function () {
+//     Route::get('/', function () {
+//         return view('creator.products.index');
+//     })->name('owner');
+//     Route::get('/detail', function () {
+//         return view('creator.products.detail-produk');
+//     })->name('detail');
     
-});
+// });
 
 // Route::get('/@{user:username}/{product}', [CartController::class, 'index'])->name('products.detailuser');
 // Route::prefix('cart')->group(function () {
@@ -159,7 +183,6 @@ Route::prefix('awkarin')->group(function () {
 //     });
 // });
 
-Route::get('/@{user:username}/{product}', [TestController::class, 'index'])->name('products.detailuser');
 
 Route::prefix('cart')->group(function () {
     Route::controller(TestController::class)->group(function () {
@@ -193,7 +216,7 @@ Route::prefix('dashboard')->group(function () {
 });
 
 
-
+// Route::get('/callback', [DuitkuController::class, 'callback']);
 
 Route::get('/checkout', function () {
     return view('creator.products.checkout');
