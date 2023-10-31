@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
+    protected $with = ['products'];
 
     protected $fillable = [
         'product_id',
@@ -17,4 +18,9 @@ class Transaction extends Model
         'payment_status',
         'date_transaction',
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
