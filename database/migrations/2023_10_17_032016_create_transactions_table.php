@@ -18,10 +18,10 @@ return new class extends Migration
             $table->bigInteger('duitku_order_id');
             $table->integer('total_item');
             $table->integer('total_price');
-            $table->string('customer_info');
+            $table->string('customer_info')->nullable();
             $table->string('payment_method');
             $table->string('payment_status')->default('pending');
-            $table->string('redirect_url');
+            $table->string('payment_url')->nullable();
             $table->timestamp('transaction_created');
             $table->timestamp('transaction_finished')->nullable();
             $table->timestamps();
