@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory, HasUlids;
-    protected $with = ['users'];
+    protected $with = ['users','transactions'];
 
     protected $fillable = [
         'user_id',
@@ -42,5 +42,10 @@ class Product extends Model
     public function users()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function transactions()
+    {
+        return $this->belongsTo(Transaction::class);
     }
 }
