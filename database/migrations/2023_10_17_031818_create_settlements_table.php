@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('payout_date');
-            $table->date('payout_amount');
+            $table->bigInteger('payout_amount');
             $table->timestamps();
         });
     }
