@@ -1,7 +1,8 @@
 <?php
 
+use App\Enums\ProductTypeEnum;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\Creators\DashboardController;
+use App\Http\Controllers\Creators\DashboardCreatorController;
 use App\Http\Controllers\Payment\DuitkuController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -68,8 +69,15 @@ Route::get('/@{user:username}/{product}', [TestController::class, 'index'])->nam
 
 Route::prefix('creator')->middleware('auth')->group(function () {
     
-    Route::get('/', [DashboardController::class, 'index']);
-    Route::get('/home', [DashboardController::class, 'index'])->name('admin');
+    // DASHBOARD CREATOR ROUTES
+    Route::get('/', [DashboardCreatorController::class, 'index']);
+    Route::get('/home', [DashboardCreatorController::class, 'index'])->name('admin');
+    Route::get('/order', [DashboardCreatorController::class, 'order'])->name('order');
+    Route::get('/earning', [DashboardCreatorController::class, 'earning'])->name('creator.earning');
+    Route::get('/statistik', [DashboardCreatorController::class, 'statistik'])->name('creator.statistik');
+    Route::get('/settlements', [DashboardCreatorController::class, 'settlement_history'])->name('creator.settlementhistory');
+
+
 
     Route::controller(ProductController::class)->group(function () {
     
@@ -108,6 +116,8 @@ Route::prefix('creator')->middleware('auth')->group(function () {
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
 
+
+
     // Route::middleware('auth')->group(function () {
 
     //     // ACCOUNT & APPEARANCE
@@ -123,28 +133,30 @@ Route::prefix('creator')->middleware('auth')->group(function () {
     //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     // });
 
-    Route::get('/payment-history', function () {
-        return view('creator.paymenthistory');
-    })->name('payout');
+    // Route::get('/payment-history', function () {
+    //     return view('creator.paymenthistory');
+    // })->name('payout');
     
-    Route::get('/earning', function (Request $request) {
-        return view('creator.earning',[
-            'user' => $request->user(),
-        ]);
-    })->name('earning');
+    // Route::get('/earning', function (Request $request) {
+    //     return view('creator.earning',[
+    //         'user' => $request->user(),
+    //     ]);
+    // })->name('earning');
     
-    Route::get('/history', function () {
-        return view('creator.history');
-    })->name('history');
+    // Route::get('/history', function () {
+    //     return view('creator.history');
+    // })->name('history');
 
 
-    Route::get('/statistik',function () {
-        return view('creator.statistik');
-    })->name('statistik');
 
-    Route::get('/order', function () {
-        return view('creator.order');
-    })->name('order');
+    // Route::get('/statistik',function () {
+    //     return view('creator.statistik');
+    // })->name('statistik');
+
+    // Route::get('/order', function () {
+    //     return view('creator.order');
+    // })->name('order');
+
 
 });
 
@@ -188,7 +200,11 @@ Route::prefix('cart')->group(function () {
     Route::controller(TestController::class)->group(function () {
         Route::get('/', 'index');
         Route::get('/tes', 'index_clone');
+        
+        // Route::get('/item', 'getAllItems')->name('cart.getitems');
         Route::get('/item', 'getAllItems')->name('cart.getitems');
+        Route::post('/item', 'getAllItems')->name('cart.storeitems');
+        
         Route::post('/', 'store')->name('addcart');
         Route::patch('/', 'update')->name('cart.update');
         Route::get('/checkout', 'checkout_items')->name('cart.checkout');
@@ -215,7 +231,10 @@ Route::prefix('dashboard')->group(function () {
 
 });
 
-
+Route::get('ea', function(){
+    $data = Product::all();
+    dump($data[0]->id);
+});
 // Route::get('/callback', [DuitkuController::class, 'callback']);
 
 Route::get('/checkout', function () {
