@@ -9,6 +9,7 @@ use App\Enums\ProductTypeEnum;
 use App\Http\Requests\Product\DigitalProductRequest;
 use App\Http\Requests\Product\LinkProductRequest;
 use App\Models\Product;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Http\Request;
@@ -260,7 +261,24 @@ class ProductController extends Controller
                 }
             }
             
+        }else{
+            try {
+                $product->update([
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'url' => $request->url,
+                    'min_price' => $request->min_price,
+                    'max_price' => $request->max_price,
+                    'messages' => ($request->messages) ? $request->messages : NULL,
+                    'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
+                    'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
+                ]);
+
+            } catch (\Throwable $th) {
+                throw $th;
+            }
         }
+        
 
         return redirect()->route('admin');
     }
@@ -306,16 +324,18 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        // $arr = [1,2,3,4];
-        // dump($arr, array_shift($arr), $arr);
-        // die;
-        // dd($product);
-        if ($product->images) {
-            foreach ($product->images as $key => $value) {
-                Storage::delete('public/tes/'. $value);
+        try {
+            Transaction::where('product_id', $product->id)->delete();
+            if ($product->images) {
+                foreach ($product->images as $key => $value) {
+                    Storage::delete('public/tes/'. $value);
+                }
             }
+            $product->delete();
+            
+        } catch (\Throwable $th) {
+            throw $th;
         }
-        $product->delete();
         return redirect()->route('admin');
     }
 

@@ -101,8 +101,8 @@
         <div class="list-produk">
             <div class="card border-0">
                 <div class="card-body px-2">
-                    <span class="fs-3">List produk</span>
-                    {{-- @dump($products) --}}
+                    <span class="fs-3 fw-semibold">Product Lists ({{ $total_product }})</span>
+                    {{-- @dump($pag) --}}
                     <div class="vstack gap-2 mt-3">
                         @forelse ($products as $product)
                         <div class="card produk-detail">

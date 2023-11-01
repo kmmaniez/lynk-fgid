@@ -58,7 +58,8 @@
                             <form id="form-delete-account" method="post" action="{{ route('profile.destroy') }}" class="p-6">
                                 @csrf
                                 @method('delete')
-                                <small>Jika ingin menghapus akun, klik tombol dibawah. <strong>akun yang sudah dihapus tidak dapat diregistrasi ulang!</strong></small>
+                                <small>If you want delete your account, click button below. <strong>Deleted account can't be registered again!</strong></small>
+                                {{-- <small>If you want delete your account, click button below.</small> --}}
                                 <a href="#" class="btn btn-delete-account btn-outline-danger btn-md text-uppercase w-100 mt-2">Delete Account</a>
                             </form>
                         </div>

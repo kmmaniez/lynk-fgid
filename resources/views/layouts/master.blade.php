@@ -131,7 +131,7 @@
                     <a href="{{ route('admin') }}" class="nav-link {{ (Request::routeIs('admin') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ route('statistik') }}" class="nav-link {{ (Request::routeIs('statistik') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Statistic</a>
+                    <a href="{{ route('creator.statistik') }}" class="nav-link {{ (Request::routeIs('creator.statistik') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Statistic</a>
                 </li>
                 <li>
                     <a href="{{ route('order') }}" class="nav-link {{ (Request::routeIs('order') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Order</a>
@@ -144,11 +144,11 @@
                             Settings</a>
                     </li>
                     <li>
-                        <a href="{{ route('earning') }}" class="nav-link {{ (Request::routeIs('earning') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Earning Settings</a>
+                        <a href="{{ route('creator.earning') }}" class="nav-link {{ (Request::routeIs('creator.earning') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Earnings Settings</a>
                     </li>
                     <li>
-                        <a href="{{ route('history') }}" class="nav-link {{ (Request::routeIs('history') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Settlement
-                            Settings</a>
+                        <a href="{{ route('creator.settlementhistory') }}" class="nav-link {{ (Request::routeIs('creator.settlementhistory') ? 'fw-semibold active bg-gradient bg-danger' : 'text-secondary') }}">Settlements
+                            History</a>
                     </li>
                 </div>
 

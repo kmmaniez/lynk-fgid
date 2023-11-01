@@ -328,7 +328,7 @@
                             let card = `
                             <div class="card result-item">
                                 <div class="card-body hstack gap-3">
-                                    <img src="${(photoUrl) ? photoUrl : 'assets/profile.png' }"
+                                    <img src="${(photoUrl) ? photoUrl : 'assets/profile-default.png' }"
                                     class="rounded-2 object-fit-cover"
                                     style="width: 48px; height: 48px;" loading="lazy" alt="" srcset="">
                                     <a href="/@${item.username}" class="text-decoration-none">${item.username}</a>

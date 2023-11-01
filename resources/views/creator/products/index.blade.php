@@ -227,10 +227,10 @@
     <section id="wrap" class="">
         <div class="header" style="">
             <div class="card card-cover rounded-0 border-0 text-center position-relative" style="z-index: 1">
-                <img id="tes" src="{{ ($user->coverimage) ? Storage::url($user->coverimage) : asset('assets/user6.jpg') }}" alt="" srcset="">
+                <img id="tes" src="{{ ($user->coverimage) ? Storage::url($user->coverimage) : asset('assets/cover-default.jpg') }}" alt="" srcset="">
                 {{-- <div id="coverprofile" style="background: url('{{ ($user->coverimage) ? Storage::url($user->coverimage) : asset('assets/user6.jpg') }}')"></div> --}}
                 <div class="card-body vstack gap-3 align-items-center">
-                    <img src="{{ ($user->photo) ? Storage::url($user->photo) : asset('assets/user2.jpg') }}" style="width: 5rem; height: 5rem;" 
+                    <img src="{{ ($user->photo) ? Storage::url($user->photo) : asset('assets/profile-default.png') }}" style="width: 5rem; height: 5rem;" 
                         class="rounded-circle border border-secondary-subtle border-3 object-fit-cover" alt="...">
                     <span><strong>{{ '@'.$user->username }}</strong></span>
                     <span>{{ $user->description }}</span>

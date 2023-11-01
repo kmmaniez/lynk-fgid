@@ -1,4 +1,7 @@
 @extends('layouts.master')
+@php 
+use App\Enums\LayoutEnum; 
+@endphp
 @push('style')
     <style>
         #layout span{
@@ -98,7 +101,20 @@
                     <div class="form-group my-3">
                         <label for="layout">Layout</label>
                         <div class="hstack gap-3 mt-2" id="layout">
+                            @php
+                                $arrAsset = ['assets/default-col.png','assets/grid.png','assets/large-image.png']
+                            @endphp
+                            @foreach(LayoutEnum::cases() as $key => $layout)
+                            @if ($key != 1)
+                                
                             <label>
+                                <input class="form-check-input" type="radio" name="layout" value="{{ $layout }}" {{ ($product->layout === $layout) ? 'checked' : '' }}>
+                                <img src="{{ asset($arrAsset[$key]) }}" width="164" height="164" alt="default">
+                                <span>{{ Str::ucfirst($layout->value) }}</span>
+                            </label>
+                            @endif
+                            @endforeach
+                            {{-- <label>
                                 <input class="form-check-input" type="radio" name="layout" value="default" {{ ($product->layout == "default") ? 'checked' : '' }}>
                                 <img src="{{ asset('assets/default-col.png') }}" width="164" height="164" alt="default">
                                 <span>Small</span>
@@ -107,7 +123,7 @@
                                 <input class="form-check-input" type="radio" name="layout" value="large" {{ ($product->layout == "large") ? 'checked' : '' }}>
                                 <img src="{{ asset('assets/large-image.png') }}" width="164" height="164" alt="large">
                                 <span>Large image</span>
-                            </label>
+                            </label> --}}
                         </div>
                     </div>
                     
@@ -139,7 +155,7 @@
                 $('.form-upload').css('display','block');
                 console.log('{{ $product->id }}');
                 $.ajax({
-                    url: '/link/delete-image/' + '{{ $product->id }}',
+                    url: '/delete-image/' + '{{ $product->id }}',
                     method: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
