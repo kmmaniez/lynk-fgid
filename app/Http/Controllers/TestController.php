@@ -8,7 +8,6 @@ use Exception;
 // use Darryldecode\Cart\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Symfony\Component\VarDumper\VarDumper;
 
 class TestController extends Controller
 {
@@ -16,20 +15,27 @@ class TestController extends Controller
     protected $fee = 0;
 
     public function __construct(\Cart $cart) {
-        $this->cart = $cart::session('shopping');
-        // $this->cart = $cart;
+        // $this->cart = $cart::session('shopping');
+        $this->cart = $cart;
     }
 
     
     public function index(User $user, Product $product)
     {
-        $cartitems = $this->cart->getContent();
-
+        if (!$this->cart::session($user->id)->isEmpty()) {
+            // abort(404);
+            // abort(404);
+            $cartitems = $this->cart::session($user->id)->getContent();
+        }else{
+            $cartitems = [];
+        }
+        // $cartitems = $this->cart->getContent();
         return view('creator.products.detail-produk', compact('user', 'product','cartitems'));
     }
 
     public function index_clone()
     {
+        // dd($this->cart->getContent());
         // $this->cart::session('shopping');
         $cartitems = $this->cart->getContent();
         $subtotal = $this->cart->getSubTotal();
@@ -39,16 +45,24 @@ class TestController extends Controller
         return view('cart.tes', compact('products','cartitems','subtotal','quantity'));
     }
 
-    public function getAllItems()
+    public function getAllItems(Request $request)
     {
         // $this->cart::session('shopping');
+        // ($request->user_id) ? 
         $data = [
-            'cart' => $this->cart->getContent(),
-            'total_item' => $this->cart->getContent()->count(),
-            'total_price' => $this->cart->getSubTotal(),
-            'total_quantity' => $this->cart->getTotalQuantity(),
+            'cart' => ($request->user_id) ? $this->cart::session($request->user_id)->getContent() : [],
+            'total_item' => ($request->user_id) ? $this->cart::session($request->user_id)->getContent()->count() : 0,
+            'total_price' => ($request->user_id) ? $this->cart::session($request->user_id)->getSubTotal() : 0,
+            'total_quantity' => ($request->user_id) ? $this->cart::session($request->user_id)->getTotalQuantity() : 0,
             'payment_fee' => 0
         ];
+        // $data = [
+        //     'cart' => $this->cart->getContent(),
+        //     'total_item' => $this->cart->getContent()->count(),
+        //     'total_price' => $this->cart->getSubTotal(),
+        //     'total_quantity' => $this->cart->getTotalQuantity(),
+        //     'payment_fee' => 0
+        // ];
         
         return response()->json([
             'data' => $data
@@ -73,6 +87,16 @@ class TestController extends Controller
                 ]);
             }
         }
+        //new ?
+        $this->cart::session($request->user_id)->add([
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $request->user_pay * $request->quantity,
+            'quantity' => $request->quantity,
+            'attributes' => [
+                'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
+            ],       
+        ]);
         // $this->cart::session($product->id)->add([
         //     'id' => $product->id,
         //     'name' => $product->name,
@@ -82,22 +106,23 @@ class TestController extends Controller
         //         'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
         //     ],       
         // ]);
-        $this->cart->add([
-            'id' => $product->id,
-            'name' => $product->name,
-            'price' => $request->user_pay * $request->quantity,
-            'quantity' => $request->quantity,
-            'attributes' => [
-                'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
-                'creator_id' => $request->creator_id
-            ],
-        ]);
+        // dd($this->cart);
+        // $this->cart->add([
+        //     'id' => $product->id,
+        //     'name' => $product->name,
+        //     'price' => $request->user_pay * $request->quantity,
+        //     'quantity' => $request->quantity,
+        //     'attributes' => [
+        //         'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
+        //         'creator_id' => $request->creator_id
+        //     ],
+        // ]);
 
         $data = [
-            'cart' => $this->cart->getContent(),
-            'total_item' => $this->cart->getContent()->count(),
-            'total_price' => $this->cart->getSubTotal(),
-            'total_quantity' => $this->cart->getTotalQuantity(),
+            'cart' => $this->cart::session($request->user_id)->getContent(),
+            'total_item' => $this->cart::session($request->user_id)->getContent()->count(),
+            'total_price' => $this->cart::session($request->user_id)->getSubTotal(),
+            'total_quantity' => $this->cart::session($request->user_id)->getTotalQuantity(),
             'payment_fee' => 0
         ];
         return response()->json([
@@ -110,12 +135,16 @@ class TestController extends Controller
     {
         if ($request->type === 'increase') {
             // increase quantity product
-            $this->cart->update($request->id, [
+            $this->cart::session($request->user_id)->update($request->id, [
                 'quantity' => 1,
             ]);
+            // $this->cart->update($request->id, [
+            //     'quantity' => 1,
+            // ]);
             return response()->json([
                 'message' => 'Successfully increased cart item',
-                'cart' => $this->cart->getContent(),
+                'cart' => $this->cart::session($request->user_id)->getContent(),
+                // 'cart' => $this->cart->getContent(),
                 'status_code' => 201,
             ]);
 
@@ -133,16 +162,24 @@ class TestController extends Controller
             //         // 'cur' => $this->cart->get($request->id)->quantity ? $this->cart->get($request->id)->quantity : 'NULL'
             //     ]);
             // }else{
-                if ($this->cart->get($request->id)->quantity <= 1) {
-                    $this->cart->remove($request->id);
-                }else{
-                    $this->cart->update($request->id, [
+                // if ($this->cart->get($request->id)->quantity <= 1) {
+                //     $this->cart->remove($request->id);
+                // }
+                if ($this->cart::session($request->user_id)->get($request->id)->quantity <= 1) {
+                    $this->cart::session($request->user_id)->remove($request->id);
+                }
+                else{
+                    $this->cart::session($request->user_id)->update($request->id, [
                         'quantity' => -1,
                     ]);
+                    // $this->cart->update($request->id, [
+                    //     'quantity' => -1,
+                    // ]);
                 }
                 return response()->json([
                     'message' => 'Successfully reduce cart item.',
-                    'cart' => $this->cart->getContent(),
+                    'cart' => $this->cart::session($request->user_id)->getContent(),
+                    // 'cart' => $this->cart->getContent(),
                     'status_code' => 201,
                 ]);
             // }
@@ -203,9 +240,10 @@ class TestController extends Controller
     public function remove_item(Request $request)
     {
         // remove item product
-        $cartitems = $this->cart->remove($request->cart_id);
+        // $cartitems = $this->cart->remove($request->cart_id);
+        $cartitems = $this->cart::session($request->user_id)->remove($request->cart_id);
         return response()->json([
-            'cart' => $this->cart->getContent(),
+            'cart' => $this->cart::session($request->user_id)->getContent(),
             'data' => $cartitems,
             'code' => 201
         ]);
