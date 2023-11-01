@@ -170,7 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Darryldecode\Cart\CartServiceProvider::class,
-        Yajra\DataTables\DataTablesServiceProvider::class,
+        // Yajra\DataTables\DataTablesServiceProvider::class,
         // Jackiedo\Cart\CartServiceProvider::class,
     ])->toArray(),
 
