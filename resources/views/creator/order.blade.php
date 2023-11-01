@@ -1,35 +1,94 @@
 @extends('layouts.master')
-
+@push('style')
+    <style>
+        .copied::after{
+            content: 'Copied';
+            width: max-content;
+            height: max-content;
+            padding: 4px 8px;
+            font-size: 12px;
+            background-color: salmon;
+            border-radius: 6px;
+            position: absolute;
+            top: -32px;
+            left: -8px;
+        }
+        .copied::before{
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-color: salmon;
+            border-radius: 4px;
+            position: absolute;
+            top: -16px;
+            transform: rotate(45deg);
+        }
+    </style>
+@endpush
 @section('content')
     <section id="order" class="mt-3">
         <div class="card border-0 mt-3">
             <div class="card-body p-2">
                 <h5>History Order</h5>
-                <div class="vstack w-100 gap-2">
-                    @for ($i=0; $i < 10; $i++)
+                {{-- @dump($transactions) --}}
+                <div id="list-transaction" class="vstack w-100 gap-2">
+                    @forelse ($transactions as $transact)
                     <div class="card">
                         <div class="card-body">
                             <div class="detail">
-                                {{-- <span class="fw-semibold">Tanggal : 24/10/2023</span> --}}
+                                <span class="fw-semibold">Date : {{ $transact->transaction_created }}</span>
                                 <div class="list-item">
                                     <span class="">Detail Item :</span>
-                                    <span>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</span>
+                                    {{-- <span>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</span> --}}
                                     <ul class="m-0">
+                                        <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</li>
                                         {{-- <li>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</li> --}}
-                                        {{-- @if ($i%3===0)
-                                        <li>Jasa Social Media (4x) | Rp. 5.000</li>
-                                        @endif --}}
                                     </ul>
                                 </div>
-                                <span class="d-block"><strong>Total : Rp. 25.000</strong></span>
-                                <span><strong>Email pelanggan : {{ Str::random(5) }}@gmail.com</strong></span>
-                                {{-- <span><i data-feather="copy" class="fa-24 text-primary"></i></span> --}}
+                                <span class="d-block mt-2"><strong>Total : Rp. {{ $transact->total_price }}</strong></span>
+                                <div class="customer-field hstack gap-3">
+                                    <div id="copy" class="fw-semibold">Customer Email : <span id="email">{{ $transact->customer_info }}</span></div>
+                                    <a href="#" id="btnCopy" title="copy email" class="position-relative btn border-0"><i data-feather="copy" data-id="{{ $transact->product_id }}" class="fa-24 text-danger"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    @endfor
+                    @empty
+                    <div class="card"></div>
+                    @endforelse
                 </div>
             </div>
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        const btnCopy = document.querySelectorAll('#btnCopy');
+        const email = $('#list-transaction #emailcopy');
+        // console.log(btnCopy);
+        btnCopy.forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault()
+                let text = element.previousElementSibling.children[0].textContent;
+                try {
+                    navigator.clipboard.writeText(text)
+                    element.classList.toggle('copied')
+                    setTimeout(() => {
+                        element.classList.remove('copied')
+                    }, 1500);
+                } catch (error) {
+                    console.error('Failed to copy');
+                }
+                // console.log(element.previousElementSibling.children[0].textContent);
+            })
+        });
+        // $(document).ready(function(){
+        //     $('#list-transaction .card .card-body .customer-field').on('click', (e) => {
+        //         console.log($(this));
+        //     })
+        // })
+        // $('#list-transaction .card .card-body .customer-field #btnCopy').on('click', (e) => {
+        //     console.log(e.target);
+        // })
+    </script>
+@endpush
