@@ -18,6 +18,7 @@ return new class extends Migration
             $table->bigInteger('duitku_order_id');
             $table->integer('total_item');
             $table->integer('total_price');
+            $table->boolean('is_payout')->default(false);
             $table->string('customer_info')->nullable();
             $table->string('payment_method');
             $table->string('payment_status')->default('pending');
