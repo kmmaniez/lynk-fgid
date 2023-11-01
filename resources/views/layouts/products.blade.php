@@ -170,7 +170,12 @@
 
         <nav class="navbar {{ (Request::routeIs('products.detailuser')) ? 'ps-2 pe-4' : 'px-4' }} bg-primary sticky-top bg-body-tertiary">
             @if (!Request::routeIs('products.detailuser'))
-                <a class="navbar-brand" href="{{ route('admin') }}">
+                @guest
+                    <a class="navbar-brand" href="{{ route('public.index') }}">
+                @endguest
+                @auth
+                    <a class="navbar-brand" href="{{ route('admin') }}">
+                @endauth
                     <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150" class="d-inline-block align-text-top">
                 </a>
             @else
@@ -305,6 +310,10 @@
             $.ajax({
                 url: "{{ route('cart.getitems') }}",
                 method: 'GET',
+                data:{
+                    _token: '{{ csrf_token() }}',
+                    user_id: '{{ $user->id }}'
+                },
                 success: (res) => {
                     const {data} = res;
                     // console.log('awal');
@@ -357,6 +366,7 @@
                         _token: '{{ csrf_token() }}',
                         _method: 'PATCH',
                         id: $(this).data('id'),
+                        user_id: '{{ $user->id }}',
                         type: 'increase'
                     },
                     success: (res) => {
@@ -377,6 +387,7 @@
                         _token: '{{ csrf_token() }}',
                         _method: 'PATCH',
                         id: $(this).data('id'),
+                        user_id: '{{ $user->id }}',
                         type: 'decrease'
                     },
                     success: (res) => {
@@ -395,7 +406,7 @@
 
         BtnAddToCart.on('click', (e) => {
             e.preventDefault();
-            
+            console.log({{ $user->id }});
             $('.list-item').children().remove()
             addToCart();
             showCartItems();
@@ -472,6 +483,7 @@
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: productId.val(),
+                    user_id: '{{ $user->id }}',
                     quantity: quantity.val(),
                     user_pay: userPayVal.val(),
                     creator_id: '{{ $user->id }}'
@@ -501,6 +513,7 @@
                 method: 'POST',
                 data: {
                     _token: '{{ csrf_token() }}',
+                    user_id: '{{ $user->id }}',
                     cart_id: id,
                 },
                 success: (res) => {
@@ -514,9 +527,15 @@
         function showCartItems(){
             $.ajax({
                 url: "{{ route('cart.getitems') }}",
-                method: 'GET',
+                // method: 'GET',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    user_id: '{{ $user->id }}',
+                },
                 success: (res) => {
                     const {data} = res;
+                    console.log(res);
                     // console.log('show');
                     // console.log(res);
                     // console.log(data.cart);
@@ -530,7 +549,7 @@
                             <div class="card" style="height: 6rem;">
                                 <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-3">
                                     
-                                    <img src="/${product.attributes.image}" style="width: 4rem; height: 4rem;" class="card-img-top" alt="image">
+                                    <img src='/${(product.attributes.image) ? product.attributes.image : "assets/profile-default.png"}' style="width: 4rem; height: 4rem;" class="card-img-top" alt="image">
         
                                     <div class="vstack justify-content-between">
                                         <span class="d-block">${product.name}</span>
