@@ -17,17 +17,6 @@ return [
             'createpayment' => '/webapi/api/merchant/v2/inquiry',
             'checkpayment' => '/webapi/api/merchant/transactionStatus',
         ]
-        
     ]
-
-    //SANDBOX
-    //GET PAYMENT
-    // $url = '/webapi/api/merchant/paymentmethod/getpaymentmethod';
-    //CREATE PAYMENT
-    // $url = '/webapi/api/merchant/v2/inquiry'; // Sandbox
-    //RETURN URL
-    // $url = '/webapi/api/merchant/transactionStatus';
-
-
 
 ];
