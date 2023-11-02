@@ -14,15 +14,16 @@ class PublicController extends Controller
     public function index() : View
     {
         // $creators = User::whereHas('products')->get();
-        $creators = User::all();
+        $creators = User::whereRelation('roles','name','!=','admin')->WhereRelation('roles','name','!=','super-admin')->limit(10)->get();
+
         return view('public.index', compact('creators'));
     }
 
     public function discover() : View
     {
-        // $creators = User::whereHas('products')->get();
-        $creatorFeatured = User::all();
-        $creatorRecents = User::all();
+        $creatorFeatured = User::whereRelation('roles','name','!=','admin')->WhereRelation('roles','name','!=','super-admin')->limit(10)->get();
+        $creatorRecents = User::latest()->limit(10)->get();
+
         return view('public.discover', compact('creatorFeatured','creatorRecents'));
     }
 
@@ -40,46 +41,30 @@ class PublicController extends Controller
 
     public function search(Request $request) 
     {
-        if (strlen($request->username) > 0) {
-            $data = User::where('username','LIKE', "%$request->username%")->get(['username','photo']);
-    
-            if (count($data) > 0) {
-                return response()->json([
-                    'user' => $data,
-                    'message' => 'Users Found',
-                ]);
+        if (request()->ajax()) {
+            if (strlen($request->username) > 0) {
+
+                $user = User::where('username','LIKE', "%$request->username%")->get(['username','photo']);
+        
+                if (count($user) > 0) {
+                    return response()->json([
+                        'user' => $user,
+                        'message' => 'Users Found',
+                    ]);
+                }else{
+                    return response()->json([
+                        'user' => [],
+                        'message' => 'No Results Found',
+                    ]);
+                }
             }else{
                 return response()->json([
                     'user' => [],
                     'message' => 'No Results Found',
                 ]);
             }
-        }else{
-            return response()->json([
-                'user' => [],
-                'message' => 'No Results Found',
-            ]);
         }
+        abort(404);
     }
 
-
-    // CART
-    public function addProduct(Request $request)
-    {
-        $prod = Product::find($request->id);
-        $cart = Cart::name('shopping')->useForCommercial();
-        dd($request->all());
-        $cart->addItem([
-            'id'       => $prod->id,
-            'title'    => $prod->name,
-            'quantity' => $request->jml,
-            'price'    => $prod->min_price,
-            'total_price'    => $request->jml * $prod->min_price,
-            'extra_info' => [
-                'date_time' => [
-                    'added_at' => time(),
-                ]
-            ]
-        ]);
-    }
 }

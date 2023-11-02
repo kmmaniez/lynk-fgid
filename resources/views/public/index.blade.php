@@ -188,22 +188,22 @@
                     <div class="carousel-item active" data-bs-interval="5000">
                         <img src="{{ asset('assets/carousel-1.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
                         <div class="carousel-caption rounded d-none d-md-block bg-glass">
-                            <h2>First slide label</h2>
-                            <p class="fs-5">Some representative placeholder content for the first slide.</p>
+                            <h2>Best platform for sellers</h2>
+                            <p class="fs-5">Create your own product and share it through social media</p>
                         </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="3000">
                         <img src="{{ asset('assets/carousel-2.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
                         <div class="carousel-caption rounded d-none d-md-block bg-glass">
-                            <h2>Second slide label</h2>
-                            <p class="fs-5">Some representative placeholder content for the first slide.</p>
+                            <h2>Best platform for communty</h2>
+                            <p class="fs-5">Build for photographers community in indonesia and for everyone</p>
                         </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="4000">
                         <img src="{{ asset('assets/carousel-3.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
                         <div class="carousel-caption rounded d-none d-md-block bg-glass">
-                            <h2>Third slide label</h2>
-                            <p class="fs-5">Some representative placeholder content for the first slide.</p>
+                            <h2>Be the best creator</h2>
+                            <p class="fs-5">Build your own product characteristics and be the best</p>
                         </div>
                     </div>
                 </div>
@@ -212,8 +212,8 @@
 
         <section id="hero" class="d-flex justify-content-between align-items-center text-white">
             <div class="title">
-                <h1>Gank is the simplest way to earn for content creators</h1>
-                <p class="mt-3">Gank helps content creators accept donations, manage membership and sell merch, for free.
+                <h1>FGID is the simplest way to earn for content creators</h1>
+                <p class="mt-3">FGID helps content creators accept donations, manage membership and sell merch, for free.
                 </p>
                 <p>Claim your page now!</p>
 
@@ -226,27 +226,61 @@
                 </div>
 
             </div>
-            {{-- <div class="preview flex-grow-1">
-                <img src="{{ asset('assets/valorant.jpg') }}" class="object-fit-contain" style="width: 100%; height: 600px;"
-                    alt="" srcset="">
-            </div> --}}
         </section>
 
         <section id="benefit" class="mt-5">
             <h2 class="text-center">How creators using FGID</h2>
             <div class="row row-cols-1 row-cols-md-3 mt-3 row-benefit">
-                @for ($i = 0; $i < 6; $i++)
+                {{-- @for ($i = 0; $i < 8; $i++) --}}
                     <div class="col">
                         <div class="card h-100" id="card-benefit">
                             <div class="card-body">
                                 <h5 class="card-title">Digital Product</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim,
-                                    architecto.
-                                </p>
+                                <p class="card-text">Sell your e-book/presets/itinerary to your audience, Through lynk.id secured system</p>
                             </div>
                         </div>
                     </div>
-                @endfor
+                    <div class="col">
+                        <div class="card h-100" id="card-benefit">
+                            <div class="card-body">
+                                <h5 class="card-title">Consolidate Links</h5>
+                                <p class="card-text">Let your audience knows what are you up to in other platforms. You can put any link here.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100" id="card-benefit">
+                            <div class="card-body">
+                                <h5 class="card-title">Donations</h5>
+                                <p class="card-text">Receive one-off support from fans who may not be able to make a monthly commitment.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100" id="card-benefit">
+                            <div class="card-body">
+                                <h5 class="card-title">Customize Interface</h5>
+                                <p class="card-text">Customize your products theme for your customer</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100" id="card-benefit">
+                            <div class="card-body">
+                                <h5 class="card-title">Lower Fee</h5>
+                                <p class="card-text">Our platform using lower fees for withdrawal and make anytime withdrawal request as you want.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100" id="card-benefit">
+                            <div class="card-body">
+                                <h5 class="card-title">Community</h5>
+                                <p class="card-text">We grow and we listen our community to make our platform better for creator and customers.</p>
+                            </div>
+                        </div>
+                    </div>
+                {{-- @endfor --}}
             </div>
 
         </section>
@@ -260,10 +294,10 @@
                 <div class="col">
                     <a href="{{ route('public.user', $creator->username) }}" class="text-decoration-none">
                         <div class="card card-style rounded-4 border-0 h-100">
-                            <img id="img-cover" src="{{ asset('assets/user1.jpg') }}" style="width: 100%; height: 120px;"
+                            <img id="img-cover" src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/cover-white.png') }}"" style="width: 100%; height: 120px;"
                                 class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
                             <div class="card-body position-relative">
-                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/user1.jpg') }}"
+                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/profile-default.png') }}"
                                     class="rounded-circle object-fit-cover border border-white border-3"
                                     style="width: 96px; height: 96px;" alt="creator-avatar" srcset="">
                                 <h5 class="card-title">{{ $creator->username }}</h5>

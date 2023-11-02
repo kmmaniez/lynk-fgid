@@ -58,29 +58,28 @@ class ProductController extends Controller
         $pathImages = array();
         if ($request->has('img')) {
             $pattern = '(data:application)';
-            for ($i=0; $i < count($request->img); $i++) { 
+            for ($i = 0; $i < count($request->img); $i++) {
                 if (preg_match($pattern, $request->img[$i])) {
-                    return redirect()->back()->with('error','Please upload valid file!');
+                    return redirect()->back()->with('error', 'Please upload valid file!');
                 }
             }
 
             foreach ($request->img as $key => $image) {
-                $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','', $image));
-                $imgname = date('HisdmY').'_'.Str::random(5).'.png';
-                Storage::disk('public')->put('tes/'.$imgname, $base);
-                array_push($pathImages,$imgname);
+                $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
+                $imgname = date('HisdmY') . '_' . Str::random(5) . '.png';
+                Storage::disk('public')->put('tes/' . $imgname, $base);
+                array_push($pathImages, $imgname);
             }
-            
         }
 
         try {
-            $ea = Product::create([
+            Product::create([
                 'user_id' => auth()->user()->id,
                 'type' => ProductTypeEnum::PRODUCT_DIGITAL,
                 'name' => $request->name,
-                'slug' => self::generateSlug(7),
+                'slug' => self::generateSlug(rand(5,8)),
                 // 'thumbnail' => ($request->thumbnail) ? $pathThumbnail : 'public/products/default.jpg',
-                'thumbnail' => ($request->img) ? $pathImages[0] : 'public/tes/default.jpg',
+                'thumbnail' => ($request->img) ? $pathImages[0] : NULL,
                 // 'images' => ($request->img) ? json_encode($pathImages) : NULL,
                 'images' => ($request->img) ? $pathImages : NULL,
                 'description' => $request->description,
@@ -95,7 +94,7 @@ class ProductController extends Controller
             throw $th;
         }
         // dd($request, $request['name']);
-        return redirect()->route('admin')->with('success','Data created');
+        return redirect()->route('creator')->with('success', 'Data created');
     }
 
     public function store_link(LinkProductRequest $request)
@@ -106,9 +105,9 @@ class ProductController extends Controller
             // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
             $thumbnailName = date('HisdmY') . '_' . Str::random(5);
             $thumbnailPath = FileService::store(
-                'public/products', 
+                'public/products',
                 $request->file('thumbnail'),
-                $request->thumbnail->extension(), 
+                $request->thumbnail->extension(),
                 $thumbnailName
             );
             try {
@@ -118,29 +117,10 @@ class ProductController extends Controller
                     'user_id' => auth()->user()->id,
                     'thumbnail' => $thumbnailPath,
                 ]);
-                
             } catch (\Throwable $th) {
                 throw $th;
             }
-        }else{
-            // $ea = 
-            // $slug =  self::generateSlug(6);
-            // $slugExist = Product::where('slug','aduh')->first();
-            // if ($slugExist) {
-            //     echo 'ada';
-            // }
-            // dump($slugExist);
-            // $status = false;
-            // echo $slug.'<br>';
-            // $a = 0;
-            // do {
-            //     echo $a++.'<br>';
-            //     if ($a == 8 || $a == 15) {
-            //         $status = true;
-            //         echo 'STOPPED '.$a++.'<br>';
-            //         continue;
-            //     }
-            // } while ($status != true);
+        } else {
             try {
                 Product::create([
                     ...$request->validated(),
@@ -152,7 +132,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('admin')->with('success','Data created');
+        return redirect()->route('creator')->with('success', 'Data created');
     }
 
     /**
@@ -168,20 +148,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        // dump($product->images);
         $user = request()->user();
-        $arr = ["04163523102023_n0yJP.png", //0
-                "04163523102023_jOt1Z.png", //1
-                "04163523102023_33UKl.png", //2
-                "04163523102023_xz5yl.png" //3
-            ];
-        // dump($arr);
-        // $index = 1;
-        // if (array_key_exists($index, $arr)) {
-        //     unset($arr[$index]);
-        //     $arr = array_values($arr);
-        // }
-        // dump($arr);
         return view('creator.product.update-digital', compact('product', 'user'));
     }
 
@@ -204,9 +171,9 @@ class ProductController extends Controller
 
             // check valid base64 file image, if false will back and give errors
             $pattern = '(data:application)';
-            for ($i=0; $i < count($request->img); $i++) { 
+            for ($i = 0; $i < count($request->img); $i++) {
                 if (preg_match($pattern, $request->img[$i])) {
-                    return redirect()->back()->with('error','Please upload valid file!');
+                    return redirect()->back()->with('error', 'Please upload valid file!');
                 }
             }
 
@@ -214,10 +181,10 @@ class ProductController extends Controller
             foreach ($request->img as $key => $image) {
                 $pattern = '#^data:image/\w+;base64,#i';
                 if (preg_match($pattern, $image)) {
-                    $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','', $image));
-                    $imgname = date('HisdmY').'_'.Str::random(5).'.png';
-                    Storage::disk('public')->put('tes/'.$imgname, $base);
-                    array_push($pathImages,$imgname);
+                    $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
+                    $imgname = date('HisdmY') . '_' . Str::random(5) . '.png';
+                    Storage::disk('public')->put('tes/' . $imgname, $base);
+                    array_push($pathImages, $imgname);
                 }
             }
 
@@ -236,12 +203,10 @@ class ProductController extends Controller
                         'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                         'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
                     ]);
-
                 } catch (\Throwable $th) {
                     throw $th;
                 }
-
-            }else{
+            } else {
                 try {
                     $product->update([
                         'name' => $request->name,
@@ -255,13 +220,11 @@ class ProductController extends Controller
                         'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                         'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
                     ]);
-    
                 } catch (\Throwable $th) {
                     throw $th;
                 }
             }
-            
-        }else{
+        } else {
             try {
                 $product->update([
                     'name' => $request->name,
@@ -273,14 +236,13 @@ class ProductController extends Controller
                     'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                     'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
                 ]);
-
             } catch (\Throwable $th) {
                 throw $th;
             }
         }
-        
 
-        return redirect()->route('admin');
+
+        return redirect()->route('creator');
     }
 
 
@@ -288,26 +250,26 @@ class ProductController extends Controller
     {
         $currentUserId = $request->user()->id;
         if ($request->hasFile('thumbnail')) {
-            
+
             if ($product->thumbnail) {
                 Storage::delete($product->thumbnail);
             }
 
-            $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
+            $thumbnailName = date('HisdmY') . '_' . str_replace([' ', '-'], '_', strtolower($request->name));
             $thumbnailPath = FileService::store(
-                'public/products', 
+                'public/products',
                 $request->file('thumbnail'),
-                $request->thumbnail->extension(), 
+                $request->thumbnail->extension(),
                 $thumbnailName
             );
 
-            $product->where('user_id', $currentUserId)->where('id',$product->id)->update([
+            $product->where('user_id', $currentUserId)->where('id', $product->id)->update([
                 ...$request->validated(),
                 // 'slug' => 2,
                 'thumbnail' => $thumbnailPath,
             ]);
-        }else{
-            $product->where('user_id', $currentUserId)->where('id',$product->id)->update([
+        } else {
+            $product->where('user_id', $currentUserId)->where('id', $product->id)->update([
                 ...$request->validated(),
                 // 'slug' => 2,
                 // 'name' => $request->title,
@@ -316,7 +278,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return redirect()->route('admin')->with('success','Data updated');
+        return redirect()->route('creator')->with('success', 'Data updated');
     }
 
     /**
@@ -328,15 +290,14 @@ class ProductController extends Controller
             Transaction::where('product_id', $product->id)->delete();
             if ($product->images) {
                 foreach ($product->images as $key => $value) {
-                    Storage::delete('public/tes/'. $value);
+                    Storage::delete('public/tes/' . $value);
                 }
             }
             $product->delete();
-            
         } catch (\Throwable $th) {
             throw $th;
         }
-        return redirect()->route('admin');
+        return redirect()->route('creator');
     }
 
     public function destroy_link(Product $product)
@@ -346,7 +307,7 @@ class ProductController extends Controller
         }
         $product->delete();
 
-        return redirect()->route('admin');
+        return redirect()->route('creator');
     }
 
     public function delete_image(Request $request, Product $product)
@@ -360,7 +321,7 @@ class ProductController extends Controller
             if (array_key_exists($indexImage, $listImages)) {
                 unset($listImages[$indexImage]);
                 $listImages = array_values($listImages);
-                Storage::delete('public/tes/'. $product->images[$indexImage]);
+                Storage::delete('public/tes/' . $product->images[$indexImage]);
             }
 
             $product->where('user_id', $request->user()->id)->where('id', $product->id)->update([
@@ -373,83 +334,28 @@ class ProductController extends Controller
                 'old_img' => $oldImg,
                 'new_img' => $listImages,
             ]);
-        }else{
+        } else {
             return response()->json([
                 'data' => $product,
-                'req' => $request->all(),
-                'aw' => 'kosong',
-                'img' => $request->image,
-                'old_img' => $oldImg,
-                'new_img' => $listImages,
-                'leng_old' => count($oldImg),
-                'leng_new' => count($listImages),
             ]);
         }
-        // if ($product->thumbnail) {
-        //     // Storage::delete($product->thumbnail);
-            
-        //     // $product->where('user_id', $request->user_id)->where('id', $product->id)->update([
-        //     //     'thumbnail' => NULL,
-        //     // ]);
-        //     return response()->json([
-        //         'data' => $product,
-        //         // 'img' => $product->images[$request->data_img],
-        //         'req' => $request->all(),
-        //         'aw' => 'ada',
-        //     ]);
-        // }else{
-        //     return response()->json([
-        //         'data' => $product,
-        //         'req' => $request->all(),
-        //         'aw' => 'kosong'
-        //     ]);
-        // }
 
     }
 
     // Generate random slug
     public  static function generateSlug(int $length)
     {
-        // digital product = 7 length
-        // link product = 6 length
-        $userId = request()->user()->id;
         $alphanum = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         $str = '';
 
-        for ($i=0; $i < $length; $i++) { 
+        for ($i = 0; $i < $length; $i++) {
             $str .= $alphanum[rand(0, strlen($alphanum) - 1)];
         }
-        return $str;
+        return $str.rand(1,100);
     }
 
-    // Get enum from input
-    public  static function getEnumProduct(CtaEnum $product)
+    public function product_user(User $user, Product $product)
     {
-        // switch ($product) {
-        //     case ProductEnum::CTA_NO_OPTION:
-        //         return 'I Want this';
-        //         break;
-        //     case ProductEnum::CTA_OPTION_1:
-        //         return 'Support Creator';
-        //         break;
-        //     case ProductEnum::CTA_OPTION_2:
-        //         return 'Beli Sekarang';
-        //         break;
-        //     case ProductEnum::CTA_OPTION_3:
-        //         return 'Book Now';
-        //         break;
-        //     default:
-        //         break;
-        // }
-    }
-    
-    public function product_user(User $user, Product $product) {
-        // echo 'ok';
-        // dd($user,$product);
         return view('creator.products.detail-produk', compact('user', 'product'));
-    }
-
-    public function tes() {
-        return view('creator.product.tes');
     }
 }

@@ -45,20 +45,23 @@
         .nav-item:not(:nth-child(1)) {
             /* padding: 0 24px; */
         }
-        .menu{
+
+        .menu {
             width: 100%;
             flex-wrap: wrap;
             gap: 8px;
             display: flex;
             justify-content: space-between;
         }
-        .link-information{
+
+        .link-information {
             padding: 0 16px 0 0;
             width: 100%;
             display: flex;
             justify-content: space-between;
         }
-        #wrapper{
+
+        #wrapper {
             /* height: 100vh; */
             min-height: 100vh;
             max-height: max-content;
@@ -72,16 +75,18 @@
             flex-direction: row;
             justify-content: space-around;
         }
-        .container{
+
+        .container {
             width: 800px;
             /* height: 100vh; */
         }
 
         @media (max-width: 768px) {
-            .container{
+            .container {
                 width: 100%;
                 /* height: 100vh; */
             }
+
             #wrapper {
                 /* padding: 0 16px; */
                 /* background-color: red; */
@@ -103,10 +108,12 @@
             .link-information {
                 padding-inline-start: 0;
             }
-            nav{
+
+            nav {
                 position: relative;
             }
-            .dropdown-menu{
+
+            .dropdown-menu {
                 width: 300px;
             }
         }
@@ -121,12 +128,13 @@
     <div id="wrapper" class="container bg-white pb-4">
 
         <nav class="navbar border-bottom navbar-expand-lg p-0 d-flex justify-content-between" style="height: 4rem;">
-            <a class="navbar-brand" href="{{ route('admin') }}">
+            <a class="navbar-brand" href="{{ route('creator') }}">
                 <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150"
                     class="d-inline-block align-text-top">
             </a>
             <div class="dropdown">
-                <button type="button" class="btn dropdown-toggle border-0" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn dropdown-toggle border-0" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     <i id="user-profile" data-feather="user"></i> My Profile
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end mt-2 py-3">
@@ -153,13 +161,14 @@
 
             <ul class="nav nav-underline w-100">
                 <li class="nav-item">
-                    <a class="nav-link {{  (Request::routeIs('admin')) ? 'active' : '' }}" href="/admin">Dashboard</a>
+                    <a class="nav-link {{ Request::routeIs('admin') ? 'active' : '' }}" href="/admin">Dashboard</a>
                 </li>
                 {{-- <li class="nav-item">
                     <a class="nav-link" href="#">Appereance</a>
                 </li> --}}
                 <li class="nav-item">
-                    <a class="nav-link {{  (Request::routeIs('statistik')) ? 'active' : '' }}" href="/statistik">Statistic</a>
+                    <a class="nav-link {{ Request::routeIs('statistik') ? 'active' : '' }}"
+                        href="/statistik">Statistic</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Order</a>
@@ -167,7 +176,8 @@
             </ul>
 
             <div class="link-information">
-                <span>Your link <a href="#" class="text-decoration-none" id="contentLink"><?= $_SERVER['HTTP_HOST'] ?></a></span>
+                <span>Your link <a href="#" class="text-decoration-none"
+                        id="contentLink"><?= $_SERVER['HTTP_HOST'] ?></a></span>
                 <a href="#" id="shareLink" class="text-success text-decoration-none fw-bold">Share</a>
             </div>
 
@@ -188,7 +198,6 @@
         })
 
         feather.replace();
-
     </script>
     @stack('scripts')
 </body>

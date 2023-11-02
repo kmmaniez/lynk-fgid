@@ -39,6 +39,11 @@ class Product extends Model
         'images' => 'array',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function users()
     {
         return $this->belongsTo(User::class);
