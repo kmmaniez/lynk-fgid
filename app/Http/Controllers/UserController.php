@@ -20,14 +20,18 @@ class UserController extends Controller
 
     public function getAllUsers(Request $request)
     {
-        // if ($request->ajax()) {
+        if ($request->ajax()) {
             $model = User::all();
 
             return DataTables::of($model)
                 ->only(['id', 'photo', 'name', 'username', 'email', 'phone', 'updated_at','action'])
                 ->addIndexColumn()
                 ->editColumn('photo', function($row) {
-                    return '<img src="'. Storage::url($row->photo) .'" style="width:100%;height:64px;" class="profile-img card-img-top object-fit-cover rounded-circle">';
+                    if ($row->photo != NULl) {
+                        return '<img src="'. Storage::url($row->photo) .'" style="width:64px;height:64px;" class="profile-img card-img-top object-fit-cover rounded-circle">';
+                    } else {
+                        return '<img src="'.asset('assets/profile-default.png').'" style="width:64px;height:64px;" class="profile-img card-img-top object-fit-cover rounded-circle">';
+                    }                    
                 })
                 ->editColumn('updated_at', function ($row) {
                     $date = Carbon::parse($row->created_at)->translatedFormat('l') . ', ' . Carbon::parse($row->created_at)->translatedFormat('d F Y');
@@ -42,8 +46,8 @@ class UserController extends Controller
                 })
                 ->rawColumns(['photo','action'])
                 ->toJson();
-        // }
-        // return abort(404);
+        }
+        return abort(404);
     }
 
 }
