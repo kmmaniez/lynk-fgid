@@ -205,15 +205,6 @@
             transform: translateY(0.5rem);
             left: 0;
         }
-        .searchbox.show{
-            /* visibility: visible; */
-            /* height: 180px; */
-            /* transform: translateY(0.5rem); */
-            /* transition: all 500ms linear; */
-        }
-        .searchbox .card:nth-child(odd){
-            /* background-color: red; */
-        }
     </style>
 @endpush
 
@@ -228,25 +219,6 @@
                     <input id="search-input" type="text" class="form-control shadow-none border-danger w-100 pe-2 py-3" placeholder="Search..." aria-label="Recipient's username" aria-describedby="button-addon2">
                     <button id="claim" class="btn btn-md btn-danger fw-bold position-absolute" style="width: 120px;" type="button" id="button-addon2">Search</button>
                     <div class="searchbox vstack gap-2 p-2 bg-white rounded-1">
-                        {{-- <div class="card">
-                            <div class="card-body">
-                                <span>Lorem ipsum dolor sit amet.</span>
-                            </div>
-                        </div> --}}
-                        {{-- <div class="card">
-                            <div class="card-body">
-                                <span>Lorem ipsum dolor sit amet.</span>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <div class="card-body">
-                                <span>Lorem ipsum dolor sit amet.</span>
-                            </div>
-                        </div><div class="card">
-                            <div class="card-body">
-                                <span>Lorem ipsum dolor sit amet.</span>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
 
@@ -262,15 +234,14 @@
                 <div class="col">
                     <a href="{{ route('public.user', $creator->username) }}" title="{{ $creator->username }}" class="text-decoration-none">
                         <div class="card h-100 rounded-4 border-0">
-                            <img src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/user1.jpg') }}" loading="lazy" style="width: 100%; height: 120px;"
+                            <img src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/cover-white.png') }}" loading="lazy" style="width: 100%; height: 120px;"
                                 class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
                             <div class="card-body position-relative">
-                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/user1.jpg') }}"
+                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/profile-default.png') }}"
                                     class="rounded-circle object-fit-cover border border-white border-3"
                                     style="width: 96px; height: 96px;" loading="lazy" alt="creator-avatar" srcset="">
                                 <h5 class="card-title">{{ $creator->username }}</h5>
                                 <p class="card-text">{{ $creator->description }}</p>
-                                {{-- <span class="badge rounded-pill px-2">Singer</span> --}}
                             </div>
                         </div>
                     </a>
@@ -287,10 +258,10 @@
                 <div class="col">
                     <a href="{{ route('public.user', $creator->username) }}" class="text-decoration-none">
                         <div id="card-recent" class="card card-style h-100 rounded-4 border-0">
-                            <img src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/user1.jpg') }}" loading="lazy" style="width: 100%; height: 120px;"
+                            <img src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/cover-white.png') }}" loading="lazy" style="width: 100%; height: 120px;"
                                 class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="Photo">
                             <div class="card-body position-relative">
-                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/user1.jpg') }}"
+                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/profile-default.png') }}"
                                     class="rounded-circle object-fit-cover border border-white border-3"
                                     style="width: 96px; height: 96px;" loading="lazy" alt="creator-avatar" srcset="">
                                 <h5 class="card-title">{{ $creator->username }}</h5>
@@ -310,15 +281,16 @@
         const searchbox = document.querySelector('.searchbox');
 
         $('#search-input').on('change', (e) => {
-            fetch('/search?username=' + e.target.value)
-                .then(response => response.json())
-                .then(data => {
-                    // const users = data.user;
+            $.ajax({
+                url: "{{ route('public.search') }}?username="+e.target.value,
+                method: 'GET',
+                success: (res) => {
+                    const {user} = res;
                     $('.searchbox').css('visibility', 'visible');
                     let listUsers = [];
                     $('.searchbox').empty()
-                    if (data.user.length > 0) {
-                        listUsers.push(...data.user)
+                    if (user.length > 0 ) {
+                        listUsers.push(...user)
                         listUsers.forEach(item => {
                             let url, photoUrl;
                             if (item.photo) {
@@ -341,12 +313,11 @@
                         $('.searchbox').html(`
                             <div class="card empty">
                                 <div class="card-body">
-                                    <span>${data.message}</span>
+                                    <span>${res.message}</span>
                                 </div>
                             </div>
                         `);
                     }
-
                     if (e.target.textLength === 0) {
                         listUsers = [];
                         $('.searchbox').html(`
@@ -357,26 +328,17 @@
                             </div>
                         `);
                     };
-                })
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            })
+            // console.log(e.target.value);
         })
 
-        $('#claim').on('click', (e) => {
-            e.preventDefault();
-                const card = `
-                <div class="card">
-                    <div class="card-body">
-                        <span>Lorem ipsum dolor sit amet.</span>
-                    </div>
-                </div>
-                `;
-                $('.searchbox').append(card);
-            })
 
         $('.searchbox').on('mouseleave', (e) => {
             $('.searchbox').css('visibility', 'hidden');
-        })
-        // $('#search-input').on('keyup', function() {
-        //     $('#searchbox').css('visibility', 'visible');
-        // });
+        });
     </script>
 @endpush
