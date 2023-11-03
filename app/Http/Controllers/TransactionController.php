@@ -48,7 +48,7 @@ class TransactionController extends Controller
         $cart = \Cart::session($request->cart);
 
 
-        $response = $this->_duitku->getPaymentMethod($cart->getSubTotal());
+        // $response = $this->_duitku->getPaymentMethod($cart->getSubTotal());
 
 
         if ($rules->fails()) {
@@ -60,20 +60,38 @@ class TransactionController extends Controller
         $paymentMethod = $request->payment_method;
         $productName = 'Beli';
 
-        foreach ($response['paymentFee'] as $key => $value) {
-            if ($request->payment != $response['paymentFee'][$key]['paymentMethod']) {
-                return redirect()->back()->with('payment', 'Payment method must be selected');
-            }
+        $dataCart = $cart->getContent();
+        dump($dataCart);
+        
+        foreach ($dataCart as $key => $cart) {
+            Transaction::create([
+                'product_id' => $cart->id,
+                'duitku_order_id' => rand(100,500) * rand(5,200) * rand(10,100),
+                'total_item' => $cart->quantity,
+                'total_price' => $cart->price * $cart->quantity,
+                'customer_info' => $request->email,
+                'payment_method' => $request->payment,
+                'payment_url' => fake()->url(),
+                'transaction_created' => now(),
+            ]);
         }
+        // remove cart after payment
+        \Cart::session($request->cart)->clear();
 
-        foreach ($response['paymentFee'] as $key => $value) {
-            if ($response['paymentFee'][$key]['paymentMethod'] === $request->payment) {
-                $fee = $response['paymentFee'][$key]['totalFee'];
-                print_r($response['paymentFee'][$key]['paymentMethod']);
-                break;
-            }
-        }
-        $totalItemWithFee = $cart->getSubTotal() + $fee;
+        // foreach ($response['paymentFee'] as $key => $value) {
+        //     if ($request->payment != $response['paymentFee'][$key]['paymentMethod']) {
+        //         return redirect()->back()->with('payment', 'Payment method must be selected');
+        //     }
+        // }
+
+        // foreach ($response['paymentFee'] as $key => $value) {
+        //     if ($response['paymentFee'][$key]['paymentMethod'] === $request->payment) {
+        //         $fee = $response['paymentFee'][$key]['totalFee'];
+        //         print_r($response['paymentFee'][$key]['paymentMethod']);
+        //         break;
+        //     }
+        // }
+        // $totalItemWithFee = $cart->getSubTotal() + $fee;
         // dd( $request->all(), $cart->getSubTotal(), $cart->getSubTotal() + $fee);
         // $transaction = DuitkuController::createInvoice(
         //     $amount, 
@@ -81,16 +99,16 @@ class TransactionController extends Controller
         //     $paymentMethod,
         //     $emailCustomer,
         // );
-        Transaction::create([
-            'product_id' => 1,
-            'duitku_order_id' => 1,
-            'total_item' => $cart,
-            'total_price' => 1,
-            'customer_info' => $request->email,
-            'payment_method' => 1,
-            'payment_url' => fake()->url(),
-            'transaction_created' => now(),
-        ]);
+        // Transaction::create([
+        //     'product_id' => 1,
+        //     'duitku_order_id' => 1,
+        //     'total_item' => $cart,
+        //     'total_price' => 1,
+        //     'customer_info' => $request->email,
+        //     'payment_method' => 1,
+        //     'payment_url' => fake()->url(),
+        //     'transaction_created' => now(),
+        // ]);
         // dump($transaction);
     }
 
