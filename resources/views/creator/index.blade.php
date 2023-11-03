@@ -111,7 +111,7 @@
                                 @if ($product->type->value === "link")
                                     href="{{ route('products.linkedit', $product->id) }}" 
                                 @else
-                                    href="{{ route('products.digitaledit', $product->id) }}" 
+                                    href="{{ route('products.digitaledit', $product->slug) }}" 
                                 @endif
                                     title="{{ $product->name }}" class="text-decoration-none text-dark"
                                 >
