@@ -41,11 +41,11 @@
                                     <span class="">Detail Item :</span>
                                     {{-- <span>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</span> --}}
                                     <ul class="m-0">
-                                        <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</li>
+                                        <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ number_format($transact->total_price,0,0,'.') }}</li>
                                         {{-- <li>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</li> --}}
                                     </ul>
                                 </div>
-                                <span class="d-block mt-2"><strong>Total : Rp. {{ $transact->total_price }}</strong></span>
+                                <span class="d-block mt-2"><strong>Total : Rp. {{ number_format($transact->total_price,0,0,'.') }}</strong></span>
                                 <div class="customer-field hstack gap-3">
                                     <div id="copy" class="fw-semibold">Customer Email : <span id="email">{{ $transact->customer_info }}</span></div>
                                     <a href="#" id="btnCopy" title="copy email" class="position-relative btn border-0"><i data-feather="copy" data-id="{{ $transact->product_id }}" class="fa-24 text-danger"></i></a>
@@ -56,6 +56,7 @@
                     @empty
                     <div class="card"></div>
                     @endforelse
+                    {{-- {{ $transactions->links() }} --}}
                 </div>
             </div>
         </div>
