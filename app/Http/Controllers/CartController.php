@@ -15,11 +15,12 @@ use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
-    protected $_cart; 
+    protected $_cart;
     protected $_hash;
     protected $_update;
 
-    public function __construct(Cart $cart) {
+    public function __construct(Cart $cart)
+    {
         $this->_cart = $cart;
     }
 
@@ -33,8 +34,7 @@ class CartController extends Controller
         // $x = Cart::name('shopping');
         // dump(  $x->getItems());
         // return view('cart.index', compact('product', 'cart','cartitems'));
-        return view('creator.products.detail-produk', compact('user', 'product','products', 'cart','cartitems'));
-
+        return view('creator.products.detail-produk', compact('user', 'product', 'products', 'cart', 'cartitems'));
     }
 
     public function getAllItems()
@@ -45,55 +45,54 @@ class CartController extends Controller
         ]);
     }
 
-    public function index_clone()
-    {
-        $product = Product::all();
-        $cartOri = Cart::name('shopping')->useForCommercial();
-        $cart = Cart::name('shopping')->getDetails();
-        $cartitems = Cart::name('shopping')->getItems(); // get items inside cart
-        $json = Cart::name('shopping')->getDetails()->toJson();
-        $keys = implode('',array_keys($cartitems));
-        if (count($cartitems) > 0) {
-            // cart kosong
-            echo 'cart ada';
-        }else{
-            echo 'cart kosong';
-            
-        }
-        $jml = (int) request()->get('jml');
-        $bayar = request()->get('bayar');
-        echo '<br>NAMBAH ITEM '.$jml.' - BAYARNYA ? '.$bayar;
-        dump($cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails());
-        $updatedItem = $cartOri->updateItem('item_e38970ae0bc86760b77c80d62b75dc8e', [
-            'title'      => 'New title 2',
-            'quantity' => $cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails()->get('quantity') + $jml,
-            // 'price' => $cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails()->get('price') * $bayar,
-            // 'price' => $jml * $bayar,
-            'price' => $cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails()->get('quantity') * $bayar,
-        ]);
-        echo 'AFTER';
-        dump($cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails(), $cartOri->getDetails());
-        die;
-        return view('cart.index', compact('product', 'cart','cartitems', 'json'));
-        // return view('creator.products.detail-produk', compact('user', 'product','products', 'cart','cartitems'));
+    // public function index_clone()
+    // {
+    //     $product = Product::all();
+    //     $cartOri = Cart::name('shopping')->useForCommercial();
+    //     $cart = Cart::name('shopping')->getDetails();
+    //     $cartitems = Cart::name('shopping')->getItems(); // get items inside cart
+    //     $json = Cart::name('shopping')->getDetails()->toJson();
+    //     $keys = implode('', array_keys($cartitems));
+    //     if (count($cartitems) > 0) {
+    //         // cart kosong
+    //         echo 'cart ada';
+    //     } else {
+    //         echo 'cart kosong';
+    //     }
+    //     $jml = (int) request()->get('jml');
+    //     $bayar = request()->get('bayar');
+    //     echo '<br>NAMBAH ITEM ' . $jml . ' - BAYARNYA ? ' . $bayar;
+    //     dump($cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails());
+    //     $updatedItem = $cartOri->updateItem('item_e38970ae0bc86760b77c80d62b75dc8e', [
+    //         'title'      => 'New title 2',
+    //         'quantity' => $cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails()->get('quantity') + $jml,
+    //         // 'price' => $cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails()->get('price') * $bayar,
+    //         // 'price' => $jml * $bayar,
+    //         'price' => $cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails()->get('quantity') * $bayar,
+    //     ]);
+    //     echo 'AFTER';
+    //     dump($cartitems['item_e38970ae0bc86760b77c80d62b75dc8e']->getDetails(), $cartOri->getDetails());
+    //     die;
+    //     return view('cart.index', compact('product', 'cart', 'cartitems', 'json'));
+    //     // return view('creator.products.detail-produk', compact('user', 'product','products', 'cart','cartitems'));
 
-    }
+    // }
 
     public function store(Request $request)
     {
         $product = Product::find($request->id);
         $cart = Cart::name('shopping')->useForCommercial();
-        $cartitems = Cart::name('shopping')->getItems();// get items inside cart
+        $cartitems = Cart::name('shopping')->getItems(); // get items inside cart
         if (is_null($request->user_pay)) {
             return response()->json([
                 'code' => 201,
                 'messages' => 'Price must be filled'
             ]);
-        }else{
+        } else {
             if ($request->user_pay < $product->min_price) {
                 return response()->json([
                     'code' => 201,
-                    'messages' => 'Price must higher or equal than '.$product->min_price
+                    'messages' => 'Price must higher or equal than ' . $product->min_price
                 ]);
             } else {
                 // check if added cart already exist
@@ -111,7 +110,7 @@ class CartController extends Controller
                             'user_pay' => $request->user_pay
                         ]
                     ]);
-                }else{
+                } else {
                     $cart->updateItem($request->hash, [
                         // 'title'      => 'New title 2',
                         'quantity' => $cartitems[$request->hash]->getDetails()->get('quantity') + $request->quantity,
@@ -123,15 +122,14 @@ class CartController extends Controller
                     $this->_update = $cartitems[$request->hash]->getDetails();
                 }
                 return response()->json([
-                    'request' => $request->all(), 
+                    'request' => $request->all(),
                     'hash' => (!$request->hash) ? 'BARU NAMBAH' : 'NAMBAH LAGI',
-                    'keyhash' => implode('',array_keys($cart->getItems())),
+                    'keyhash' => implode('', array_keys($cart->getItems())),
                     'update' => $this->_update,
                     // 'upd' => $cartitems[$request->hash] ? $cartitems[$request->hash] : 'KOSONG'
                 ]);
                 // dump($cartitems['item_eaf22b8914ab128f5ee89d3d46c0b1d5']->getDetails());
             }
-            
         }
 
         // $cart->addItem([
@@ -146,24 +144,23 @@ class CartController extends Controller
         //         ]
         //     ]
         // ]);
-        // return redirect()->to(route('admin'));
+        // return redirect()->to(route('creator'));
         // return redirect()->back();
     }
 
-    public function update(Request $request) : RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
         $cart = Cart::name('shopping');
         dd($cart->getItems());
         // dd($request->all());
         return view('cart.index');
-        return redirect()->to(route('admin'));
+        return redirect()->to(route('creator'));
         $update = $cart->updateItem($cart->getHash(), [
             'title'      => 'New title',
             'extra_info' => [
                 'date_time.updated_at' => time()
             ]
         ]);
-
     }
 
     public function remove_items(Request $request)
@@ -181,6 +178,5 @@ class CartController extends Controller
         Cart::name('shopping')->destroy();
         $this->_cart::name('shopping')->destroy();
         dump($this->_cart::name('shopping')->getDetails());
-
     }
 }

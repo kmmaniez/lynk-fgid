@@ -68,7 +68,7 @@ Route::prefix('creator')->middleware('auth')->group(function () {
         Route::delete('/link/destroy/{product:id}', 'destroy_link')->name('products.linkdestroy');
     
         // DELETE IMAGE
-        Route::post('/delete-image/{product}', 'delete_image')->name('products.deleteimage');
+        Route::post('/delete-image/{product:id}', 'delete_image')->name('products.deleteimage');
     });
 
     // MANAGE PROFILE CREATOR
@@ -452,6 +452,30 @@ Route::controller(TransactionController::class)->prefix('tf')->group(function ()
     Route::get('/', 'index');
     Route::post('/store', 'store')->name('transaction.store');
 
+});
+
+// TES GET PAYMENT METHOD, CREATE INVOICE
+Route::get('/eak', function() {
+    $duitku = new DuitkuController();
+    // getpaymentmethod
+    $getPayment = $duitku::getPaymentMethods(10000);
+
+    // create invoice
+    $data = array(
+        'name' => 'FOTO NGAB',
+        'price' => 20000,
+        'quantity' => 1
+    );
+    $invoice = $duitku::createInvoice(
+        20000,
+        'BC',
+        'PRODUK AJAK',
+        'sembrun@gmail.com',
+        $data
+    );
+
+    
+    dump( $getPayment, $invoice);
 });
 
 Route::controller(DuitkuController::class)->prefix('duitku')->group(function () {

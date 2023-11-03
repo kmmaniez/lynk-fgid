@@ -65,7 +65,7 @@
 <body>
     <div id="wrapper" class="bg-white p-0" style="">
         <nav class="navbar border-bottom navbar-expand-lg px-3 d-flex justify-content-between" style="height: 4rem;">
-            <a class="navbar-brand" href="{{ route('admin') }}">
+            <a class="navbar-brand" href="{{ route('creator') }}">
                 <img src="{{ asset('assets/logo.png') }}" alt="Logo" width="150"
                     class="d-inline-block align-text-top">
             </a>
@@ -201,7 +201,7 @@
 @extends('layouts.products')
 @push('styles')
     <style>
-        .wrapper{
+        .wrapper {
             overflow-y: hidden;
         }
     </style>
@@ -211,24 +211,28 @@
         <div class="card border-0 h-100">
             <!-- CAROUSEL -->
             @if ($product->images)
-            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    @foreach ($product->images as $key => $image)
-                    <div class="carousel-item {{ ($key == 0) ? 'active' : '' }}" data-bs-interval="5000">
-                        <img src="{{ Storage::url('tes/'.$image) }}" class="d-block object-fit-cover" style="width: 100%; height: 300px;" alt="Product Image" loading="lazy">
+                <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @foreach ($product->images as $key => $image)
+                            <div class="carousel-item {{ $key == 0 ? 'active' : '' }}" data-bs-interval="5000">
+                                <img src="{{ Storage::url('tes/' . $image) }}" class="d-block object-fit-cover"
+                                    style="width: 100%; height: 300px;" alt="Product Image" loading="lazy">
+                            </div>
+                        @endforeach
                     </div>
-                    @endforeach
                 </div>
-            </div>
             @else
-            <img src="{{ asset('assets/bg-3.jpg') }}" style="width: 100%; height: 240px;" class="rounded-none" alt="...">
+                <img src="{{ asset('assets/bg-3.jpg') }}" style="width: 100%; height: 240px;" class="rounded-none"
+                    alt="...">
             @endif
 
             <div class="card-body">
                 <h2 class="mb-3">{{ $product->name }}</h2>
                 <div class="form-group">
                     <label for="user_pay_product"><small>How much you will pay the product</small></label>
-                    <input type="number" class="form-control shadow-none" step="100" placeholder="{{ $product->min_price }}" min="{{ $product->min_price }}" name="user_pay_product" id="user_pay_product">
+                    <input type="number" class="form-control shadow-none" step="100"
+                        placeholder="Recomendation Rp {{ number_format($product->max_price,0,0,'.') }}" min="{{ $product->max_price }}" name="user_pay_product"
+                        id="user_pay_product">
                     <small class="text-danger" id="user_pay_error"></small>
                 </div>
                 <div class="form-group mt-3">
@@ -237,40 +241,20 @@
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                {{-- <form action="{{ route('addcart') }}" id="formAddProduct" method="post">
+                {{-- <form action="{{ route('cart.store') }}" id="formAddProduct" method="post">
                     @csrf --}}
-                    {{-- <div class="hstack"> --}}
-                        <input type="hidden" name="productId" id="productId" value="{{ $product->id }}">
-                        <input type="hidden" name="quantity" id="quantity" value="1" class="form-control shadow-none">
-                        <button class="btn bg-danger text-white fw-semibold bg-gradient w-100" id="btnAddToCart">{{ $product->cta_text->value }}</button>
-                    {{-- </div> --}}
+                {{-- <div class="hstack"> --}}
+                <input type="hidden" name="productId" id="productId" value="{{ $product->id }}">
+                <input type="hidden" name="quantity" id="quantity" value="1" class="form-control shadow-none">
+                <button class="btn bg-danger text-white fw-semibold bg-gradient w-100"
+                    id="btnAddToCart">{{ $product->cta_text->value }}</button>
+                {{-- </div> --}}
                 {{-- </form> --}}
                 {{-- <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">{{ $product->cta_text->value }}</a> --}}
-                <a href="{{ route('public.user', request()->route()->originalParameters()['user']) }}" id="" class="btn mt-2 w-100">Back</a>
+                <a href="{{ route('public.user',request()->route()->originalParameters()['user']) }}" id=""
+                    class="btn mt-2 w-100">Back</a>
             </div>
         </div>
     </section>
-    {{-- <section id="produk" class="px-2 mt-2">
-
-        <div class="card border-0 h-100">
-            <img src="{{ asset('assets/user2.jpg') }}" style="width: 100%; height: 240px;"
-                class="card-img-top" alt="...">
-            <div class="card-body px-2">
-                <h2 class="mb-3">Judul Produk</h2>
-                <div class="form-group">
-                    <label for=""><small>Berapa yang akan anda bayar</small></label>
-                    <input type="number" class="form-control shadow-none" step="200" min="3000" name="" id="">
-                </div>
-                <div class="form-group mt-3">
-                    <label for=""><small class="text-secondary fw-semibold">Judul Deskripsi</small></label>
-                    <span class="d-block mt-2">Deskripsi produk</span>
-                </div>
-            </div>
-            <div class="card-footer border-0 mb-3">
-                    <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">Beli Sekarang</a>
-                    <a href="{{ route('owner') }}" id="" class="btn mt-2 w-100">Kembali</a>
-
-            </div>
-        </div>
-    </section> --}}
+    
 @endsection
