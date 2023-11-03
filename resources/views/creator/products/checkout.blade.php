@@ -14,6 +14,9 @@
             <div class="card-body">
                 <div class="card">
                     <div class="card-body">
+                        {{-- @dump($cartitems)
+                        <p>Total item {{ $totalitem }}</p>
+                        <p>total price {{ $totalprice }}</p> --}}
                         <small>Order Summary</small>
                         <table class="table">
                             <tbody>
@@ -77,46 +80,62 @@
 
                 <div class="card border-0 mt-2">
                     <div class="card-body card-form-input">
-                        <form action="" method="post">
+                        @dump($errors)
+                        <form action="{{ route('transaction.store') }}" method="post">
                             @csrf
 
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input class="form-control shadow-none" type="email" name="email" id="email" required>
+                                @error('email')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="form-group mt-2">
                                 <label for="name">Name</label>
                                 <input class="form-control shadow-none" type="text" name="name" id="name" required>
                             </div>
 
-                            <div class="payment-method mt-2">
+                            <div class="payment-method mt-3">
                                 <div class="form-group">
-                                    <label for="">Pilih Pembayaran</label>
+                                    <label for="payment">Pilih Pembayaran</label>
                                     <div class="hstack mt-2" id="choose_payment">
                                         <label>
-                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="ovo">
-                                            <img src="{{ asset('assets/ovo.jpg') }}" alt="light">
+                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="OV">
+                                            <img src="{{ asset('assets/ovo.jpg') }}" alt="ovo">
                                         </label>
                                         <label>
-                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="qris">
-                                            <img src="{{ asset('assets/qris.png') }}" alt="dark">
+                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="SP">
+                                            <img src="{{ asset('assets/qris.png') }}" alt="qris">
                                         </label>
                                         <label>
-                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="shopee">
-                                            <img src="{{ asset('assets/shopeepay.png') }}" alt="dark">
+                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="SA">
+                                            <img src="{{ asset('assets/shopeepay.png') }}" alt="shopee">
+                                        </label>
+                                        <label>
+                                            <input class="form-check-input" type="radio" id="payment" name="payment" value="BC">
+                                            <img src="{{ asset('assets/cover-dark.png') }}" alt="shopee">
                                         </label>
                                     </div>
                                 </div>
+                                @if (session()->has('payment'))
+                                <small class="text-danger">{{ session()->get('payment') }}</small>
+                                @endif
+                            </div>
+                            
+                            <div class="button-group mt-4">
+                                <button id="btnPay" class="btn text-white bg-danger bg-gradient w-100"></button>
+
                             </div>
                         </form>
                     </div>
                 </div>
 
             </div>
-            <div class="card-footer border-0">
+            {{-- <div class="card-footer border-0">
                 <a href="#" id="btnPay" class="btn text-white bg-danger bg-gradient w-100"></a>
                 <a href="{{ route('public.user', $userProduct[0]->username) }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Back to Shopping</a>
-            </div>
+            </div> --}}
         </div>
     </section>
 @endsection
@@ -129,20 +148,31 @@
         const totalItem = $('#totalitem');
         const totalPrice = $('#totalprice');
 
+        const url = window.location.href;
+        let pattern = /order_id=([^&]*)/;
+        let match = url.match(pattern)
         $(function(){
             fetchCart()
+        })
+        $('#btnPay').on('click',(e) => {
+            e.preventDefault();
+            const link = `<input hidden name="cart" value="${match[1]}">`;
+            $('#btnPay').parent().parent().prepend(link)
+            $('#btnPay').closest('form').submit()
+            // console.log($('#btnPay').closest('form').submit());
         })
 
         $('#choose_payment').children().on('change', (e) =>{
             $.ajax({
-                url: "{{ route('cart.checkfee') }}?type="+e.target.value,
+                url: window.location.href+'&type='+e.target.value,
                 method: 'GET',
                 cache: false,
                 success: (res) => {
+                    console.log(res);
                     const {cart} = res;
                     btnPayment.text('Bayar Sekarang - Rp. '+res.payment_fee)
                     totalPrice.text(res.payment_fee)
-                    feePlatform.text(res.payment_fee)
+                    feePlatform.text(res.fees)
                 },
                 error: (res) => {
                     console.log(res);
@@ -152,9 +182,10 @@
 
         function fetchCart() {
             $.ajax({
-                url: "{{  route('cart.getitems')  }}",
+                url: "{{  route('cart.getitems')  }}?user_id="+match[1],
                 method: 'GET',
                 success: (res) => {
+                    console.log(res);
                     const {cart} = res.data;
                     btnPayment.text('Bayar Sekarang - Rp. '+res.data.total_price)
                     totalItem.text(res.data.total_item)
