@@ -22,7 +22,7 @@
                     <div class="card">
                         <div class="card-body text-center pt-3 pb-0 px-0">
                             <h5 class="text-secondary text-uppercase">Last Payment</h5>
-                            <h5 class="text-success fw-bold">Rp. {{ number_format($settlements->payout_amount,0,0,'.') }}</h5>
+                            <h5 class="text-success fw-bold">Rp. {{ (!isset($settlements->payout_amount)) ? 0 : number_format($settlements->payout_amount,0,0,'.') }}</h5>
     
                             <div class="hstack justify-content-evenly border border-end py-3 mt-3 w-100">
                                 <div class="last-payment">
@@ -40,6 +40,11 @@
     
                             <div class="fees w-100 py-2 bg-danger-subtle">
                                 <small class="text-dark">Fee 5% from total withdrawal.</small>
+                                <button type="button" class="btn btn-sm border-0" data-bs-container="body"
+                                    data-bs-toggle="popover" data-bs-placement="top"
+                                    data-bs-content="Example: If your request withdrawal Rp 50.000, fee is Rp 2.500. You'll receive Rp 47.500">
+                                <i data-feather="info"></i>
+                            </button>
                             </div>
     
                             <div class="manual-withdraw py-2">
@@ -76,3 +81,20 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+
+        const popoverCustomMessage = document.getElementById('popover-custom-message');
+        const contentMessage = document.getElementById('popover-custom-content');
+
+        // popoverCustomMessage.addEventListener('click', (e) => {
+        //     contentMessage.classList.toggle('d-block')
+        // })
+        // const popover = new bootstrap.Popover(popoverCustomMessage, {
+        //     html: true,
+        //     content: contentMessage,
+        // })
+    </script>
+@endpush
