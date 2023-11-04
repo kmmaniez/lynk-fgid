@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class MasterPayoutDate extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'initial_date'
+    ];
 }
