@@ -468,7 +468,7 @@
 
             $('#claim').on('click', (e) => {
                 localStorage.setItem('username', $(this).val())
-                window.location.href = "{{ route('register') }}"
+                window.location.href = "{{ route('login') }}"
             })
         })
     </script>
