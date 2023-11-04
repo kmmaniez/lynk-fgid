@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Creators;
 
 use App\Http\Controllers\Controller;
+use App\Models\MasterPayoutDate;
 use App\Models\Product;
 use App\Models\Settlement;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 
 class DashboardCreatorController extends Controller
@@ -69,7 +71,11 @@ class DashboardCreatorController extends Controller
     public function earning()
     {
         $user = auth()->user();
+        $lastPayoutDate = MasterPayoutDate::latest()->limit(1)->orderBy('id','DESC')->get();
 
+        $date = Carbon::parse($lastPayoutDate[0]->initial_date);
+
+        // dump($date->addMonth());
         // $last_payment = Settlement::with('users')->where('user_id', $user->id)->latest()->get();
         $settlements = Settlement::where('user_id', $user->id)->orderBy('id','DESC')->first('payout_amount');
         // $total_earning = Transaction::whereHas('products',function($q) use ($user){
@@ -86,7 +92,7 @@ class DashboardCreatorController extends Controller
         // dump($estimate_payout);
         // $data = Settlement::with('users')->where('user_id', $user->id)->get()->first();
 
-        return view('creator.earning',compact('user','estimate_payout','total_earning','settlements'));
+        return view('creator.earning',compact('user','estimate_payout','total_earning','settlements','date'));
     }
 
     public function statistik()
