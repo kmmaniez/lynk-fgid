@@ -26,7 +26,7 @@
                                 @csrf
                                 @method('PATCH')
                                 <div class="form-group">
-                                    <label for="bank_name">Bank Name</label>
+                                    <label for="bank_name">Bank Name/E-wallet</label>
                                     <select class="form-control shadow-none" name="bank_name" id="bank_name">
                                         <option value="">-- Choose Bank Name --</option>
                                         <option value="BCA" {{ $user->banks?->bank_name === 'BCA' ? 'selected' : '' }}>
