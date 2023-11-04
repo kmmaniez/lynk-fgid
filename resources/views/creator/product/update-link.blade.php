@@ -177,7 +177,7 @@
                 $('.form-upload').css('display', 'block');
                 console.log('{{ $product->id }}');
                 $.ajax({
-                    url: '/creator/delete-image/' + '{{ $product->id }}',
+                    url: '/creator/delete-image-link/' + '{{ $product->id }}',
                     method: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
