@@ -38,9 +38,9 @@ class PermissionSeeder extends Seeder
 
         // create demo users
         $user = User::create([
-            'username'  => 'usertest',
-            'name'      => 'usertest',
-            'email'     => 'usertest@gmail.com',
+            'username'  => 'writer',
+            'name'      => 'writer',
+            'email'     => 'writer@gmail.com',
             'description' => $faker->paragraph('2'),
             'password'  => Hash::make('password')
         ]);

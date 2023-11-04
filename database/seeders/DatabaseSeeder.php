@@ -33,24 +33,24 @@ class DatabaseSeeder extends Seeder
                 }
             }
         }
-        // MasterPayoutDate::create([
-        //     'initial_date' => date('Y-m-d')
-        // ]);
+        MasterPayoutDate::create([
+            'initial_date' => date('Y-m-d')
+        ]);
         $this->call([
-            // PermissionSeeder::class,
+            PermissionSeeder::class,
             // ProductSeeder::class,
             // TransactionSeeder::class,
         ]);
-        // for ($i=0; $i < 10; $i++) { 
-        //     $users = User::create([
-        //         'username'  => $faker->userName(),
-        //         'name'      => $faker->name(),
-        //         'email'     => $faker->email(),
-        //         // 'phone' => $faker->phoneNumber(),
-        //         'description' => $faker->paragraph('1'),
-        //         'password'  => Hash::make('password')
-        //     ]);
-        //     $users->assignRole('creator');
-        // }
+        for ($i=0; $i < 10; $i++) { 
+            $users = User::create([
+                'username'  => $faker->userName(),
+                'name'      => $faker->name(),
+                'email'     => $faker->email(),
+                // 'phone' => $faker->phoneNumber(),
+                'description' => $faker->paragraph('1'),
+                'password'  => Hash::make('password')
+            ]);
+            $users->assignRole('creator');
+        }
     }
 }
