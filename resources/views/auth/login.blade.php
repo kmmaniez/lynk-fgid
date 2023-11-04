@@ -1,88 +1,91 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap5/css/bootstrap.min.css') }}">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <script src="{{ asset('assets/feather-icons/dist/feather.js') }}"></script>
-    <style>
-        .wrapper{
-            width: 100vw;
-            height: 100vh;
-        }
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 
-        .bg-glass{
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-        }
-        section#login-page{
-            width: 100%;
-            height: inherit;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-        .banner-image{
-            width: 100%;
-            height: max-content;
-            position: absolute;
-        }
-        .login-area, .register-area{
-            width: 40%;
-            height: 100%;
-            flex-grow: 1;
-        }
-        .card{
-            height: 100vh;
-            transition: transform 500ms ease-in-out;
-            border: none;
-        }
-        .login-area .card{
-            border-radius: 0;
-        }
-        .login-area .card.hidden{
-            transform: translateY(-100%);
-        }
-        .register-area .card.active{
-            transform: translateY(-100%);
-        }
-        img{
-            width: 100%;
-            height: 100vh;
-            object-fit: cover;
-        }
-        .caption{
-            width: 60%;
-            padding: 0.5rem 1rem;
-            height: max-content;
-            bottom: 0;
-            left: 0;
-        }
-        .button-group{
-            text-align: end;
-        }
-        @media (max-width: 820px) {
+        <title>{{ config('app.name', 'Laravel') }}</title>
+
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap5/css/bootstrap.min.css') }}">
+        <script src="{{ asset('assets/feather-icons/dist/feather.js') }}"></script>
+        
+        <style>
+            .wrapper{
+                width: 100vw;
+                height: 100vh;
+            }
+
+            .bg-glass{
+                background: rgba(255, 255, 255, 0.3);
+                box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+                border: 1px solid rgba(255, 255, 255, 0.25);
+            }
+            section#login-page{
+                width: 100%;
+                height: inherit;
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
             .banner-image{
-                display: none;
+                width: 100%;
+                height: max-content;
+                position: absolute;
             }
             .login-area, .register-area{
-                width: 100vw;
+                width: 40%;
                 height: 100%;
                 flex-grow: 1;
             }
-            .button-group{
-                text-align: center;
+            .card{
+                height: 100vh;
+                transition: transform 500ms ease-in-out;
+                border: none;
             }
-        }
-    </style>
-  </head>
+            .login-area .card{
+                border-radius: 0;
+            }
+            .login-area .card.hidden{
+                transform: translateY(-100%);
+            }
+            .register-area .card.active{
+                transform: translateY(-100%);
+            }
+            img{
+                width: 100%;
+                height: 100vh;
+                object-fit: cover;
+            }
+            .caption{
+                width: 60%;
+                padding: 0.5rem 1rem;
+                height: max-content;
+                bottom: 0;
+                left: 0;
+            }
+            .button-group{
+                text-align: end;
+            }
+            @media (max-width: 820px) {
+                .banner-image{
+                    display: none;
+                }
+                .login-area, .register-area{
+                    width: 100vw;
+                    height: 100%;
+                    flex-grow: 1;
+                }
+                .button-group{
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
   <body>
     
     <div class="wrapper">
