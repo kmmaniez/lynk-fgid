@@ -34,7 +34,7 @@
                                 <div class="next-payment">
                                     <span class="d-block text-secondary">Next Payment</span>
                                     {{-- <span class="fw-semibold">30 Sep 2023</span> --}}
-                                    <span class="fw-semibold">{{ \Carbon\Carbon::now()->addMonth()->translatedFormat('d M Y') }}</span>
+                                    <span class="fw-semibold">{{ $date->format('d') }} {{ $date->addMonth()->shortMonthName }} {{ $date->year }}</span>
                                 </div>
                             </div>
     
@@ -49,7 +49,7 @@
     
                             <div class="manual-withdraw py-2">
                                 <span class="d-block">Dont't wait until next payment?</span>
-                                <a href="" class="text-decoration-none">Withdraw manual</a>
+                                <a href="#" class="text-decoration-none">Withdraw manual</a>
                             </div>
                         </div>
                     </div>
@@ -59,10 +59,10 @@
                     <div class="card">
                         <div class="card-header bg-transparent">
                             <div class="hstack justify-content-between">
-                                <span>Rekening Pembayaran</span>
+                                <span>Bank Withdrawal</span>
                                 <a href="{{ route('profile.manage-rekening') }}" title="Manage Rekening Pembayaran"
                                     class="text-decoration-none text-success fw-medium"><i data-feather="credit-card"
-                                        style="width: 16px; height:16px;"></i> Manage Rekening</a>
+                                        style="width: 16px; height:16px;"></i> Manage Withdrawal Accounts</a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -70,7 +70,7 @@
                                 <p><strong>{{ $user->banks->bank_name }}</strong> | {{ $user->banks->bank_number }} A/n {{ $user->banks->bank_account_name }}</p>
                                 {{-- @dump($user->banks) --}}
                             @else
-                                <small class="text-secondary">anda belum mengatur rekening pembayaran</small>
+                                <small class="text-secondary">you didn't settings your withdrawal accounts</small>
                             @endif
                         </div>
                     </div>
