@@ -67,7 +67,7 @@ class ProductController extends Controller
             foreach ($request->img as $key => $image) {
                 $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
                 $imgname = date('HisdmY') . '_' . Str::random(5) . '.png';
-                Storage::disk('public')->put('tes/' . $imgname, $base);
+                Storage::disk('public')->put('products/digital/' . $imgname, $base);
                 array_push($pathImages, $imgname);
             }
         }
@@ -105,7 +105,7 @@ class ProductController extends Controller
             // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
             $thumbnailName = date('HisdmY') . '_' . Str::random(5);
             $thumbnailPath = FileService::store(
-                'public/products',
+                'public/products/link',
                 $request->file('thumbnail'),
                 $request->thumbnail->extension(),
                 $thumbnailName
@@ -183,7 +183,7 @@ class ProductController extends Controller
                 if (preg_match($pattern, $image)) {
                     $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $image));
                     $imgname = date('HisdmY') . '_' . Str::random(5) . '.png';
-                    Storage::disk('public')->put('tes/' . $imgname, $base);
+                    Storage::disk('public')->put('products/digital/' . $imgname, $base);
                     array_push($pathImages, $imgname);
                 }
             }
@@ -210,7 +210,7 @@ class ProductController extends Controller
                 try {
                     $product->update([
                         'name' => $request->name,
-                        'thumbnail' => ($request->img) ? $pathImages[0] : 'public/tes/default.jpg',
+                        'thumbnail' => ($request->img) ? $pathImages[0] : NULL,
                         'images' => ($request->img) ? $pathImages : NULL,
                         'description' => $request->description,
                         'url' => $request->url,
@@ -257,7 +257,7 @@ class ProductController extends Controller
 
             $thumbnailName = date('HisdmY') . '_' . str_replace([' ', '-'], '_', strtolower($request->name));
             $thumbnailPath = FileService::store(
-                'public/products',
+                'public/products/link',
                 $request->file('thumbnail'),
                 $request->thumbnail->extension(),
                 $thumbnailName
@@ -290,7 +290,7 @@ class ProductController extends Controller
             Transaction::where('product_id', $product->id)->delete();
             if ($product->images) {
                 foreach ($product->images as $key => $value) {
-                    Storage::delete('public/tes/' . $value);
+                    Storage::delete('public/products/digital/' . $value);
                 }
             }
             $product->delete();
@@ -321,7 +321,7 @@ class ProductController extends Controller
             if (array_key_exists($indexImage, $listImages)) {
                 unset($listImages[$indexImage]);
                 $listImages = array_values($listImages);
-                Storage::delete('public/tes/' . $product->images[$indexImage]);
+                Storage::delete('public/products/digital/' . $product->images[$indexImage]);
             }
 
             $product->where('user_id', $request->user()->id)->where('id', $product->id)->update([
@@ -330,16 +330,25 @@ class ProductController extends Controller
             ]);
 
             return response()->json([
-                'img' => $request->image,
-                'old_img' => $oldImg,
-                'new_img' => $listImages,
+                'message' => 'Image deleted successfully'
             ]);
         } else {
             return response()->json([
-                'data' => $product,
+                'message' => 'Image not found'
             ]);
         }
 
+    }
+    public function delete_image_link(Request $request, Product $product)
+    {
+        Storage::delete($product->thumbnail);
+        $product->where('user_id', $request->user()->id)->where('id', $product->id)->update([
+            'thumbnail' => NULL,
+        ]);
+
+        return response()->json([
+            'message' => 'Image deleted successfully'
+        ]);
     }
 
     // Generate random slug
