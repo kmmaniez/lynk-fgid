@@ -68,6 +68,7 @@ Route::prefix('creator')->middleware('auth')->group(function () {
     
         // DELETE IMAGE
         Route::post('/delete-image/{product:id}', 'delete_image')->name('products.deleteimage');
+        Route::post('/delete-image-link/{product:id}', 'delete_image_link')->name('products.deleteimage-link');
     });
 
     // MANAGE PROFILE CREATOR
@@ -111,14 +112,9 @@ Route::prefix('dashboard')->middleware(['isAdmin','auth'])->group(function () {
     
     Route::controller(DashboardAdminController::class)->group(function () {
 
-        Route::get('/', 'index')->name('dashboad');
+        Route::get('/', 'index')->name('dashboard');
 
     });
-    // Route::get('/', function() {
-    //     $total_user = User::all()->count();
-    //     $total_product = Product::all()->count();
-    //     return view('admin.dashboard', compact('total_user','total_product'));
-    // })->name('dashboard');
 
     Route::controller(UserController::class)->prefix('users')->group(function () {
         Route::get('/', 'index')->name('user.index');
