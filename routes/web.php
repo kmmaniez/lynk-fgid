@@ -2,6 +2,10 @@
 
 use App\Enums\ProductTypeEnum;
 use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\PayoutController;
+use App\Http\Controllers\Admin\ProductsAdminController;
+use App\Http\Controllers\Admin\SettlementController;
+use App\Http\Controllers\Admin\UsersAdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Creators\DashboardCreatorController;
 use App\Http\Controllers\PaymentGateway\DuitkuController;
@@ -10,7 +14,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TransactionController;
-use App\Http\Controllers\UserController;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\User;
@@ -87,23 +90,6 @@ Route::prefix('creator')->middleware('auth')->group(function () {
         Route::delete('/profile', 'destroy')->name('profile.destroy');
     });
 
-
-
-    // Route::middleware('auth')->group(function () {
-
-    //     // ACCOUNT & APPEARANCE
-    //     Route::get('/account', [ProfileController::class, 'edit'])->name('profile.account');
-    //     Route::get('/appearance', [ProfileController::class, 'edit_appearance'])->name('profile.appearance');
-    
-    //     // REKENING
-    //     Route::get('/manage-rekening', [ProfileController::class, 'edit_bank'])->name('profile.manage-rekening');
-    //     Route::patch('/manage-rekening', [ProfileController::class, 'update_bank'])->name('profile.update-rekening');
-    
-    //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    //     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    //     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // });
-    
 });
 
 // ROUTE ADMIN
@@ -116,10 +102,30 @@ Route::prefix('dashboard')->middleware(['isAdmin','auth'])->group(function () {
 
     });
 
-    Route::controller(UserController::class)->prefix('users')->group(function () {
-        Route::get('/', 'index')->name('user.index');
-        Route::get('/getallusers', 'getAllUsers')->name('user.getusers');
+    Route::controller(ProductsAdminController::class)->prefix('products')->group(function () {
+        Route::get('/', 'index')->name('admin-product.index');
+        Route::get('/getallusers', 'getAllUsers')->name('admin-product.getusers');
     });
+
+    Route::controller(UsersAdminController::class)->prefix('users')->group(function () {
+        Route::get('/', 'index')->name('admin-user.index');
+        Route::get('/getallusers', 'getAllUsers')->name('admin-user.getusers');
+    });
+
+    Route::controller(PayoutController::class)->prefix('payouts')
+        ->as('admin-payout.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/getallpayouts', 'getAllPayouts')->name('getpayouts');
+        }
+    );
+
+    Route::controller(SettlementController::class)->prefix('settlements')
+        ->as('admin-settlement.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/getallsettlements', 'getAllSettlements')->name('getpayouts');
+            Route::post('/', 'store')->name('store');
+        }
+    );
 
 
 
