@@ -181,7 +181,7 @@
                                 @foreach ($product->images as $key => $image)
                                     <div class="item position-relative rounded-2" style="width: max-content;">
                                         <img id="displayimg" loading="lazy" alt="images" class="rounded-2" title="delete"
-                                            src="{{ Storage::url('tes/' . $image) }}" width="116" height="118"
+                                            src="{{ Storage::url('products/digital/' . $image) }}" width="116" height="118"
                                             alt="" srcset="">
                                         <span id="remove-list" title="delete"
                                             class="remove-list position-absolute top-0 start-100 translate-middle badge border-light border-2 rounded-circle bg-danger"

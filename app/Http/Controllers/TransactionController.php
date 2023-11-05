@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\PaymentGateway\DuitkuController;
+use App\Models\Payout;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -67,12 +68,18 @@ class TransactionController extends Controller
             Transaction::create([
                 'product_id' => $cart->id,
                 'duitku_order_id' => rand(100,500) * rand(5,200) * rand(10,100),
+                'duitku_reference' => rand(100,500) * rand(5,200) * rand(10,100),
                 'total_item' => $cart->quantity,
                 'total_price' => $cart->price * $cart->quantity,
                 'customer_info' => $request->email,
                 'payment_method' => $request->payment,
                 'payment_url' => fake()->url(),
                 'transaction_created' => now(),
+            ]);
+            Payout::create([
+                'product_id' => $cart->id, 
+                'total_item' => $cart->quantity, 
+                'total_price' => $cart->price * $cart->quantity, 
             ]);
         }
         // remove cart after payment

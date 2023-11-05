@@ -1,0 +1,139 @@
+@extends('layouts.admin')
+@push('styles')
+    <link href="{{ url('sb-admin') }}/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <style>
+        input.form-control.is-invalid:focus{
+            /* background-color: red; */
+            box-shadow: none;
+            border: 1px solid #ff887d;
+        }
+        /* table tbody tr td:last-child{
+            width: 180px;
+        } */
+    </style>
+@endpush
+@section('konten')
+    <x-admin.page-heading>{{ $title ?? 'N' }}</x-admin.page-heading>
+
+    <!-- Content Row -->
+
+    <div class="row">
+
+        <div class="col-xl-12 col-lg-12">
+
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Tabel Data {{ $title ?? 'n' }}</h6>
+                </div>
+                <div class="card-body">
+                    {{-- <a href="" class="btn btn-md btn-primary mb-3" id="btnTambahUser" data-toggle="modal" data-target="#modalUser"><i
+                            class="fas fa-fw fa-plus"></i> Add User</a> --}}
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="DTUsers" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Username</th>
+                                    <th>Total Quantity</th>
+                                    <th>Total Price</th>
+                                    <th>Settlements Created</th>
+                                    {{-- <th>Action</th> --}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CRUD Modal User -->
+    <div class="modal fade" id="modalUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Form Modal User</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCreateUser">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nama</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="cth: Adinda Maharani" required>
+                            <span class="text-danger" id="name-error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" name="username" id="username" placeholder="cth: adminkeren" required>
+                            <span class="text-danger" id="username-error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" class="form-control" name="email" id="email" placeholder="cth: mailmu@gmail.com" required>
+                            <span class="text-danger" id="email-error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role <small><i>(default: writer)</i></small></label>
+                            <select class="form-control" name="role" id="role">
+                                <option data-name="writer" value="writer">Writer</option>
+                                <option data-name="admin" value="admin">Admin</option>
+                                <option data-name="super" value="super">Super Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="" required>
+                            <span class="text-danger" id="password-error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password_conf" class="form-label">Password Konfirmasi</label>
+                            <input type="password" class="form-control" name="password_conf" id="password_conf" placeholder="" required>
+                            <span class="text-danger" id="passwordconf-error"></span>
+                        </div>
+                        <button class="btn btn-md btn-primary" id="btnSimpanUser"><i class="fas fa-fw fa-save"></i>Simpan</button>
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@push('scripts')
+    <script src="{{ url('sb-admin') }}/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ url('sb-admin') }}/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ url('sb-admin') }}/js/demo/datatables-demo.js"></script>
+
+    <script>
+
+        /* INISIALISASI DATATABLE */
+        $('#DTUsers').DataTable({
+              processing: true,
+              serverSide: true,
+              ajax: "{{ route('admin-settlement.getpayouts') }}",
+              cache: true,
+              columns: [
+                  {data: 'DT_RowIndex', name: 'id', orderable: false},
+                  {data: 'users.username', name: 'username'},
+                  {data: 'payout_date', name: 'payout_date'},
+                  {data: 'payout_amount', name: 'payout_amount'},
+                  {data: 'created_at', name: 'created_at'},
+                //   {
+                //       data: 'action', 
+                //       name: 'action', 
+                //       orderable: false, 
+                //       searchable: false
+                //   },
+              ],
+              "language": {
+                    "processing": "<div class=\"spinner-border bg-transparent\" role=\"status\"></div>"
+                }
+        });
+    </script>
+@endpush

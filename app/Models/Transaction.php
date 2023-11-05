@@ -14,6 +14,7 @@ class Transaction extends Model
     protected $fillable = [
         'product_id',
         'duitku_order_id',
+        'duitku_reference',
         'total_item',
         'total_price',
         'customer_info',

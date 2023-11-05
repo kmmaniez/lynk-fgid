@@ -118,7 +118,7 @@
         $('#DTUsers').DataTable({
               processing: true,
               serverSide: true,
-              ajax: "{{ route('user.getusers') }}",
+              ajax: "{{ route('admin-user.getusers') }}",
               cache: true,
               columns: [
                   {data: 'DT_RowIndex', name: 'id', orderable: false},

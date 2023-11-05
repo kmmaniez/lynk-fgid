@@ -280,7 +280,7 @@
         const btn = document.querySelector('#claim');
         const searchbox = document.querySelector('.searchbox');
 
-        $('#search-input').on('change', (e) => {
+        $('#search-input').on('keyup', (e) => {
             $.ajax({
                 url: "{{ route('public.search') }}?username="+e.target.value,
                 method: 'GET',
@@ -333,7 +333,6 @@
                     console.log(err);
                 }
             })
-            // console.log(e.target.value);
         })
 
 

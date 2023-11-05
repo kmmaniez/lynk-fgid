@@ -22,54 +22,43 @@
             }
 
         }
+        .copied{
+            display: none;
+        }
+        .copied.show{
+            display: block;
+            padding: 4px 8px;
+            width: max-content;
+            height: max-content;
+            font-size: 12px;
+            background-color: salmon;
+            position: absolute;
+            border-radius: 6px;
+            z-index: 2;
+            top: -2.2rem;
+            right: 0;
+        }
+        .copied.show::after{
+            content: '';
+            width: 14px;
+            height: 14px;
+            background-color: salmon;
+            border-radius: 4px;
+            position: absolute;
+            bottom: -6px;
+            right: 35%;
+            transform: rotate(45deg);
+        }
     </style>
 @endpush
 @section('content')
-    {{-- <div class="tab-content mt-3" id="myTabContent">
-        <div class="tab-pane {{  (Request::routeIs('admin')) ? 'show active' : '' }}" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-            <div class="row">
-                <div class="col-lg-5">
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                        Add new block
-                    </button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <x-public.statistik></x-public.statistik>
-
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Tambahkan Block Anda</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col">
-                            <div class="card mb-3 d-flex" style="height: 10rem;">
-                                <a href="/createlink" class="btn btn-outline-success h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="link"></i> Link</a>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card mb-3 d-flex" style="height: 10rem;">
-                                <a href="/digitalproduk" class="btn btn-outline-success h-100 d-flex flex-column align-items-center justify-content-center gap-3 fw-bold"><i id="product" data-feather="shopping-bag"></i>Digital Product</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <section id="content" class="mt-3">
 
         <div class="produk-action">
+            <div class="text-end pe-3 position-relative" id="link-group">
+                <a href="#" class="text-decoration-none" id="user-link">{{ route('public.user', auth()->user()->username) }}</a>
+                <a href="#" id="btnCopy" title="copy link"><i data-feather="copy" class="fa-24 text-danger"></i></a>
+            </div>
             <div class="row g-0">
                 <div class="col-xl-4 col-12">
                     <div class="card border-0 p-0">
@@ -123,7 +112,7 @@
                                             src="{{ Storage::url($product->thumbnail) }}" 
                                         @else
                                             @if ($product->images)
-                                                src="{{ Storage::url('tes/'. $product->images[0]) }}" 
+                                                src="{{ Storage::url('products/digital/'. $product->images[0]) }}" 
                                             @else
                                                 src="{{ Storage::url($product->thumbnail) }}" 
                                             @endif
@@ -170,5 +159,23 @@
                 </div>
             </div>
         </div>
+        
     </section>
 @endsection
+@push('scripts')
+    <script>
+        $('#btnCopy').on('click', (e) => {
+            e.preventDefault();
+            try {
+                $('#link-group').append('<div class="copied">copied</div>');
+                navigator.clipboard.writeText($('#user-link').text())
+                $('.copied').addClass('show')
+                    setTimeout(() => {
+                        $('.copied').remove()
+                    }, 1500);
+            } catch (error) {
+                console.error('Failed to copy');
+            }
+        })
+    </script>
+@endpush
