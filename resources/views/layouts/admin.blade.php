@@ -82,6 +82,10 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ url('sb-admin/js/demo/datatables-demo.js') }}"></script>
+
+    <!-- Vendor scripts -->
+    <script src="{{ asset('assets/vendor/sweetalert/dist/sweetalert2.all.min.js') }}"></script>
+
     @stack('scripts')
 
 </body>
