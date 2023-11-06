@@ -107,7 +107,7 @@ class TestController extends Controller
             'price' => $request->user_pay * $request->quantity,
             'quantity' => $request->quantity,
             'attributes' => [
-                'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
+                'image' => ($product->thumbnail) ? 'storage/products/digital/'.$product->thumbnail : '',
             ],       
         ]);
         // $this->cart::session($product->id)->add([
@@ -217,7 +217,7 @@ class TestController extends Controller
         if ($request->get('type')) {
             
             $duitku = new DuitkuController;
-            $response = $duitku->getPaymentMethod($this->cart::session($request->get('order_id'))->getSubTotal());
+            $response = $duitku::getPaymentMethods($this->cart::session($request->get('order_id'))->getSubTotal());
 
             // foreach ($paymentFee as $key => $value) {
             //     if ($request->get('type') === $key) {
