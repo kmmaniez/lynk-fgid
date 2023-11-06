@@ -57,33 +57,58 @@ class TransactionController extends Controller
         }
         $cartId = $request->id;
         $emailCustomer = $request->email;
+        $nameCustomer = $request->name;
         $amount = (int) $request->amount;
         $paymentMethod = $request->payment_method;
         $productName = 'Beli';
 
         $dataCart = $cart->getContent();
-        dump($dataCart);
-        
+        $dataItem = array();
         foreach ($dataCart as $key => $cart) {
-            Transaction::create([
-                'product_id' => $cart->id,
-                'duitku_order_id' => rand(100,500) * rand(5,200) * rand(10,100),
-                'duitku_reference' => rand(100,500) * rand(5,200) * rand(10,100),
-                'total_item' => $cart->quantity,
-                'total_price' => $cart->price * $cart->quantity,
-                'customer_info' => $request->email,
-                'payment_method' => $request->payment,
-                'payment_url' => fake()->url(),
-                'transaction_created' => now(),
-            ]);
-            Payout::create([
-                'product_id' => $cart->id, 
-                'total_item' => $cart->quantity, 
-                'total_price' => $cart->price * $cart->quantity, 
-            ]);
+            array_push($dataItem,
+                [
+                    'name' => $cart->name,
+                    'price' => $cart->price,
+                    'quantity' => $cart->quantity,
+                ]
+            );
+            // Transaction::create([
+            //     'product_id' => $cart->id,
+            //     'duitku_order_id' => rand(100,500) * rand(5,200) * rand(10,100),
+            //     'duitku_reference' => rand(100,500) * rand(5,200) * rand(10,100),
+            //     'total_item' => $cart->quantity,
+            //     'total_price' => $cart->price * $cart->quantity,
+            //     'customer_info' => $request->email,
+            //     'payment_method' => $request->payment,
+            //     'payment_url' => fake()->url(),
+            //     'transaction_created' => now(),
+            // ]);
+            // Payout::create([
+            //     'product_id' => $cart->id, 
+            //     'total_item' => $cart->quantity, 
+            //     'total_price' => $cart->price * $cart->quantity, 
+            // ]);
         }
-        // remove cart after payment
+        // // remove cart after payment
         \Cart::session($request->cart)->clear();
+
+        // calculate total amount from cart for transaction duitku
+        $totalAmount = 0;
+        foreach ($dataItem as $key => $value) {
+            $totalAmount += $value['price'] * $value['quantity'];
+        }
+        
+        // create invoice duitku
+        $this->_duitku::createInvoice(
+            $totalAmount, 
+            $paymentMethod,
+            'Transaction FGID',
+            $request->email,
+            null,
+            $dataItem
+            )
+        // return redirect()->to(route('public.discover'));
+
 
         // foreach ($response['paymentFee'] as $key => $value) {
         //     if ($request->payment != $response['paymentFee'][$key]['paymentMethod']) {
