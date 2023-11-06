@@ -22,8 +22,7 @@ class PublicController extends Controller
     public function discover() : View
     {
         $creatorFeatured = User::whereRelation('roles','name','!=','admin')->WhereRelation('roles','name','!=','super-admin')->limit(10)->get();
-        $creatorRecents = User::latest()->limit(10)->get();
-
+        $creatorRecents = User::whereRelation('roles','name','!=','admin')->WhereRelation('roles','name','!=','super-admin')->latest()->limit(10)->get();
         return view('public.discover', compact('creatorFeatured','creatorRecents'));
     }
 

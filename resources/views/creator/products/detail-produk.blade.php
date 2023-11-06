@@ -215,7 +215,7 @@
                     <div class="carousel-inner">
                         @foreach ($product->images as $key => $image)
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}" data-bs-interval="5000">
-                                <img src="{{ Storage::url('tes/' . $image) }}" class="d-block object-fit-cover"
+                                <img src="{{ Storage::url('products/digital/' . $image) }}" class="d-block object-fit-cover"
                                     style="width: 100%; height: 300px;" alt="Product Image" loading="lazy">
                             </div>
                         @endforeach

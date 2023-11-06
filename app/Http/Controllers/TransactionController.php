@@ -57,22 +57,53 @@ class TransactionController extends Controller
         }
         $cartId = $request->id;
         $emailCustomer = $request->email;
+        $nameCustomer = $request->name;
         $amount = (int) $request->amount;
-        $paymentMethod = $request->payment_method;
+        $paymentMethod = $request->payment;
         $productName = 'Beli';
 
         $dataCart = $cart->getContent();
-        dump($dataCart);
+        $dataItem = array();
+        foreach ($dataCart as $key => $cart) {
+            array_push($dataItem,
+                [
+                    'name' => $cart->name,
+                    'price' => $cart->price * $cart->quantity,
+                    'quantity' => $cart->quantity,
+                ]
+            );
+        }
+        // remove cart after payment
+        // \Cart::session($request->cart)->clear();
+
+        // calculate total amount from cart for transaction duitku
+        $totalAmount = 0;
+        foreach ($dataItem as $key => $value) {
+            $totalAmount += $value['price'];
+        }
         
+        // create invoice duitku
+        $orderId = time();
+        $invoice = $this->_duitku::createInvoice(
+            $totalAmount,
+            $paymentMethod,
+            $orderId,
+            'TRANSACTION PRODUCTS',
+            $request->name,
+            $request->email,
+            $dataItem
+        );
+        // looping and insert
         foreach ($dataCart as $key => $cart) {
             Transaction::create([
                 'product_id' => $cart->id,
-                'duitku_order_id' => rand(100,500) * rand(5,200) * rand(10,100),
-                'duitku_reference' => rand(100,500) * rand(5,200) * rand(10,100),
+                'duitku_order_id' => $orderId,
+                'duitku_reference' => $invoice['reference'],
                 'total_item' => $cart->quantity,
                 'total_price' => $cart->price * $cart->quantity,
                 'customer_info' => $request->email,
                 'payment_method' => $request->payment,
+                'payment_status' => 'paid',
                 'payment_url' => fake()->url(),
                 'transaction_created' => now(),
             ]);
@@ -82,8 +113,9 @@ class TransactionController extends Controller
                 'total_price' => $cart->price * $cart->quantity, 
             ]);
         }
-        // remove cart after payment
-        \Cart::session($request->cart)->clear();
+        // dump($invoice);
+        return redirect()->to($invoice['paymentUrl']);
+
 
         // foreach ($response['paymentFee'] as $key => $value) {
         //     if ($request->payment != $response['paymentFee'][$key]['paymentMethod']) {

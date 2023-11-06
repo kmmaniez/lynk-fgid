@@ -136,14 +136,13 @@
                                 <h6 class="mt-3 {{ ($product->type->value == 'link') ? 'flex-grow-1 text-center' : '' }}">{{ $product->name }} {{ $product->type->value }}</h6>
                             @else
                                 @if ($product->thumbnail)
-                                <img src="{{ Storage::url('tes/'.$product->thumbnail) }}" style="width: 100%; {{ ($product->layout->value == 'large') ? 'height:300px' : 'height:120px'  }};" class="rounded-1 object-fit-cover">
-                                {{-- <img src="{{ Storage::url('tes/'.$product->thumbnail) }}" style="width: 100%; height: 120px;" class="rounded-1 object-fit-cover"> --}}
+                                <img src="{{ Storage::url('products/digital/'.$product->thumbnail) }}" style="width: 100%; {{ ($product->layout->value == 'large') ? 'height:300px' : 'height:120px'  }};" class="rounded-1 object-fit-cover">
                                 @else
                                 <img src="{{ ($user->theme == 'light') ? asset('assets/cover-white.png') : asset('assets/cover-dark.png') }}" style="width: 100%; height: 120px;" class="rounded-1 object-fit-cover">
                                 @endif
-                                <h6 class="mt-3">{{ $product->name }} {{ $product->type->value }}</h6>
+                                <h6 class="mt-3">{{ $product->name }}</h6>
                                 {{-- <h6 class="{{ ($product->thumbnail) ? 'mt-3' : '' }}">{{ $product->name }} {{ $product->type->value }}</h6> --}}
-                                <span><strong>Rp. {{ $product->min_price }} | {{ $product->layout->value }}</strong></span>
+                                <span><strong>Rp. {{ $product->min_price }}</strong></span>
                             @endif
                             {{-- <small>{{ $product->id }}</small> --}}
                         </div>

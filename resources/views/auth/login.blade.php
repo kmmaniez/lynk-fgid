@@ -129,7 +129,7 @@
                             </div>
                             <div class="button-group">
                                 <button class="btn btn-login btn-md shadow-none btn-danger w-100 text-uppercase fw-semibold rounded-0 mt-3 mb-3" style="letter-spacing: 0.5px">Login</button>
-                                <small><a href="{{ route('register') }}" id="btnRegister" class="text-decoration-none text-danger">Don't have an account? register</a></small>
+                                <small><a href="" id="btnRegister" class="text-decoration-none text-danger">Don't have an account? register</a></small>
                             </div>
                         </form>
                     </div>
@@ -179,7 +179,7 @@
                             </div>
                             <div class="button-group">
                                 <button class="btn btn-md btn-register shadow-none btn-danger w-100 text-uppercase fw-semibold rounded-0 mt-3 mb-3" style="letter-spacing: 0.5px">Register</button>
-                                <small><a href="#" id="btnLogin" class="text-decoration-none text-danger">Already have an account? login</a></small>
+                                <small><a href="" id="btnLogin" class="text-decoration-none text-danger">Already have an account? login</a></small>
                             </div>
                         </form>
                     </div>
@@ -199,7 +199,7 @@
         $(document).ready(function() {
             const inputUsername = document.getElementById('username');
 
-            if (localStorage.length > 0) {
+            if (localStorage.length > 0 && localStorage.getItem('username')) {
                 $('.register-area .card').addClass('active');
                 $('.login-area .card').addClass('hidden');
                 inputUsername.value = localStorage.getItem('username').split('').splice(13).join('')

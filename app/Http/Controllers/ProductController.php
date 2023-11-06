@@ -24,12 +24,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // return view('creator.digitalproduk');
-        // $file = Storage::files('public/tes')[0];
-        // $aw = Storage::mimeType('public/tes/'.$file);
-        // dump(Storage::files('public/tes')[0], $file, $aw);
-
-        // dump(array_column(CtaEnum::cases(),'value','name'), CtaEnum::cases());
         return view('creator.product.create-digital');
     }
 

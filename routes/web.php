@@ -292,127 +292,140 @@ Route::get('/trans', function () {
     }
 });
 
-Route::get('/callback', function () {
-    $apiKey = "cafbb760f4a70cf1be6e7e4ea129b2fa";
-    $merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null; 
-    $amount = isset($_POST['amount']) ? $_POST['amount'] : null; 
-    $merchantOrderId = isset($_POST['merchantOrderId']) ? $_POST['merchantOrderId'] : null; 
-    $productDetail = isset($_POST['productDetail']) ? $_POST['productDetail'] : null; 
-    $additionalParam = isset($_POST['additionalParam']) ? $_POST['additionalParam'] : null; 
-    $paymentMethod = isset($_POST['paymentCode']) ? $_POST['paymentCode'] : null; 
-    $resultCode = isset($_POST['resultCode']) ? $_POST['resultCode'] : null; 
-    $merchantUserId = isset($_POST['merchantUserId']) ? $_POST['merchantUserId'] : null; 
-    $reference = isset($_POST['reference']) ? $_POST['reference'] : null; 
-    $signature = isset($_POST['signature']) ? $_POST['signature'] : null; 
-    $publisherOrderId = isset($_POST['publisherOrderId']) ? $_POST['publisherOrderId'] : null; 
-    $spUserHash = isset($_POST['spUserHash']) ? $_POST['spUserHash'] : null; 
-    $settlementDate = isset($_POST['settlementDate']) ? $_POST['settlementDate'] : null; 
-    $issuerCode = isset($_POST['issuerCode']) ? $_POST['issuerCode'] : null; 
+// Route::get('/callback', function () {
+//     $apiKey = "cafbb760f4a70cf1be6e7e4ea129b2fa";
+//     $merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null; 
+//     $amount = isset($_POST['amount']) ? $_POST['amount'] : null; 
+//     $merchantOrderId = isset($_POST['merchantOrderId']) ? $_POST['merchantOrderId'] : null; 
+//     $productDetail = isset($_POST['productDetail']) ? $_POST['productDetail'] : null; 
+//     $additionalParam = isset($_POST['additionalParam']) ? $_POST['additionalParam'] : null; 
+//     $paymentMethod = isset($_POST['paymentCode']) ? $_POST['paymentCode'] : null; 
+//     $resultCode = isset($_POST['resultCode']) ? $_POST['resultCode'] : null; 
+//     $merchantUserId = isset($_POST['merchantUserId']) ? $_POST['merchantUserId'] : null; 
+//     $reference = isset($_POST['reference']) ? $_POST['reference'] : null; 
+//     $signature = isset($_POST['signature']) ? $_POST['signature'] : null; 
+//     $publisherOrderId = isset($_POST['publisherOrderId']) ? $_POST['publisherOrderId'] : null; 
+//     $spUserHash = isset($_POST['spUserHash']) ? $_POST['spUserHash'] : null; 
+//     $settlementDate = isset($_POST['settlementDate']) ? $_POST['settlementDate'] : null; 
+//     $issuerCode = isset($_POST['issuerCode']) ? $_POST['issuerCode'] : null; 
 
-    $message = '';
-    // $messageFailed = '';
-    //log callback untuk debug 
-    // file_put_contents('callback_debug.txt', "* Callback *\r\n", FILE_APPEND | LOCK_EX);
+//     $message = '';
+//     // $messageFailed = '';
+//     //log callback untuk debug 
+//     // file_put_contents('callback_debug.txt', "* Callback *\r\n", FILE_APPEND | LOCK_EX);
 
-    if(!empty($merchantCode) && !empty($amount) && !empty($merchantOrderId) && !empty($signature))
-    {
-        $params = $merchantCode . $amount . $merchantOrderId . $apiKey;
-        $calcSignature = md5($params);
+//     if(!empty($merchantCode) && !empty($amount) && !empty($merchantOrderId) && !empty($signature))
+//     {
+//         $params = $merchantCode . $amount . $merchantOrderId . $apiKey;
+//         $calcSignature = md5($params);
 
-        if($signature == $calcSignature){
-            //Callback tervalidasi
-            //Silahkan rubah status transaksi anda disini
-            $time = date('Y-m-d H:i:s', time());
+//         if($signature == $calcSignature){
+//             //Callback tervalidasi
+//             //Silahkan rubah status transaksi anda disini
+//             $time = date('Y-m-d H:i:s', time());
 
-            if ($resultCode == "00") { // SUCCESS
-                // $query = mysqli_query($connect, 
-                // "UPDATE `transaction` SET `status` = 'paid', `payment_finished` = '$time' WHERE order_id = '$merchantOrderId'");
-                // if ($query) {
-                //     file_put_contents('sql-result.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
-                //     $message = "RESULT CODE = [".$resultCode."] > KODE MERCHANT [".$merchantOrderId."] |REFERENSI DUITKU [".$reference."]\nBELI [".$productDetail."] | User [$merchantUserId] has Transaction merchantOrderId: [".$merchantOrderId."]\nSuccessfully transfered using [".$paymentMethod."] with amount [".$amount."] \nSettlement on [".$settlementDate."] | PUBLISHER ORDER [".$publisherOrderId."]";
+//             if ($resultCode == "00") { // SUCCESS
+//                 Log::info('PAYMENT SUCCESS, USER PAY');
+//                 // $query = mysqli_query($connect, 
+//                 // "UPDATE `transaction` SET `status` = 'paid', `payment_finished` = '$time' WHERE order_id = '$merchantOrderId'");
+//                 // if ($query) {
+//                 //     file_put_contents('sql-result.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
+//                 //     $message = "RESULT CODE = [".$resultCode."] > KODE MERCHANT [".$merchantOrderId."] |REFERENSI DUITKU [".$reference."]\nBELI [".$productDetail."] | User [$merchantUserId] has Transaction merchantOrderId: [".$merchantOrderId."]\nSuccessfully transfered using [".$paymentMethod."] with amount [".$amount."] \nSettlement on [".$settlementDate."] | PUBLISHER ORDER [".$publisherOrderId."]";
 
-                //     // $message = 
-                //     // "RESULT CODE = ".$resultCode." > KODE MERCHANT [".$merchantOrderId."] | BELI ".$productDetail." | User ".$merchantUserId." has Transaction merchantOrderId: " . $merchantOrderId . "
-                //     // successfully transfered using " . $paymentMethod . " with amount ".$amount." Settlement on ".$settlementDate." | PUBLISHER ORDER ".$publisherOrderId;
-                // }else{
-                //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
-                // }
+//                 //     // $message = 
+//                 //     // "RESULT CODE = ".$resultCode." > KODE MERCHANT [".$merchantOrderId."] | BELI ".$productDetail." | User ".$merchantUserId." has Transaction merchantOrderId: " . $merchantOrderId . "
+//                 //     // successfully transfered using " . $paymentMethod . " with amount ".$amount." Settlement on ".$settlementDate." | PUBLISHER ORDER ".$publisherOrderId;
+//                 // }else{
+//                 //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
+//                 // }
                 
-            }elseif ($resultCode == "01") {
-                // $query = mysqli_query($connect, 
-                // "UPDATE `transaction` SET `status` = 'FAILED', `payment_finished` = '$time' WHERE order_id = '$merchantOrderId'");
-                // if ($query) {
-                //     $message = 
-                //     "FAILED !! RESULT CODE = ".$resultCode." > KODE MERCHANT [".$merchantOrderId."] | BELI ".$productDetail." | User ".$merchantUserId." has Transaction merchantOrderId: " . $merchantOrderId . "
-                //     successfully transfered using " . $paymentMethod . " with amount ".$amount." Settlement on ". $settlementDate. " | PUBLISHER ORDER ".$publisherOrderId;
-                // }else{
-                //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
-                // }
-            }
-            // file_put_contents('callback.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
+//             }elseif ($resultCode == "01") {
+//                 // $query = mysqli_query($connect, 
+//                 // "UPDATE `transaction` SET `status` = 'FAILED', `payment_finished` = '$time' WHERE order_id = '$merchantOrderId'");
+//                 // if ($query) {
+//                 //     $message = 
+//                 //     "FAILED !! RESULT CODE = ".$resultCode." > KODE MERCHANT [".$merchantOrderId."] | BELI ".$productDetail." | User ".$merchantUserId." has Transaction merchantOrderId: " . $merchantOrderId . "
+//                 //     successfully transfered using " . $paymentMethod . " with amount ".$amount." Settlement on ". $settlementDate. " | PUBLISHER ORDER ".$publisherOrderId;
+//                 // }else{
+//                 //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
+//                 // }
+//             }
+//             // file_put_contents('callback.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
             
-        }else{
-            file_put_contents('callback.txt', "* Bad Signature *\r\n\r\n", FILE_APPEND | LOCK_EX);
-            throw new Exception('Bad Signature');
-        }
-    }
-    else{
-        file_put_contents('callback.txt', "* Bad Parameter *\r\n\r\n", FILE_APPEND | LOCK_EX);
-        throw new Exception('Bad Parameter');
-    }
-});
+//         }else{
+//             file_put_contents('callback.txt', "* Bad Signature *\r\n\r\n", FILE_APPEND | LOCK_EX);
+//             throw new Exception('Bad Signature');
+//         }
+//     }
+//     else{
+//         file_put_contents('callback.txt', "* Bad Parameter *\r\n\r\n", FILE_APPEND | LOCK_EX);
+//         throw new Exception('Bad Parameter');
+//     }
+// });
 
 Route::get('/return', function() {
-    $api = "cafbb760f4a70cf1be6e7e4ea129b2fa";
-    $merchant = "DS16326";
+    $duitku = new DuitkuController();
+    
+    $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
 
-        // $merchantOrderId = 'abcde12345'; // dari anda (merchant), bersifat unik
-        // $merchantOrderId = '1698588022'; // UNIQUE FROM MERCHANT - REQUIRED
-        $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
+    $data = $duitku::getTransactionStatus($merchantOrderId);
+    // $api = "cafbb760f4a70cf1be6e7e4ea129b2fa";
+    // $merchant = "DS16326";
+
+    //     // $merchantOrderId = 'abcde12345'; // dari anda (merchant), bersifat unik
+    //     // $merchantOrderId = '1698588022'; // UNIQUE FROM MERCHANT - REQUIRED
+    //     $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
     
-        $signature = md5($merchant . $merchantOrderId . $api);
+    //     $signature = md5($merchant . $merchantOrderId . $api);
     
-        $params = array(
-            'merchantCode' => $merchant,
-            'merchantOrderId' => $merchantOrderId,
-            'signature' => $signature
-        );
+    //     $params = array(
+    //         'merchantCode' => $merchant,
+    //         'merchantOrderId' => $merchantOrderId,
+    //         'signature' => $signature
+    //     );
     
-        $params_string = json_encode($params);
-        $url = 'https://sandbox.duitku.com/webapi/api/merchant/transactionStatus';
-        $ch = curl_init();
+    //     $params_string = json_encode($params);
+    //     $url = 'https://sandbox.duitku.com/webapi/api/merchant/transactionStatus';
+    //     $ch = curl_init();
     
-        curl_setopt($ch, CURLOPT_URL, $url); 
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params_string);                                                                  
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-            'Content-Type: application/json',                                                                                
-            'Content-Length: ' . strlen($params_string))                                                                       
-        );   
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    //     curl_setopt($ch, CURLOPT_URL, $url); 
+    //     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $params_string);                                                                  
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+    //         'Content-Type: application/json',                                                                                
+    //         'Content-Length: ' . strlen($params_string))                                                                       
+    //     );   
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
     
-        //execute post
-        $request = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    //     //execute post
+    //     $request = curl_exec($ch);
+    //     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     
-        if($httpCode == 200){
-            $results = json_decode($request, true);
-            // if ($results['statusCode'] === "02") {
-            //     $query = mysqli_query($connect, 
-            //     "UPDATE `transaction` SET `status` = 'failed' WHERE order_id = '$merchantOrderId'");
-            //     if ($query) {
-            //         $message = "KAGA BAYAR LU";
-            //     }else{
-            //         file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
-            //     }
-            // }
-            print_r($results, false);;
-        }else{
-            $request = json_decode($request);
-            $error_message = "Server Error " . $httpCode ." ". $request->Message;
-            echo $error_message;
-        }
+    //     if($httpCode == 200){
+    //         $results = json_decode($request, true);
+    //         dump($results);
+    //         if ($results['statusCode'] === "02") {
+    //             echo 'lololo<br>';
+    //             // $query = mysqli_query($connect, 
+    //             // "UPDATE `transaction` SET `status` = 'failed' WHERE order_id = '$merchantOrderId'");
+    //             // if ($query) {
+    //             //     $message = "KAGA BAYAR LU";
+    //             // }else{
+    //             //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
+    //             // }
+    //         }else if($results['statusCode'] === '00'){
+    //             echo 'lunas<br>';
+    //         }
+    //         else if($results['statusCode'] === '01'){
+    //             echo 'proses ngab<br>';
+    //         }
+    //         print_r($results, false);
+    //     }else{
+    //         $request = json_decode($request);
+    //         $error_message = "Server Error " . $httpCode ." ". $request->Message;
+    //         echo $error_message;
+    //     }
 });
 
 Route::post('/cek', function (Request $request) {

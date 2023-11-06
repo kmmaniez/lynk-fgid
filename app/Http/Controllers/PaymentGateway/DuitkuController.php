@@ -37,38 +37,15 @@ class DuitkuController extends Controller
         self::$checkTransactioStatusUrl = config('duitku.url.action.checkpayment');
     }
 
-    // public function getPaymentMethod(int $paymentamount)
-    // {
-    //     $datetime = date('Y-m-d H:i:s'); // REQ
-
-    //     $signature = hash('sha256', $this->merchantCode . $paymentamount . $datetime . $this->apiKey); // REQ
-
-    //     $params = array(
-    //         'merchantcode' => $this->merchantCode,
-    //         'amount' => $paymentamount,
-    //         'datetime' => $datetime,
-    //         'signature' => $signature
-    //     );
-
-    //     try {
-    //         $request = Http::post($this->baseUrl . $this->getPaymentUrl, $params);
-    //         $response = $request->json();
-
-    //         if ($response['responseCode'] == "00") {
-
-    //             return $response;
-
-    //         }else{
-    //             $err = new Exception("Error Processing Request", 1);
-    //             Log::error($err->getMessage());
-    //         }
-            
-    //     } catch (\Throwable $th) {
-    //         echo $th->getMessage();
-    //     }
-
-    // }
-
+    /**
+     * Create Transaction / Invoice
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
     public static function getPaymentMethods(int $paymentamount)
     {
         $datetime = date('Y-m-d H:i:s'); // REQ
@@ -111,17 +88,18 @@ class DuitkuController extends Controller
      * @return type
      * @throws conditon
      **/
-    public  static function createInvoice(int $amount, string $paymentmethod, string $productdetails, string $email, array $data = [])
+    public  static function createInvoice(int $amount, string $paymentmethod, string $merchantorderid, string $title, string $name = null, string $emails, array $data)
     {
         // $amount = 10000;
 
         $paymentAmount = $amount; // REQUIRED
         $paymentMethod = $paymentmethod; // REQUIRED [ GET FROM GetPaymentMethod.php ]
         $merchantOrderId = time() . ''; // UNIQUE FROM MERCHANT - REQUIRED
-        $productDetails = $productdetails; // REQUIRED
-        $email = 'AKUNx' . rand(500, 900) . 'xngab@gmail.com'; // REQUIRED
+        $merchantOrderId = $merchantorderid; // UNIQUE FROM MERCHANT - REQUIRED
+        $productDetails = $title; // REQUIRED
+        $email = 'kacangin@gmail.com'; // REQUIRED
         $phoneNumber = '08123456789'; // opsional
-        $additionalParam = 'Kacangin'; // opsional
+        $additionalParam = $name; // opsional
         $merchantUserInfo = $email; // opsional
         $customerVaName = env('APP_NAME'); // DISPLAY NAME ON PAYMENT - REQUIRED
         $callbackUrl        =  self::$callbackUrl;
@@ -158,25 +136,6 @@ class DuitkuController extends Controller
             'shippingAddress' => $address
         );
 
-        $item1 = array(
-            'name' => 'FOTO NGAB',
-            'price' => $amount,
-            'quantity' => 1
-        );
-
-        $item2 = array(
-            'name' => 'Test Item 2',
-            'price' => 30000,
-            'quantity' => 3
-        );
-
-        $itemDetails = array(
-            $data
-            // $item1
-            // $item1, $item2
-        );
-
-
         $params = array(
             'merchantCode' => self::$merchantCode,
             'paymentAmount' => $paymentAmount,
@@ -188,7 +147,7 @@ class DuitkuController extends Controller
             'customerVaName' => $customerVaName,
             'email' => $email,
             'phoneNumber' => $phoneNumber,
-            'itemDetails' => $itemDetails,
+            'itemDetails' => $data,
             'customerDetail' => $customerDetail,
             'callbackUrl' => $callbackUrl,
             'returnUrl' => $returnUrl,
@@ -222,20 +181,78 @@ class DuitkuController extends Controller
             $request = Http::timeout(10)->post(self::$baseUrl . self::$createTransactionUrl, $params);
             $response = $request->json();
 
-            if ($response['statusCode'] == "00") {
+            return $response;
+            // if ($response['statusCode'] == "00") {
 
-                Log::info('Request invoice '.$response['statusCode']);
-                return $response;
+            //     Log::info('Request invoice '.$response['statusCode']);
+            //     return $response;
 
-            }else{
-                $err = new Exception("Error Processing Request", 1);
-                Log::error($err->getMessage());
-            }
+            // }else{
+            //     $err = new Exception("Error Processing Request", 1);
+            //     Log::error($err->getMessage());
+            // }
             
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
 
         }
 
+    }
+
+    public  static function getTransactionStatus($merchantOrderId)
+    {
+        // $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
+    
+        $signature = md5(self::$merchantCode . $merchantOrderId . self::$apiKey);
+    
+        $params = array(
+            'merchantCode' => self::$merchantCode,
+            'merchantOrderId' => $merchantOrderId,
+            'signature' => $signature
+        );
+    
+        $params_string = json_encode($params);
+        $url = 'https://sandbox.duitku.com/webapi/api/merchant/transactionStatus';
+        $ch = curl_init();
+    
+        curl_setopt($ch, CURLOPT_URL, $url); 
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $params_string);                                                                  
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
+            'Content-Type: application/json',                                                                                
+            'Content-Length: ' . strlen($params_string))                                                                       
+        );   
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    
+        //execute post
+        $request = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    
+        if($httpCode == 200){
+            $results = json_decode($request, true);
+            dump($results);
+            echo 'from controller<br>';
+            if ($results['statusCode'] === "02") {
+                echo 'lololo<br>';
+                // $query = mysqli_query($connect, 
+                // "UPDATE `transaction` SET `status` = 'failed' WHERE order_id = '$merchantOrderId'");
+                // if ($query) {
+                //     $message = "KAGA BAYAR LU";
+                // }else{
+                //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
+                // }
+            }else if($results['statusCode'] === '00'){
+                echo 'lunas<br>';
+            }
+            else if($results['statusCode'] === '01'){
+                echo 'proses ngab<br>';
+            }
+            print_r($results, false);
+        }else{
+            $request = json_decode($request);
+            $error_message = "Server Error " . $httpCode ." ". $request->Message;
+            echo $error_message;
+        }
     }
 }

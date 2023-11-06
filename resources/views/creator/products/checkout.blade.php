@@ -80,7 +80,7 @@
 
                 <div class="card border-0 mt-2">
                     <div class="card-body card-form-input">
-                        @dump($errors)
+                        {{-- @dump($errors) --}}
                         <form action="{{ route('transaction.store') }}" method="post">
                             @csrf
 

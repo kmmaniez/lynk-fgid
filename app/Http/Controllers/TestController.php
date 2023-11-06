@@ -107,29 +107,9 @@ class TestController extends Controller
             'price' => $request->user_pay * $request->quantity,
             'quantity' => $request->quantity,
             'attributes' => [
-                'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
+                'image' => ($product->thumbnail) ? 'storage/products/digital/'.$product->thumbnail : '',
             ],       
         ]);
-        // $this->cart::session($product->id)->add([
-        //     'id' => $product->id,
-        //     'name' => $product->name,
-        //     'price' => $request->user_pay * $request->quantity,
-        //     'quantity' => $request->quantity,
-        //     'attributes' => [
-        //         'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
-        //     ],       
-        // ]);
-        // dd($this->cart);
-        // $this->cart->add([
-        //     'id' => $product->id,
-        //     'name' => $product->name,
-        //     'price' => $request->user_pay * $request->quantity,
-        //     'quantity' => $request->quantity,
-        //     'attributes' => [
-        //         'image' => ($product->thumbnail) ? 'storage/tes/'.$product->thumbnail : '',
-        //         'creator_id' => $request->creator_id
-        //     ],
-        // ]);
 
         $data = [
             'cart' => $this->cart::session($request->user_id)->getContent(),
@@ -151,51 +131,29 @@ class TestController extends Controller
             $this->cart::session($request->user_id)->update($request->id, [
                 'quantity' => 1,
             ]);
-            // $this->cart->update($request->id, [
-            //     'quantity' => 1,
-            // ]);
+
             return response()->json([
                 'message' => 'Successfully increased cart item',
                 'cart' => $this->cart::session($request->user_id)->getContent(),
-                // 'cart' => $this->cart->getContent(),
                 'status_code' => 201,
             ]);
 
         } else if($request->type === 'decrease') {
             // decrease quantity product
-            // if ($this->cart->get($request->id)->quantity === 1) {
-            //     $this->cart->remove($request->id);
-
-            //     return response()->json([
-            //         'message' => 'quantity 1',
-            //         // 'cart' => (count($this->cart->getContent()) > 0) ? $this->cart->getContent() : NULL,
-            //         'cart' => $this->cart->getContent(),
-            //         // 'length' => count($this->cart->getContent()),
-            //         'status_code' => 201,
-            //         // 'cur' => $this->cart->get($request->id)->quantity ? $this->cart->get($request->id)->quantity : 'NULL'
-            //     ]);
-            // }else{
-                // if ($this->cart->get($request->id)->quantity <= 1) {
-                //     $this->cart->remove($request->id);
-                // }
-                if ($this->cart::session($request->user_id)->get($request->id)->quantity <= 1) {
-                    $this->cart::session($request->user_id)->remove($request->id);
-                }
-                else{
-                    $this->cart::session($request->user_id)->update($request->id, [
-                        'quantity' => -1,
-                    ]);
-                    // $this->cart->update($request->id, [
-                    //     'quantity' => -1,
-                    // ]);
-                }
-                return response()->json([
-                    'message' => 'Successfully reduce cart item.',
-                    'cart' => $this->cart::session($request->user_id)->getContent(),
-                    // 'cart' => $this->cart->getContent(),
-                    'status_code' => 201,
+            // if quantity less or equal 1, remove cart
+            if ($this->cart::session($request->user_id)->get($request->id)->quantity <= 1) {
+                $this->cart::session($request->user_id)->remove($request->id);
+            }
+            else{
+                $this->cart::session($request->user_id)->update($request->id, [
+                    'quantity' => -1,
                 ]);
-            // }
+            }
+            return response()->json([
+                'message' => 'Successfully reduce cart item.',
+                'cart' => $this->cart::session($request->user_id)->getContent(),
+                'status_code' => 201,
+            ]);
         }
 
         return response()->json([
@@ -208,24 +166,11 @@ class TestController extends Controller
     {
         // checkout item product & checking fees
         // if access without cart, abort!
-        // $paymentFee = [
-        //     'OV' => 200,
-        //     'SP' => 400,
-        //     'SA' => 600
-        // ];
-
         if ($request->get('type')) {
             
             $duitku = new DuitkuController;
-            $response = $duitku->getPaymentMethod($this->cart::session($request->get('order_id'))->getSubTotal());
+            $response = $duitku::getPaymentMethods($this->cart::session($request->get('order_id'))->getSubTotal());
 
-            // foreach ($paymentFee as $key => $value) {
-            //     if ($request->get('type') === $key) {
-            //         $this->fee = $paymentFee[$key];
-            //         break;
-            //     }
-            // }
-        
             foreach ($response['paymentFee'] as $key => $value) {
                 if ($request->get('type') === $response['paymentFee'][$key]['paymentMethod']) {
                     $this->fee = $response['paymentFee'][$key]['totalFee'];
@@ -236,7 +181,6 @@ class TestController extends Controller
                 'cart' => $this->cart::session($request->get('order_id'))->getContent(),
                 'fees' => $this->fee,
                 'payment_fee' => $this->fee + $this->cart::session($request->get('order_id'))->getSubTotal(),
-                'checkout_item' => 'roue',
             ]);
         }
 
@@ -258,7 +202,6 @@ class TestController extends Controller
         // })->get();
 
         return view('creator.products.checkout', compact('user','cartitems','totalitem','totalprice'));
-        // return view('creator.products.checkout', compact('user','cartitems','totalitem','totalprice','userProduct'));
     }
 
     public function check_fee_items(User $user,Request $request)
@@ -287,7 +230,6 @@ class TestController extends Controller
     public function remove_item(Request $request)
     {
         // remove item product
-        // $cartitems = $this->cart->remove($request->cart_id);
         $cartitems = $this->cart::session($request->user_id)->remove($request->cart_id);
         return response()->json([
             'cart' => $this->cart::session($request->user_id)->getContent(),

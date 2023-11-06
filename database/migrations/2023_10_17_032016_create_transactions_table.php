@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUlid('product_id')->constrained(); 
             // $table->foreignUlid('product_id')->references('id')->on('products')->cascadeOnDelete()->cascadeOnUpdate();
             $table->bigInteger('duitku_order_id');
-            $table->bigInteger('duitku_reference');
+            $table->string('duitku_reference');
             $table->integer('total_item');
             $table->integer('total_price');
             $table->boolean('is_payout')->default(false);
