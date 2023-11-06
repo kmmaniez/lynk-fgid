@@ -37,38 +37,15 @@ class DuitkuController extends Controller
         self::$checkTransactioStatusUrl = config('duitku.url.action.checkpayment');
     }
 
-    // public function getPaymentMethod(int $paymentamount)
-    // {
-    //     $datetime = date('Y-m-d H:i:s'); // REQ
-
-    //     $signature = hash('sha256', $this->merchantCode . $paymentamount . $datetime . $this->apiKey); // REQ
-
-    //     $params = array(
-    //         'merchantcode' => $this->merchantCode,
-    //         'amount' => $paymentamount,
-    //         'datetime' => $datetime,
-    //         'signature' => $signature
-    //     );
-
-    //     try {
-    //         $request = Http::post($this->baseUrl . $this->getPaymentUrl, $params);
-    //         $response = $request->json();
-
-    //         if ($response['responseCode'] == "00") {
-
-    //             return $response;
-
-    //         }else{
-    //             $err = new Exception("Error Processing Request", 1);
-    //             Log::error($err->getMessage());
-    //         }
-            
-    //     } catch (\Throwable $th) {
-    //         echo $th->getMessage();
-    //     }
-
-    // }
-
+    /**
+     * Create Transaction / Invoice
+     *
+     * Undocumented function long description
+     *
+     * @param Type $var Description
+     * @return type
+     * @throws conditon
+     **/
     public static function getPaymentMethods(int $paymentamount)
     {
         $datetime = date('Y-m-d H:i:s'); // REQ
@@ -111,17 +88,17 @@ class DuitkuController extends Controller
      * @return type
      * @throws conditon
      **/
-    public  static function createInvoice(int $amount, string $paymentmethod, string $productdetails, string $email, array $data = [])
+    public  static function createInvoice(int $amount, string $paymentmethod, string $title, string $name = null, string $email, array $data = [])
     {
         // $amount = 10000;
 
         $paymentAmount = $amount; // REQUIRED
         $paymentMethod = $paymentmethod; // REQUIRED [ GET FROM GetPaymentMethod.php ]
         $merchantOrderId = time() . ''; // UNIQUE FROM MERCHANT - REQUIRED
-        $productDetails = $productdetails; // REQUIRED
-        $email = 'AKUNx' . rand(500, 900) . 'xngab@gmail.com'; // REQUIRED
+        $productDetails = $title; // REQUIRED
+        $email = $email; // REQUIRED
         $phoneNumber = '08123456789'; // opsional
-        $additionalParam = 'Kacangin'; // opsional
+        $additionalParam = $name; // opsional
         $merchantUserInfo = $email; // opsional
         $customerVaName = env('APP_NAME'); // DISPLAY NAME ON PAYMENT - REQUIRED
         $callbackUrl        =  self::$callbackUrl;
@@ -158,25 +135,6 @@ class DuitkuController extends Controller
             'shippingAddress' => $address
         );
 
-        $item1 = array(
-            'name' => 'FOTO NGAB',
-            'price' => $amount,
-            'quantity' => 1
-        );
-
-        $item2 = array(
-            'name' => 'Test Item 2',
-            'price' => 30000,
-            'quantity' => 3
-        );
-
-        $itemDetails = array(
-            $data
-            // $item1
-            // $item1, $item2
-        );
-
-
         $params = array(
             'merchantCode' => self::$merchantCode,
             'paymentAmount' => $paymentAmount,
@@ -188,7 +146,7 @@ class DuitkuController extends Controller
             'customerVaName' => $customerVaName,
             'email' => $email,
             'phoneNumber' => $phoneNumber,
-            'itemDetails' => $itemDetails,
+            'itemDetails' => $data,
             'customerDetail' => $customerDetail,
             'callbackUrl' => $callbackUrl,
             'returnUrl' => $returnUrl,
