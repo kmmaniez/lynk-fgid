@@ -59,7 +59,7 @@ class TransactionController extends Controller
         $emailCustomer = $request->email;
         $nameCustomer = $request->name;
         $amount = (int) $request->amount;
-        $paymentMethod = $request->payment_method;
+        $paymentMethod = $request->payment;
         $productName = 'Beli';
 
         $dataCart = $cart->getContent();
@@ -68,46 +68,53 @@ class TransactionController extends Controller
             array_push($dataItem,
                 [
                     'name' => $cart->name,
-                    'price' => $cart->price,
+                    'price' => $cart->price * $cart->quantity,
                     'quantity' => $cart->quantity,
                 ]
             );
-            // Transaction::create([
-            //     'product_id' => $cart->id,
-            //     'duitku_order_id' => rand(100,500) * rand(5,200) * rand(10,100),
-            //     'duitku_reference' => rand(100,500) * rand(5,200) * rand(10,100),
-            //     'total_item' => $cart->quantity,
-            //     'total_price' => $cart->price * $cart->quantity,
-            //     'customer_info' => $request->email,
-            //     'payment_method' => $request->payment,
-            //     'payment_url' => fake()->url(),
-            //     'transaction_created' => now(),
-            // ]);
-            // Payout::create([
-            //     'product_id' => $cart->id, 
-            //     'total_item' => $cart->quantity, 
-            //     'total_price' => $cart->price * $cart->quantity, 
-            // ]);
         }
-        // // remove cart after payment
-        \Cart::session($request->cart)->clear();
+        // remove cart after payment
+        // \Cart::session($request->cart)->clear();
 
         // calculate total amount from cart for transaction duitku
         $totalAmount = 0;
         foreach ($dataItem as $key => $value) {
-            $totalAmount += $value['price'] * $value['quantity'];
+            $totalAmount += $value['price'];
         }
         
         // create invoice duitku
-        $this->_duitku::createInvoice(
-            $totalAmount, 
+        $orderId = time();
+        $invoice = $this->_duitku::createInvoice(
+            $totalAmount,
             $paymentMethod,
-            'Transaction FGID',
+            $orderId,
+            'TRANSACTION PRODUCTS',
+            $request->name,
             $request->email,
-            null,
             $dataItem
-            )
-        // return redirect()->to(route('public.discover'));
+        );
+        // looping and insert
+        foreach ($dataCart as $key => $cart) {
+            Transaction::create([
+                'product_id' => $cart->id,
+                'duitku_order_id' => $orderId,
+                'duitku_reference' => $invoice['reference'],
+                'total_item' => $cart->quantity,
+                'total_price' => $cart->price * $cart->quantity,
+                'customer_info' => $request->email,
+                'payment_method' => $request->payment,
+                'payment_status' => 'paid',
+                'payment_url' => fake()->url(),
+                'transaction_created' => now(),
+            ]);
+            Payout::create([
+                'product_id' => $cart->id, 
+                'total_item' => $cart->quantity, 
+                'total_price' => $cart->price * $cart->quantity, 
+            ]);
+        }
+        // dump($invoice);
+        return redirect()->to($invoice['paymentUrl']);
 
 
         // foreach ($response['paymentFee'] as $key => $value) {
