@@ -56,7 +56,7 @@
 
         <div class="produk-action">
             <div class="text-end pe-3 position-relative" id="link-group">
-                <a href="#" class="text-decoration-none" id="user-link">{{ route('public.user', auth()->user()->username) }}</a>
+                <a href="{{ route('public.user', auth()->user()->username) }}" class="text-decoration-none" id="user-link">{{ route('public.user', auth()->user()->username) }}</a>
                 <a href="#" id="btnCopy" title="copy link"><i data-feather="copy" class="fa-24 text-danger"></i></a>
             </div>
             <div class="row g-0">
@@ -124,12 +124,6 @@
                                         <div class="vstack gap-1">
                                             <span class="title">{{ $product->name }}</span>
                                             <span class="badge bg-danger-dark rounded-0" style="width: max-content">{{ Str::upper($product->type?->value) }}</span>
-
-                                            {{-- @if ($product->images)
-                                                @foreach (json_decode($product->images) as $image)
-                                                    <img src="{{ Storage::url('tes/'.$image) }}" width="48" height="48" alt="" srcset="">
-                                                @endforeach
-                                            @endif --}}
                                         </div>
                                         <i id="icon" class="icon text-secondary" data-feather="arrow-up-right"></i>
                                     </div>
