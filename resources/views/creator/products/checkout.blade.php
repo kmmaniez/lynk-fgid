@@ -112,10 +112,10 @@
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="SA">
                                             <img src="{{ asset('assets/shopeepay.png') }}" alt="shopee">
                                         </label>
-                                        {{-- <label>
+                                        <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="BC">
                                             <img src="{{ asset('assets/cover-dark.png') }}" alt="shopee">
-                                        </label> --}}
+                                        </label>
                                     </div>
                                 </div>
                                 @if (session()->has('payment'))
