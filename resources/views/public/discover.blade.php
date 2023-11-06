@@ -227,7 +227,7 @@
 
         <section id="creators" class="mt-5">
             <h2>Featured Indonesia Photographer</h2>
-            <span>Discover the best streaming entertaiment</span>
+            <span>Discover the best photographer entertaiment</span>
 
             <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
                 @foreach ($creatorFeatured as $creator)
