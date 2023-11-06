@@ -80,7 +80,7 @@
 
                 <div class="card border-0 mt-2">
                     <div class="card-body card-form-input">
-                        @dump($errors)
+                        {{-- @dump($errors) --}}
                         <form action="{{ route('transaction.store') }}" method="post">
                             @csrf
 
@@ -112,10 +112,10 @@
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="SA">
                                             <img src="{{ asset('assets/shopeepay.png') }}" alt="shopee">
                                         </label>
-                                        <label>
+                                        {{-- <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="BC">
                                             <img src="{{ asset('assets/cover-dark.png') }}" alt="shopee">
-                                        </label>
+                                        </label> --}}
                                     </div>
                                 </div>
                                 @if (session()->has('payment'))
