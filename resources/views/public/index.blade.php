@@ -186,21 +186,21 @@
             <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="5000">
-                        <img src="{{ asset('assets/carousel-1.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
+                        <img src="{{ asset('assets/carousels/carousel-1.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
                         <div class="carousel-caption rounded d-none d-md-block bg-glass">
                             <h2>Best platform for sellers</h2>
                             <p class="fs-5">Create your own product and share it through social media</p>
                         </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="3000">
-                        <img src="{{ asset('assets/carousel-2.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
+                        <img src="{{ asset('assets/carousels/carousel-2.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
                         <div class="carousel-caption rounded d-none d-md-block bg-glass">
                             <h2>Best platform for communty</h2>
                             <p class="fs-5">Build for photographers community in indonesia and for everyone</p>
                         </div>
                     </div>
                     <div class="carousel-item" data-bs-interval="4000">
-                        <img src="{{ asset('assets/carousel-3.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
+                        <img src="{{ asset('assets/carousels/carousel-3.jpg') }}" class="d-block object-fit-cover" style="width: 100%; height: 600px;" alt="...">
                         <div class="carousel-caption rounded d-none d-md-block bg-glass">
                             <h2>Be the best creator</h2>
                             <p class="fs-5">Build your own product characteristics and be the best</p>

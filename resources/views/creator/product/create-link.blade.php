@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.creator')
 @push('style')
     <style>
         #layout span {

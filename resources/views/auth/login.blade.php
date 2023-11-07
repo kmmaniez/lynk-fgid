@@ -101,7 +101,7 @@
         <section id="login-page" class="">
 
             <div class="banner-image">
-                <img src="{{ asset('assets/carousel-1.jpg') }}" loading="lazy" alt="banner">
+                <img src="{{ asset('assets/carousels/carousel-1.jpg') }}" loading="lazy" alt="banner">
                 <div class="caption position-absolute bg-glass text-center text-uppercase text-white">
                     <span class="fw-semibold">Copyright <a href="{{ route('public.index') }}" class="text-decoration-none text-white">FGID</a> {{ date('Y') }}</span>
                 </div> 

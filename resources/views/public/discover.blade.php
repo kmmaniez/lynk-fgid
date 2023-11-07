@@ -117,7 +117,7 @@
 
         section#hero{
             height: 480px;
-            background-image: url("{{ asset('assets/carousel-1.jpg') }}");
+            background-image: url("{{ asset('assets/carousels/carousel-1.jpg') }}");
             background-size: 100%;
             background-repeat: no-repeat;
             background-attachment: scroll;
@@ -313,7 +313,7 @@
                         $('.searchbox').html(`
                             <div class="card empty">
                                 <div class="card-body">
-                                    <span>${res.message}</span>
+                                    <span>${res.messages}</span>
                                 </div>
                             </div>
                         `);
@@ -323,7 +323,7 @@
                         $('.searchbox').html(`
                             <div class="card empty">
                                 <div class="card-body">
-                                    <span>No Results Found!</span>
+                                    <span>${res.messages}</span>
                                 </div>
                             </div>
                         `);

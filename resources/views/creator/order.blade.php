@@ -1,7 +1,7 @@
-@extends('layouts.master')
+@extends('layouts.creator')
 @push('style')
     <style>
-        .copied::after{
+        .copied::after {
             content: 'Copied';
             width: max-content;
             height: max-content;
@@ -13,7 +13,8 @@
             top: -32px;
             left: -8px;
         }
-        .copied::before{
+
+        .copied::before {
             content: '';
             width: 16px;
             height: 16px;
@@ -30,31 +31,36 @@
         <div class="card border-0 mt-3">
             <div class="card-body p-2">
                 <h5>History Order</h5>
-                {{-- @dump($transactions) --}}
+
                 <div id="list-transaction" class="vstack w-100 gap-2">
                     @forelse ($transactions as $transact)
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="detail">
-                                <span class="fw-semibold">Date : {{ $transact->transaction_created }}</span>
-                                <div class="list-item">
-                                    <span class="">Detail Item :</span>
-                                    {{-- <span>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</span> --}}
-                                    <ul class="m-0">
-                                        <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ number_format($transact->total_price,0,0,'.') }}</li>
-                                        {{-- <li>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</li> --}}
-                                    </ul>
-                                </div>
-                                <span class="d-block mt-2"><strong>Total : Rp. {{ number_format($transact->total_price,0,0,'.') }}</strong></span>
-                                <div class="customer-field hstack gap-3">
-                                    <div id="copy" class="fw-semibold">Customer Email : <span id="email">{{ $transact->customer_info }}</span></div>
-                                    <a href="#" id="btnCopy" title="copy email" class="position-relative btn border-0"><i data-feather="copy" data-id="{{ $transact->product_id }}" class="fa-24 text-danger"></i></a>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="detail">
+                                    <span class="fw-semibold">Date : {{ $transact->transaction_created }}</span>
+                                    <div class="list-item">
+                                        <span class="">Detail Item :</span>
+                                        {{-- <span>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</span> --}}
+                                        <ul class="m-0">
+                                            <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp.
+                                                {{ number_format($transact->total_price, 0, 0, '.') }}</li>
+                                            {{-- <li>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</li> --}}
+                                        </ul>
+                                    </div>
+                                    <span class="d-block mt-2"><strong>Total : Rp.
+                                            {{ number_format($transact->total_price, 0, 0, '.') }}</strong></span>
+                                    <div class="customer-field hstack gap-3">
+                                        <div id="copy" class="fw-semibold">Customer Email : <span
+                                                id="email">{{ $transact->customer_info }}</span></div>
+                                        <a href="#" id="btnCopy" title="copy email"
+                                            class="position-relative btn border-0"><i data-feather="copy"
+                                                data-id="{{ $transact->product_id }}" class="fa-24 text-danger"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @empty
-                    <div class="card"></div>
+                        <div class="card"></div>
                     @endforelse
                     {{-- {{ $transactions->links() }} --}}
                 </div>
@@ -66,7 +72,7 @@
     <script>
         const btnCopy = document.querySelectorAll('#btnCopy');
         const email = $('#list-transaction #emailcopy');
-        // console.log(btnCopy);
+
         btnCopy.forEach(element => {
             element.addEventListener('click', (e) => {
                 e.preventDefault()
@@ -80,16 +86,7 @@
                 } catch (error) {
                     console.error('Failed to copy');
                 }
-                // console.log(element.previousElementSibling.children[0].textContent);
             })
         });
-        // $(document).ready(function(){
-        //     $('#list-transaction .card .card-body .customer-field').on('click', (e) => {
-        //         console.log($(this));
-        //     })
-        // })
-        // $('#list-transaction .card .card-body .customer-field #btnCopy').on('click', (e) => {
-        //     console.log(e.target);
-        // })
     </script>
 @endpush

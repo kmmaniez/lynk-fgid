@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Creators;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\BankAccountRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\BankAccount;
@@ -40,56 +41,53 @@ class ProfileController extends Controller
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $currentUser = $request->user();
+        $photoName = date('HisdmY') . '_' . strtolower($request->user()->username);
+        $coverName = date('HisdmY') . '_cover_' . strtolower($request->user()->username);
+        // dd($request, $currentUser);
+        if ($request->has('photo')) {
+            echo 'photo';
+        }
+        if ($request->has('coverimage')) {
+            echo 'coverimage';
+        }
 
+        die;
         if ($request->hasFile('photo')) {
 
-            if ($currentUser->photo) {
+            if ($currentUser->photo != NULL) {
                 FileService::remove($currentUser->photo);
             }
 
-            $photoName = date('HisdmY') . '_' . strtolower($request->user()->username);
             $photoPath = FileService::store(
                 'public/users', 
                 $request->file('photo'),
                 $request->photo->extension(), 
                 $photoName
             );
-
-            $request->user()->fill([
-                'photo' => ($request->photo) ? $photoPath : NULL,
-                'description' => $request->description,
-                'theme' => $request->theme,
-            ]);
-            $request->user()->save();
-            return redirect()->back()->with('success','Updated');
-        }
-
-        if ($request->hasFile('coverimage')) {
-
-            if ($currentUser->coverimage) {
+        }else if($request->hasFile('coverimage')) {
+            
+            if ($currentUser->coverimage != NULL) {
                 FileService::remove($currentUser->coverimage);
             }
 
-            $coverName = date('HisdmY') . '_cover_' . strtolower($request->user()->username);
             $coverPath = FileService::store(
                 'public/users', 
                 $request->file('coverimage'),
                 $request->coverimage->extension(), 
                 $coverName
             );
-
-            $request->user()->fill([
-                'coverimage' => $coverPath,
-                'description' => $request->description,
-                'theme' => $request->theme,
-            ]);
-            $request->user()->save();
-            return redirect()->back()->with('success','Updated');
         }
+        
+        $request->user()->fill([
+            'photo' => ($request->hasFile('photo')) ? $photoPath : NULL,
+            'coverimage' => ($request->hasFile('coverimage')) ? $coverPath : NULL,
+            'description' => $request->description,
+            'theme' => $request->theme,
+        ]);
 
-        $request->user()->fill(
-            $request->validated()
-        );
+        // $request->user()->fill(
+        //     $request->validated()
+        // );
 
         $request->user()->save();
 

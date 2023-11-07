@@ -1,12 +1,5 @@
 @extends('layouts.products')
-@push('styles')
-    <style>
-        .wrapper{
-            /* height: max-content; */
-            /* overflow-y: hidden; */
-        }
-    </style>
-@endpush
+
 @section('produk')
     <section id="checkout" class="">
 
@@ -14,9 +7,6 @@
             <div class="card-body">
                 <div class="card">
                     <div class="card-body">
-                        {{-- @dump($cartitems)
-                        <p>Total item {{ $totalitem }}</p>
-                        <p>total price {{ $totalprice }}</p> --}}
                         <small>Order Summary</small>
                         <table class="table">
                             <tbody>
@@ -80,20 +70,24 @@
 
                 <div class="card border-0 mt-2">
                     <div class="card-body card-form-input">
-                        {{-- @dump($errors) --}}
+                        
                         <form action="{{ route('transaction.store') }}" method="post">
                             @csrf
 
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input class="form-control shadow-none" type="email" name="email" id="email" required>
+                                <input class="form-control shadow-none @error('email') is-invalid @enderror" type="email" name="email" id="email" required>
                                 @error('email')
                                 <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
                             <div class="form-group mt-2">
                                 <label for="name">Name</label>
-                                <input class="form-control shadow-none" type="text" name="name" id="name" required>
+                                <input class="form-control shadow-none @error('name') is-invalid @enderror" type="text" name="name" id="name" required>
+                                @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                                @enderror    
                             </div>
 
                             <div class="payment-method mt-3">
@@ -102,19 +96,19 @@
                                     <div class="hstack mt-2" id="choose_payment">
                                         <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="OV">
-                                            <img src="{{ asset('assets/ovo.jpg') }}" alt="ovo">
+                                            <img src="{{ asset('assets/payments-icon/ovo.jpg') }}" alt="ovo">
                                         </label>
                                         <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="SP">
-                                            <img src="{{ asset('assets/qris.png') }}" alt="qris">
+                                            <img src="{{ asset('assets/payments-icon/qris.png') }}" alt="qris">
                                         </label>
                                         <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="SA">
-                                            <img src="{{ asset('assets/shopeepay.png') }}" alt="shopee">
+                                            <img src="{{ asset('assets/payments-icon/shopeepay.png') }}" alt="shopee">
                                         </label>
                                         <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="BC">
-                                            <img src="{{ asset('assets/cover-dark.png') }}" alt="shopee">
+                                            <img src="{{ asset('assets/cover-dark.png') }}" alt="bca">
                                         </label>
                                     </div>
                                 </div>
@@ -125,7 +119,6 @@
                             
                             <div class="button-group mt-4">
                                 <button id="btnPay" class="btn text-white bg-danger bg-gradient w-100"></button>
-
                             </div>
                         </form>
                     </div>
@@ -159,7 +152,6 @@
             const link = `<input hidden name="cart" value="${match[1]}">`;
             $('#btnPay').parent().parent().prepend(link)
             $('#btnPay').closest('form').submit()
-            // console.log($('#btnPay').closest('form').submit());
         })
 
         $('#choose_payment').children().on('change', (e) =>{
@@ -185,7 +177,7 @@
                 url: "{{  route('cart.getitems')  }}?user_id="+match[1],
                 method: 'GET',
                 success: (res) => {
-                    console.log(res);
+                    // console.log(res);
                     const {cart} = res.data;
                     btnPayment.text('Bayar Sekarang - Rp. '+res.data.total_price)
                     totalItem.text(res.data.total_item)

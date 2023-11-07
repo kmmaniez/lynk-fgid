@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.creator')
 @php
     use App\Enums\LayoutEnum;
 @endphp
@@ -126,24 +126,13 @@
                                 @if ($key != 1)
                                     <label>
                                         <input class="form-check-input" type="radio" name="layout"
-                                            value="{{ $layout }}"
-                                            {{ $product->layout === $layout ? 'checked' : '' }}>
+                                            value="{{ $layout }}" {{ $product->layout === $layout ? 'checked' : '' }}>
                                         <img src="{{ asset($arrAsset[$key]) }}" width="164" height="164"
                                             alt="default">
                                         <span>{{ Str::ucfirst($layout->value) }}</span>
                                     </label>
                                 @endif
                             @endforeach
-                            {{-- <label>
-                                <input class="form-check-input" type="radio" name="layout" value="default" {{ ($product->layout == "default") ? 'checked' : '' }}>
-                                <img src="{{ asset('assets/default-col.png') }}" width="164" height="164" alt="default">
-                                <span>Small</span>
-                            </label>
-                            <label>
-                                <input class="form-check-input" type="radio" name="layout" value="large" {{ ($product->layout == "large") ? 'checked' : '' }}>
-                                <img src="{{ asset('assets/large-image.png') }}" width="164" height="164" alt="large">
-                                <span>Large image</span>
-                            </label> --}}
                         </div>
                     </div>
 

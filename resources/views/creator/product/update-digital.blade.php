@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.creator')
 @php
     use App\Enums\CtaEnum;
     use App\Enums\LayoutEnum;
@@ -68,12 +68,12 @@
             }
 
             /* textarea.form-control{
-                        width: 100%;
-                    } */
+                            width: 100%;
+                        } */
 
             /* .input-group {
-                        width: 100%;
-                    } */
+                            width: 100%;
+                        } */
         }
 
         #layout span {
@@ -181,8 +181,8 @@
                                 @foreach ($product->images as $key => $image)
                                     <div class="item position-relative rounded-2" style="width: max-content;">
                                         <img id="displayimg" loading="lazy" alt="images" class="rounded-2" title="delete"
-                                            src="{{ Storage::url('products/digital/' . $image) }}" width="116" height="118"
-                                            alt="" srcset="">
+                                            src="{{ Storage::url('products/digital/' . $image) }}" width="116"
+                                            height="118" alt="" srcset="">
                                         <span id="remove-list" title="delete"
                                             class="remove-list position-absolute top-0 start-100 translate-middle badge border-light border-2 rounded-circle bg-danger"
                                             style="z-index: 1">X</span>
@@ -272,8 +272,8 @@
                         </div>
                         <select class="form-control mt-2 shadow-none" name="cta_text" id="cta_text">
                             @foreach (CtaEnum::cases() as $cta)
-                                <option value="{{ $cta }}"
-                                    {{ $product->cta_text === $cta ? 'selected' : '' }}>{{ $cta }}</option>
+                                <option value="{{ $cta }}" {{ $product->cta_text === $cta ? 'selected' : '' }}>
+                                    {{ $cta }}</option>
                             @endforeach
                         </select>
                         @if (session()->has('cta_text'))
@@ -290,8 +290,7 @@
                             @foreach (LayoutEnum::cases() as $key => $layout)
                                 <label>
                                     <input class="form-check-input" type="radio" name="layout"
-                                        value="{{ $layout }}"
-                                        {{ $product->layout === $layout ? 'checked' : '' }}>
+                                        value="{{ $layout }}" {{ $product->layout === $layout ? 'checked' : '' }}>
                                     <img src="{{ asset($arrAsset[$key]) }}" width="164" height="164"
                                         alt="default">
                                     <span>{{ Str::ucfirst($layout->value) }}</span>
@@ -304,7 +303,8 @@
                         Product</button>
                 </form>
                 <div class="vstack gap-2 mt-2">
-                    <form id="form-delete" action="{{ route('products.digitaldestroy', $product->slug) }}" method="post">
+                    <form id="form-delete" action="{{ route('products.digitaldestroy', $product->slug) }}"
+                        method="post">
                         @csrf
                         @method('DELETE')
                         <a href="#"
@@ -357,7 +357,8 @@
                         deletedImages = [];
                         $(this).parent().remove();
                         $('#list-images').children('.item:first:not(:has(small))').append(label)
-                        const listImageChildNew = $('#list-images').children('.item').children('span');
+                        const listImageChildNew = $('#list-images').children('.item').children(
+                            'span');
                         $.each(listImageChildNew, function(idx, child) {
                             child.setAttribute('data-img', idx);
                         })
