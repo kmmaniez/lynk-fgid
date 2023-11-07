@@ -22,10 +22,20 @@ class TransactionController extends Controller
     public function index()
     {
         // $data = new DuitkuController;
-        $response = $this->_duitku->getPaymentMethod(10000);
+        $response = $this->_duitku->getPaymentMethods(10000);
         $paymentFee = $response['paymentFee'];
 
         dump($response);
+    }
+
+    // ROUTE RETURN FOR DUITKU, CHECK TRANSACTION
+    public function return(Request $request)
+    {
+        $merchantOrderId = $request->get('merchantOrderId') ? $request->get('merchantOrderId') : NULL;
+        // $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
+        $transactionStatus = $this->_duitku::getTransactionStatus($merchantOrderId);
+        $transaction = Transaction::where('duitku_order_id', $transactionStatus['merchantOrderId'])->get();
+        return view('cart.return', compact('transactionStatus','transaction'));
     }
 
     /**
@@ -48,8 +58,6 @@ class TransactionController extends Controller
 
         $cart = \Cart::session($request->cart);
 
-
-        // $response = $this->_duitku->getPaymentMethod($cart->getSubTotal());
 
 
         if ($rules->fails()) {
