@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.creator')
 @push('style')
     <style>
         .form-group>span {
@@ -60,7 +60,6 @@
         #coverdisplay {
             width: 800px;
             height: 200px;
-            /* style="width: 100%; height: 200px;"  */
         }
     </style>
 @endpush
@@ -120,8 +119,8 @@
                     </div>
 
                     <div class="vstack gap-2">
-                        <button
-                            class="btn btn-md bg-danger bg-gradient text-white fw-semibold text-uppercase w-100 mt-3">Save
+                        {{-- <button type="reset">reset</button> --}}
+                        <button class="btn btn-md bg-danger bg-gradient text-white fw-semibold text-uppercase w-100 mt-3">Save
                             Appearance</button>
                         <a href="{{ route('creator') }}" class="btn w-100 fw-medium">Back</a>
                     </div>

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.creator')
 
 @push('style')
     <style>
@@ -40,8 +40,8 @@
                                         </option>
                                         <option value="OVO" {{ $user->banks?->bank_name === 'OVO' ? 'selected' : '' }}>
                                             OVO</option>
-                                        <option value="DANA"
-                                            {{ $user->banks?->bank_name === 'DANA' ? 'selected' : '' }}>DANA</option>
+                                        <option value="DANA" {{ $user->banks?->bank_name === 'DANA' ? 'selected' : '' }}>
+                                            DANA</option>
                                     </select>
                                 </div>
                                 <div class="form-group mt-3">
@@ -72,8 +72,7 @@
                                     @endforeach
                                 </div>
                                 <div class="vstack mt-3 gap-2">
-                                    <button
-                                        class="btn btn-md bg-danger fw-semibold text-uppercase bg-gradient text-white">{{ $user->banks ? 'Update Bank Account' : 'Save Bank Account' }}</button>
+                                    <button class="btn btn-md bg-danger fw-semibold text-uppercase bg-gradient text-white">{{ $user->banks ? 'Update Bank Account' : 'Save Bank Account' }}</button>
                                     <a href="{{ route('creator') }}" class="btn btn-md">Back</a>
                                 </div>
                             </form>
