@@ -188,8 +188,9 @@ class DuitkuController extends Controller
             )->post(self::$baseUrl . self::$checkTransactioStatusUrl, $params);
             
             $response = $request->json();
-
-            if ($response['statusCode'] == "00") {
+            // return $response;
+            //  00 = PAID, 01 = PROCESS, 02 = EXPIRED
+            if ($response['statusCode'] == "01") {
 
                 Log::info('Request Transaction status '.$response['statusCode']);
                 return $response;
