@@ -206,7 +206,7 @@
                     <a class="navbar-brand"
                         href="{{ route('public.user',request()->route()->originalParameters()['user']) }}">
                         <i data-feather="arrow-left" class="text-danger"></i>
-                        {{ '@' .request()->route()->originalParameters()['user'] }} | {{ $user->id }}
+                        {{ '@' .request()->route()->originalParameters()['user'] }}
                     </a>
                     <div class="cart position-relative">
                         <i data-feather="shopping-cart" class="text-danger"></i>
@@ -293,15 +293,12 @@
                 const {
                     data
                 } = res;
-                // console.log('awal');
-                // console.log(res);
                 $('#total-cart').text(data.total_item)
             }
         })
 
         cart.on('click', (e) => {
             let show = $('.cart-info').hasClass('show');
-            // console.log($('.list-item').children());
             if (!show) {
                 $('.cart-info').addClass('show')
                 if (!listItem.children().length > 0) {
@@ -310,14 +307,10 @@
             } else {
                 $('.cart-info').removeClass('show')
                 $('.list-item').children().remove()
-                // console.log($('.list-item > div.card'));
             }
         })
         BtnContinue.on('click', (e) => {
             e.preventDefault();
-            // const link = `
-            // <a href="{{ route('cart.checkout') }}" target="_blank" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a>
-            // `;
             $('.cart-info').removeClass('show')
             $('.list-item').children().remove()
             userPayVal.val('')
@@ -325,7 +318,7 @@
 
     })
     // $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnIncreaseQty', function(e){
-    $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnRemoveItem', function(e) {
+    $('body').on('click', '.list-item > .card >* #btnRemoveItem', function(e) {
         e.preventDefault()
         if (confirm('Delete this item from your cart ?')) {
             removeCartItem($(this).data('id'))
@@ -333,7 +326,8 @@
         }
     })
 
-    $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnIncreaseQty', function(
+    // $('body').on('click', '.list-item > .card > .card-body #item-action > .button-group > #btnIncreaseQty', function(
+    $('body').on('click', '.list-item > .card >* #btnIncreaseQty', function(
     e) {
         e.preventDefault()
         if (confirm('Add item again in your cart ?')) {
@@ -370,12 +364,9 @@
                     type: 'decrease'
                 },
                 success: (res) => {
-                    // console.log('decrease');
-                    // console.log(res);
                     $('.list-item').children().remove()
                     showCartItems();
                     $('#btnGroup').children('a:first').remove()
-
                 }
             })
         }
@@ -393,31 +384,23 @@
                     user_id: '{{ $user->id }}',
                 },
                 success: (res) => {
-                    // console.log('decrease');
-                    console.log(res);
                     $('.list-item').children().remove()
                     showCartItems();
                     $('#btnGroup').children('a:first').remove()
 
                 }
             })
-            console.log(e.target);
         })
     })
-    // $('#btnGroup #checkoutBtn').on('click',(e)=>{
-    //     e.preventDefault()
-    //     console.log(e.target);
-    // })
+
     let showError = false;
 
     BtnAddToCart.on('click', (e) => {
         e.preventDefault();
-        console.log({{ $user->id }});
         $('.list-item').children().remove()
         addToCart();
         showCartItems();
-
-            })
+    })
 
 
     feather.replace();
@@ -435,8 +418,6 @@
                 creator_id: '{{ $user->id }}'
             },
             success: (res) => {
-                // console.log('add cart');
-                // console.log(res);
                 if (res.code == 201) {
                     userPayError.text(res.messages)
                     userPayError.css('display', 'block');
@@ -473,7 +454,6 @@
     function showCartItems() {
         $.ajax({
             url: "{{ route('cart.getitems') }}",
-            // method: 'GET',
             method: 'POST',
             data: {
                 _token: '{{ csrf_token() }}',
@@ -483,8 +463,7 @@
                 const {
                     data
                 } = res;
-                
-                if (Object.keys(data.cart).length > 0) {
+                if (Object.keys(data).length > 0) {
                     // filled cart
                     listItem.css({
                         'height': '11rem',
@@ -533,11 +512,6 @@
                     const link = `
                      <a href="{{ route('cart.checkout') }}?order_id={{ $user->id }}" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a>
                     `;
-                    // <form action="{{ route('cart.checkout') }}?order={{ $user->id }}" method="POST">
-                    //     @csrf
-                    //     <input name="cart_id" value="{{ $user->id }}" hidden/>
-                    //     <button id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</button>
-                    //     </form>
                     if ($('#btnGroup').children().length < 2) {
                         $('#btnGroup').prepend(link)
                     }
@@ -549,15 +523,13 @@
                              </div>
                          </div>
                         `;
-                    $('#total-cart').text(data.cart.length)
+                    $('#total-cart').text(data.length)
                     $('.keterangan-order > table > tbody > tr > td:nth(0)').text('0')
                     $('.keterangan-order > table > tbody > tr > td:nth(1)').text('0')
                     $('.keterangan-order > table > tbody > tr > td:nth(2)').text('0')
                     listItem.css({
                         'height': '5rem',
                     }).append(card)
-
-                    // console.log($('#btnGroup').children('a:first:has(#checkoutBtn)'));
                 }
             },
             err: (err) => {
