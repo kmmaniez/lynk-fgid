@@ -30,9 +30,6 @@ Route::prefix('cart')->group(function () {
         Route::get('/checkout', 'checkout_items')->name('cart.checkout');
         Route::post('/checkout', 'checkout_items');
 
-        Route::get('/checkFee', 'check_fee_items')->name('cart.checkfee');
-        Route::post('/checkFee', 'check_fee_items')->name('cart.checkfee');
-
         Route::post('/remove', 'remove_item')->name('cart.removeitem');
         Route::get('/destroy', 'destroy')->name('cart.destroy');
     });

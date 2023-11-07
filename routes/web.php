@@ -98,117 +98,20 @@ Route::prefix('creator')->middleware('auth')->group(function () {
 
 // ROUTE ADMIN
 require __DIR__.'/admin.php';
-// Route::prefix('dashboard')->middleware(['isAdmin','auth'])->group(function () {
+
+// Route::get('/return', function() {
+//     $duitku = new DuitkuController();
     
-//     Route::controller(DashboardAdminController::class)->group(function () {
+//     $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
 
-//         Route::get('/', 'index')->name('dashboard');
-
-//     });
-
-//     Route::controller(ProductsAdminController::class)->prefix('products')->group(function () {
-//         Route::get('/', 'index')->name('admin-product.index');
-//         Route::get('/getallusers', 'getAllUsers')->name('admin-product.getusers');
-//     });
-
-//     Route::controller(UsersAdminController::class)->prefix('users')->group(function () {
-//         Route::get('/', 'index')->name('admin-user.index');
-//         Route::get('/getallusers', 'getAllUsers')->name('admin-user.getusers');
-//     });
-
-//     Route::controller(PayoutController::class)->prefix('payouts')
-//         ->as('admin-payout.')->group(function () {
-//             Route::get('/', 'index')->name('index');
-//             Route::get('/getallpayouts', 'getAllPayouts')->name('getpayouts');
-//         }
-//     );
-
-//     Route::controller(SettlementController::class)->prefix('settlements')
-//         ->as('admin-settlement.')->group(function () {
-//             Route::get('/', 'index')->name('index');
-//             Route::get('/getallsettlements', 'getAllSettlements')->name('getpayouts');
-//             Route::post('/', 'store')->name('store');
-//         }
-//     );
-
-
-
+//     $data = $duitku::getTransactionStatus($merchantOrderId);
 // });
 
-Route::get('/return', function() {
-    $duitku = new DuitkuController();
-    
-    $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
-
-    $data = $duitku::getTransactionStatus($merchantOrderId);
-    // $api = "cafbb760f4a70cf1be6e7e4ea129b2fa";
-    // $merchant = "DS16326";
-
-    //     // $merchantOrderId = 'abcde12345'; // dari anda (merchant), bersifat unik
-    //     // $merchantOrderId = '1698588022'; // UNIQUE FROM MERCHANT - REQUIRED
-    //     $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
-    
-    //     $signature = md5($merchant . $merchantOrderId . $api);
-    
-    //     $params = array(
-    //         'merchantCode' => $merchant,
-    //         'merchantOrderId' => $merchantOrderId,
-    //         'signature' => $signature
-    //     );
-    
-    //     $params_string = json_encode($params);
-    //     $url = 'https://sandbox.duitku.com/webapi/api/merchant/transactionStatus';
-    //     $ch = curl_init();
-    
-    //     curl_setopt($ch, CURLOPT_URL, $url); 
-    //     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
-    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $params_string);                                                                  
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);                                                                      
-    //     curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-    //         'Content-Type: application/json',                                                                                
-    //         'Content-Length: ' . strlen($params_string))                                                                       
-    //     );   
-    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    
-    //     //execute post
-    //     $request = curl_exec($ch);
-    //     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    
-    //     if($httpCode == 200){
-    //         $results = json_decode($request, true);
-    //         dump($results);
-    //         if ($results['statusCode'] === "02") {
-    //             echo 'lololo<br>';
-    //             // $query = mysqli_query($connect, 
-    //             // "UPDATE `transaction` SET `status` = 'failed' WHERE order_id = '$merchantOrderId'");
-    //             // if ($query) {
-    //             //     $message = "KAGA BAYAR LU";
-    //             // }else{
-    //             //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
-    //             // }
-    //         }else if($results['statusCode'] === '00'){
-    //             echo 'lunas<br>';
-    //         }
-    //         else if($results['statusCode'] === '01'){
-    //             echo 'proses ngab<br>';
-    //         }
-    //         print_r($results, false);
-    //     }else{
-    //         $request = json_decode($request);
-    //         $error_message = "Server Error " . $httpCode ." ". $request->Message;
-    //         echo $error_message;
-    //     }
-});
-
-Route::controller(TransactionController::class)->prefix('tf')->group(function () {
+Route::controller(TransactionController::class)->prefix('transactions')->group(function () {
     Route::get('/', 'index');
     Route::post('/store', 'store')->name('transaction.store');
+    Route::get('/return', 'return')->name('transaction.return');
 
-});
-
-Route::controller(DuitkuController::class)->prefix('duitku')->group(function () {
-    Route::get('/', 'index');
-    Route::post('/getpayment', 'getPaymentMethod');
 });
 
 require __DIR__.'/auth.php';
