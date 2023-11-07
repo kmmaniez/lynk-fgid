@@ -177,7 +177,7 @@
                 url: "{{  route('cart.getitems')  }}?user_id="+match[1],
                 method: 'GET',
                 success: (res) => {
-                    console.log(res);
+                    // console.log(res);
                     const {cart} = res.data;
                     btnPayment.text('Bayar Sekarang - Rp. '+res.data.total_price)
                     totalItem.text(res.data.total_item)
