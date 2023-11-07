@@ -30,7 +30,7 @@ class CartController extends Controller
         } else {
             $cartitems = [];
         }
-        // $cartitems = $this->cart->getContent();
+
         return view('cart.detail-produk', compact('user', 'product', 'cartitems'));
     }
 
@@ -38,6 +38,11 @@ class CartController extends Controller
     {
         // fetch Cart
         if ($request->get('user_id')) {
+
+            if ($this->cart::session($request->get('user_id'))->isEmpty()) {
+                return $this->sendResponse('Cart empty');
+            }
+
             $cartItem = [
                 'cart' => ($request->get('user_id')) ? $this->cart::session($request->get('user_id'))->getContent() : [],
                 'total_item' => ($request->get('user_id')) ? $this->cart::session($request->get('user_id'))->getContent()->count() : 0,
@@ -46,24 +51,8 @@ class CartController extends Controller
                 'payment_fee' => 0
             ];
 
-            return $this->sendResponse('Cart items', 200, [
-                'data' => $cartItem
-            ]);
+            return $this->sendResponse('Cart has items', 200, $cartItem);
         }
-        // else{
-
-        //     $cartItem = [
-        //         'cart' => ($request->user_id) ? $this->cart::session($request->user_id)->getContent() : [],
-        //         'total_item' => ($request->user_id) ? $this->cart::session($request->user_id)->getContent()->count() : 0,
-        //         'total_price' => ($request->user_id) ? $this->cart::session($request->user_id)->getSubTotal() : 0,
-        //         'total_quantity' => ($request->user_id) ? $this->cart::session($request->user_id)->getTotalQuantity() : 0,
-        //         'payment_fee' => 0
-        //     ];
-
-        //     return $this->sendResponse('Cart items', [
-        //         'data' => $cartItem
-        //     ]);
-        // }
     }
 
     public function store(Request $request)
@@ -71,21 +60,13 @@ class CartController extends Controller
         $product = Product::find($request->id);
 
         if (is_null($request->user_pay)) {
-            // return response()->json([
-            //     'code' => 201,
-            //     'messages' => 'Price must be filled'
-            // ]);
             return $this->sendResponse('Price must be filled', 201);
         } else {
             if ($request->user_pay < $product->min_price) {
-                // return response()->json([
-                //     'code' => 201,
-                //     'messages' => 'Price must higher or equal than '.$product->min_price
-                // ]);
                 return $this->sendResponse("Price must higher or equal than '.$product->min_price", 201);
             }
         }
-        //new ?
+
         $this->cart::session($request->user_id)->add([
             'id' => $product->id,
             'name' => $product->name,
@@ -103,10 +84,8 @@ class CartController extends Controller
             'total_quantity' => $this->cart::session($request->user_id)->getTotalQuantity(),
             'payment_fee' => 0
         ];
-        return response()->json([
-            'data' => $data
-        ]);
-        return redirect()->back();
+
+        return $this->sendResponse('Cart has items', 200, $data);
     }
 
     public function update(Request $request)
@@ -117,11 +96,8 @@ class CartController extends Controller
                 'quantity' => 1,
             ]);
 
-            return response()->json([
-                'message' => 'Successfully increased cart item',
-                'cart' => $this->cart::session($request->user_id)->getContent(),
-                'status_code' => 201,
-            ]);
+            return $this->sendResponse('Successfully increased cart item', 201, $this->cart::session($request->user_id)->getContent());
+
         } else if ($request->type === 'decrease') {
             // decrease quantity product
             // if quantity less or equal 1, remove cart
@@ -132,17 +108,10 @@ class CartController extends Controller
                     'quantity' => -1,
                 ]);
             }
-            return response()->json([
-                'message' => 'Successfully reduce cart item.',
-                'cart' => $this->cart::session($request->user_id)->getContent(),
-                'status_code' => 201,
-            ]);
+
+            return $this->sendResponse('Successfully reduce cart item', 201, $this->cart::session($request->user_id)->getContent());
         }
 
-        return response()->json([
-            'message' => 'Type not found!',
-            'status_code' => 404,
-        ], 404);
         return $this->sendResponse('Type not found', 404);
     }
 
@@ -182,38 +151,12 @@ class CartController extends Controller
         return view('cart.checkout', compact('user', 'cartitems', 'totalitem', 'totalprice'));
     }
 
-    public function check_fee_items(User $user, Request $request)
-    {
-        $validPayment = [
-            'ovo' => 500,
-            'qris' => 1000,
-            'shopee' => 1500
-        ];
-        foreach ($validPayment as $key => $value) {
-            if ($request->type === $key) {
-                // if ($request->get('type') === $key) {
-                $this->fee = $validPayment[$key];
-                break;
-            }
-        }
-        return response()->json([
-            'cart' => $this->cart::session('16')->getContent(),
-            'payment_fee' => $this->fee + $this->cart::session('16')->getSubTotal(),
-            // 'cart' => $this->cart->getContent(),
-            // 'payment_fee' => $this->fee + $this->cart->getSubTotal(),
-        ]);
-        // dump($request);
-    }
-
     public function remove_item(Request $request)
     {
         // remove item product
         $cartitems = $this->cart::session($request->user_id)->remove($request->cart_id);
-        return response()->json([
-            'cart' => $this->cart::session($request->user_id)->getContent(),
-            'data' => $cartitems,
-            'code' => 201
-        ]);
+
+        return $this->sendResponse('Successfully reduce cart item', 201, $cartitems);
     }
 
     public function destroy()
