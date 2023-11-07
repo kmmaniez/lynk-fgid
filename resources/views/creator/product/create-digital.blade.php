@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.creator')
 @push('style')
     <style>
         span#remove-list {
@@ -103,14 +103,6 @@
             background-color: #eaeaea;
         }
 
-        /* label#custom {
-                margin-top: 1.25rem;
-                padding: 2rem;
-                border: 2px dotted #ff7676;
-                border-radius: 8px;
-                cursor: pointer;
-                text-align: center;
-            } */
         label#custom {
             width: 116px;
             /* height: 118px; */
@@ -273,7 +265,6 @@
                                 $index = 0;
                             @endphp
                             @foreach (App\Enums\LayoutEnum::values() as $key => $layout)
-                                {{-- <option value="{{ $key }}">{{ $key }}</option> --}}
                                 <label>
                                     <input class="form-check-input" type="radio" name="layout"
                                         value="{{ $key }}" {{ $index === 0 ? 'checked' : '' }}>
