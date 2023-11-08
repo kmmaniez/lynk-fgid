@@ -17,9 +17,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = fake('id_ID');
-
-        //
         $allDir = Storage::disk('public')->allDirectories();
 
         if (count($allDir) > 0) {
@@ -38,19 +35,9 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             PermissionSeeder::class,
+            UserSeeder::class,
             // ProductSeeder::class,
             // TransactionSeeder::class,
         ]);
-        for ($i=0; $i < 10; $i++) { 
-            $users = User::create([
-                'username'  => $faker->userName(),
-                'name'      => $faker->name(),
-                'email'     => $faker->email(),
-                // 'phone' => $faker->phoneNumber(),
-                'description' => $faker->paragraph('1'),
-                'password'  => Hash::make('password')
-            ]);
-            $users->assignRole('creator');
-        }
     }
 }
