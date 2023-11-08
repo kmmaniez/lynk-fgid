@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        
         // DATA WILL DELETED EVERY WEEKS IF TRANSACTION FINISHED IS NULL (USER NOT PAY), 
         // $schedule->command('model:prune')->weekly();
     }
