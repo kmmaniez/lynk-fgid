@@ -34,16 +34,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    {{-- <th>Product ID</th>
-                                    <th>Total Quantity</th>
-                                    <th>Total Price</th>
-                                    <th>Transaction Created</th> --}}
                                     <th>Full Name</th>
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Bank Account</th>
-                                    {{-- <th>Total Quantity</th>
-                                    <th>Total Price</th> --}}
                                     <th>Total Payouts</th>
                                     <th>Last Payouts</th>
                                     <th>Action</th>
@@ -162,7 +156,12 @@
                   {data: 'email', name: 'email'},
                   {data: 'banks', name: 'banks'},
                   {data: 'total_payout', name: 'total_payout'},
-                  {data: 'settlements', name: 'settlements.payout_date'},
+                  {
+                    data: 'settlements',
+                    name: 'settlements.payout_date',
+                    orderable: false,
+                    searchable: false
+                  },
                   {
                       data: 'action', 
                       name: 'action', 

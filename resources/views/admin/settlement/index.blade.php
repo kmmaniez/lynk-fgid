@@ -34,8 +34,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Username</th>
-                                    <th>Total Quantity</th>
-                                    <th>Total Price</th>
+                                    <th>Total Payout</th>
                                     <th>Settlements Created</th>
                                     {{-- <th>Action</th> --}}
                                 </tr>
@@ -116,12 +115,11 @@
         $('#DTUsers').DataTable({
               processing: true,
               serverSide: true,
-              ajax: "{{ route('admin-settlement.getpayouts') }}",
+              ajax: "{{ route('admin-settlement.getsettlements') }}",
               cache: true,
               columns: [
                   {data: 'DT_RowIndex', name: 'id', orderable: false},
                   {data: 'users.username', name: 'username'},
-                  {data: 'payout_date', name: 'payout_date'},
                   {data: 'payout_amount', name: 'payout_amount'},
                   {data: 'created_at', name: 'created_at'},
                 //   {
