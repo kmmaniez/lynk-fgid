@@ -31,23 +31,12 @@ class ProductCreatorController extends Controller
         return view('creator.product.create-link');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('creator.product.create-link');
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(DigitalProductRequest $request)
     {
-        // DigitalProductRequest
-        // $img = $request->img;
-        // $base = base64_decode(preg_replace('#^data:image/\w+;base64,#i','',$img));
-        // Storage::disk('public')->put('rea/img_'. Str::random(10).'.png', $base);
         $pathImages = array();
         if ($request->has('img')) {
             $pattern = '(data:application)';
@@ -71,14 +60,12 @@ class ProductCreatorController extends Controller
                 'type' => ProductTypeEnum::PRODUCT_DIGITAL,
                 'name' => $request->name,
                 'slug' => self::generateSlug(rand(5, 8)),
-                // 'thumbnail' => ($request->thumbnail) ? $pathThumbnail : 'public/products/default.jpg',
                 'thumbnail' => ($request->img) ? $pathImages[0] : NULL,
-                // 'images' => ($request->img) ? json_encode($pathImages) : NULL,
                 'images' => ($request->img) ? $pathImages : NULL,
                 'description' => $request->description,
                 'url' => $request->url,
                 'min_price' => $request->min_price,
-                'max_price' => $request->max_price,
+                'recommend_price' => $request->recommend_price,
                 'messages' => ($request->messages) ? $request->messages : NULL,
                 'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                 'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
@@ -86,16 +73,14 @@ class ProductCreatorController extends Controller
         } catch (\Throwable $th) {
             throw $th;
         }
-        // dd($request, $request['name']);
+
         return redirect()->route('creator')->with('success', 'Data created');
     }
 
     public function store_link(LinkProductRequest $request)
     {
-        // dd($request->all());
         if ($request->hasFile('thumbnail')) {
 
-            // $thumbnailName = date('HisdmY') . '_' . str_replace([' ','-'], '_', strtolower($request->name));
             $thumbnailName = date('HisdmY') . '_' . Str::random(5);
             $thumbnailPath = FileService::store(
                 'public/products/link',
@@ -106,7 +91,6 @@ class ProductCreatorController extends Controller
             try {
                 Product::create([
                     ...$request->validated(),
-                    // 'type' => ProductTypeEnum::PRODUCT_LINK,
                     'user_id' => auth()->user()->id,
                     'thumbnail' => $thumbnailPath,
                 ]);
@@ -128,13 +112,6 @@ class ProductCreatorController extends Controller
         return redirect()->route('creator')->with('success', 'Data created');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -191,7 +168,7 @@ class ProductCreatorController extends Controller
                         'description' => $request->description,
                         'url' => $request->url,
                         'min_price' => $request->min_price,
-                        'max_price' => $request->max_price,
+                        'recommend_price' => $request->recommend_price,
                         'messages' => ($request->messages) ? $request->messages : NULL,
                         'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                         'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
@@ -208,7 +185,7 @@ class ProductCreatorController extends Controller
                         'description' => $request->description,
                         'url' => $request->url,
                         'min_price' => $request->min_price,
-                        'max_price' => $request->max_price,
+                        'recommend_price' => $request->recommend_price,
                         'messages' => ($request->messages) ? $request->messages : NULL,
                         'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                         'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
@@ -224,7 +201,7 @@ class ProductCreatorController extends Controller
                     'description' => $request->description,
                     'url' => $request->url,
                     'min_price' => $request->min_price,
-                    'max_price' => $request->max_price,
+                    'recommend_price' => $request->recommend_price,
                     'messages' => ($request->messages) ? $request->messages : NULL,
                     'cta_text' => ($request->cta_text) ? $request->cta_text : CtaEnum::CTA_NO_OPTION,
                     'layout' => ($request->layout) ? $request->layout : LayoutEnum::LAYOUT_DEFAULT,
@@ -264,10 +241,6 @@ class ProductCreatorController extends Controller
         } else {
             $product->where('user_id', $currentUserId)->where('id', $product->id)->update([
                 ...$request->validated(),
-                // 'slug' => 2,
-                // 'name' => $request->title,
-                // 'url' => $request->url,
-                // 'layout' => $request->layout,
             ]);
         }
 

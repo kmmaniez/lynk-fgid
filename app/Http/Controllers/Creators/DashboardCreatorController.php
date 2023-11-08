@@ -40,7 +40,8 @@ class DashboardCreatorController extends Controller
         })->get();
 
         $amountWithdrawUserNotPayout = Transaction::whereHas('products', function($q)use ($userId){
-            return $q->where('user_id', $userId)->where('is_payout',0);
+            return $q->where('user_id', $userId)->where('payment_status','paid');
+            // return $q->where('user_id', $userId)->where('is_payout',0);
         })
         ->sum('total_price');
         // ->get();
@@ -83,14 +84,12 @@ class DashboardCreatorController extends Controller
         // })->get();
         $total_earning = Transaction::whereHas('products',function($q) use ($user){
             return $q->where('user_id', $user->id);
-        })->where('is_payout',0)->where('payment_status','paid')->sum('total_price');
+        })->where('payment_status','paid')->sum('total_price');
         
         $estimate_payout = Transaction::whereHas('products',function($q) use ($user){
             return $q->where('user_id', $user->id);
-        })->where('is_payout',0)->where('payment_status','paid')->sum('total_price');
+        })->where('payment_status','paid')->sum('total_price');
         // ->where('payment_status','paid')
-        // dump($estimate_payout);
-        // $data = Settlement::with('users')->where('user_id', $user->id)->get()->first();
 
         return view('creator.earning',compact('user','estimate_payout','total_earning','settlements','date'));
     }
