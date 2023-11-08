@@ -232,12 +232,12 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <label for="max_price" class="form-label">Recomendation Price</label>
+                                <label for="recommend_price" class="form-label">Recomendation Price</label>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text text-secondary">Rp</span>
-                                    <input type="number" value="{{ old('max_price', $product->max_price) }}"
-                                        name="max_price" id="max_price" class="form-control" placeholder="1500"
-                                        aria-label="max_price">
+                                    <input type="number" value="{{ old('recommend_price', $product->recommend_price) }}"
+                                        name="recommend_price" id="recommend_price" class="form-control" placeholder="1500"
+                                        aria-label="recommend_price">
                                 </div>
                             </div>
                         </div>

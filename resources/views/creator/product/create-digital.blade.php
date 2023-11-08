@@ -170,7 +170,6 @@
         <div class="card border-0 pb-0">
             <div class="card-body">
                 <h3>Add product digital</h3>
-
                 <form action="{{ route('products.digitalstore') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
@@ -209,12 +208,15 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
-                                <label for="max_price" class="form-label">Recomendation Price</label>
-                                <div class="input-group mb-3">
+                                <label for="recommend_price" class="form-label">Recomendation Price</label>
+                                <div class="input-group">
                                     <span class="input-group-text text-secondary">Rp</span>
-                                    <input type="number" name="max_price" id="max_price" class="form-control"
-                                        placeholder="1500" aria-label="max_price">
+                                    <input type="number" name="recommend_price" id="recommend_price" class="form-control"
+                                        placeholder="1500" aria-label="recommend_price">
                                 </div>
+                                @error('recommend_price')
+                                <small class="text-danger">{{ $message }}</small>    
+                                @enderror
                             </div>
                         </div>
                         <small style="font-size: 14px;" class="text-success"><em>Harga rekomendasi <strong>harus lebih besar

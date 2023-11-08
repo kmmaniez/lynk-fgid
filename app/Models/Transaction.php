@@ -10,6 +10,7 @@ class Transaction extends Model
 {
     use HasFactory, Prunable;
     protected $with = ['products'];
+    public $timestamps = false;
 
     protected $fillable = [
         'product_id',
@@ -20,7 +21,8 @@ class Transaction extends Model
         'customer_info',
         'payment_method',
         'payment_status',
-        'payment_url',
+        'product_file_url',
+        'transaction_url_views',
         'transaction_created',
         'transaction_finished',
     ];

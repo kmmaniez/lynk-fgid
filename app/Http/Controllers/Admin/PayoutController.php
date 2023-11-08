@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Payout;
 use App\Models\Product;
+use App\Models\Settlement;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -62,9 +63,17 @@ class PayoutController extends Controller
                     return 'Rp. '.number_format($amount,0,0,'.');
                 })
                 ->addColumn('settlements', function (User $user) {
-                    return $user->settlements->map(function($set){
-                        return Carbon::parse($set->payout_date)->translatedFormat('l, d-m-Y'). ' | Rp. '.number_format($set->payout_amount,0,0,'.');
+                    // return Settlement::whereHas('users')->where('user_id',$user->id)->get('payout_date')->toArray();
+                    return Settlement::whereHas('users')->where('user_id',$user->id)->get()->map(function($set){
+                        $info = '
+                        <div class="mb-1">'.Carbon::parse($set->payout_date)->translatedFormat('l, d-m-Y').'</div>
+                        <span class="badge badge-danger p-2">Rp. '.number_format($set->payout_amount,0,0,'.').'</span>
+                        ';
+                        return $info;
                     })->implode('');
+                    // return $user->settlements->map(function($set){
+                    //     return Carbon::parse($set->payout_date)->translatedFormat('l, d-m-Y'). ' | Rp. '.number_format($set->payout_amount,0,0,'.');
+                    // })->implode('');
                 })
                 ->editColumn('created_at', function ($row) {
                     $date = Carbon::parse($row->created_at)->translatedFormat('l') . ', ' . Carbon::parse($row->created_at)->translatedFormat('d M Y H:i:s');
@@ -78,9 +87,6 @@ class PayoutController extends Controller
                             <div class="d-flex flex-wrap justify-content-center" style="row-gap:6px">
                             <button data-user="' . $row->id . '" data-payout="'.$amount.'" id="btnAddPayout" class="btn btn-md btn-danger w-100"><i class="fas fa-fw fa-plus"></i> Add to settlement</button>
                             ';
-                            // <button href="#" data-user="' . $row->id . '" id="btnEditPayout" class="btn btn-md btn-info w-100"><i class="fas fa-fw fa-edit"></i> Edit</button>
-                            // <div>
-                            // <button href="#" data-user="' . $row->id . '" id="btnDelPayout" class="btn btn-md btn-danger"><i class="fas fa-fw fa-trash-alt"></i> Delete</button>
                     if ($amount > 0) {
                         return $btn;
                         
@@ -89,7 +95,7 @@ class PayoutController extends Controller
                         return 'Not enough balance to withdraw';
                     }
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['settlements','action'])
                 ->toJson();
         // }
         // return abort(404);

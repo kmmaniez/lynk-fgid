@@ -68,20 +68,20 @@ Route::post('/callback', function (Request $request) {
             $time = date('Y-m-d H:i:s', time());
 
             if ($resultCode == "00") { // SUCCESS
-                Log::info('PAYMENT SUCCESS, USER PAY');
-                // $update = Transaction::all()->whereIn('')
-                // $query = mysqli_query($connect, 
-                // "UPDATE `transaction` SET `status` = 'paid', `payment_finished` = '$time' WHERE order_id = '$merchantOrderId'");
-                // if ($query) {
-                //     file_put_contents('sql-result.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
-                //     $message = "RESULT CODE = [".$resultCode."] > KODE MERCHANT [".$merchantOrderId."] |REFERENSI DUITKU [".$reference."]\nBELI [".$productDetail."] | User [$merchantUserId] has Transaction merchantOrderId: [".$merchantOrderId."]\nSuccessfully transfered using [".$paymentMethod."] with amount [".$amount."] \nSettlement on [".$settlementDate."] | PUBLISHER ORDER [".$publisherOrderId."]";
-
-                //     // $message = 
-                //     // "RESULT CODE = ".$resultCode." > KODE MERCHANT [".$merchantOrderId."] | BELI ".$productDetail." | User ".$merchantUserId." has Transaction merchantOrderId: " . $merchantOrderId . "
-                //     // successfully transfered using " . $paymentMethod . " with amount ".$amount." Settlement on ".$settlementDate." | PUBLISHER ORDER ".$publisherOrderId;
-                // }else{
-                //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
-                // }
+                // $transaction = Transaction::all()->whereIn('duitku_order_id', $transactionStatus['merchantOrderId']);
+                try {
+                    $update =  Transaction::whereIn('duitku_order_id', [$merchantOrderId])->update([
+                        'payment_status' => 'paid'
+                    ]);
+                    if ($update) {
+                        Log::info('PAYMENT SUCCESS, USER PAY');
+                    } else {
+                        Log::alert($update);
+                    }
+                    
+                } catch (\Throwable $th) {
+                    //throw $th;
+                }
                 
             }elseif ($resultCode == "01") {
                 // $query = mysqli_query($connect, 
@@ -94,7 +94,6 @@ Route::post('/callback', function (Request $request) {
                 //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
                 // }
             }
-            // file_put_contents('callback.txt', "* Success *\r\n\r\n", FILE_APPEND | LOCK_EX);
             
         }else{
             file_put_contents('callback.txt', "* Bad Signature *\r\n\r\n", FILE_APPEND | LOCK_EX);

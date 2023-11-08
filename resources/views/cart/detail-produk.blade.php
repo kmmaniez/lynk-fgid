@@ -231,7 +231,7 @@
                 <div class="form-group">
                     <label for="user_pay_product"><small>How much you will pay the product</small></label>
                     <input type="number" class="form-control shadow-none" step="100"
-                        placeholder="Recomendation Rp {{ number_format($product->max_price,0,0,'.') }}" min="{{ $product->max_price }}" name="user_pay_product"
+                        placeholder="Recomendation Rp {{ number_format($product->recommend_price,0,0,'.') }}" min="{{ $product->recommend_price }}" name="user_pay_product"
                         id="user_pay_product">
                     <small class="text-danger" id="user_pay_error"></small>
                 </div>

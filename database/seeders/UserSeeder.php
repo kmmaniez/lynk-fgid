@@ -16,45 +16,15 @@ class UserSeeder extends Seeder
     {
         $faker = fake('id_ID');
 
-        $data = [
-            [
-                'username'  => 'writer',
-                'name'      => 'Creator Program',
-                'email'     => 'writer@gmail.com',
-                'role'      => ['creator'],
-            ],
-            [
-                'username'  => 'adminlorem',
-                'name'      => 'Name ADMIN FGID',
-                'email'     => 'admin@gmail.com',
-                'role'      => ['admin'],
-            ],
-        ];
-
-        foreach ($data as $row) {
-            try {
-                $user = User::create([
-                    'username'  => $row['username'],
-                    'name'      => $row['name'],
-                    'email'     => $row['email'],
-                    'password'  => Hash::make('password')
-                ]);
-                $user->assignRole($row['role']);
-            } catch (\Throwable $th) {
-                throw $th;
-            }
-        }
-
-        for ($i=0; $i < 10; $i++) { 
+        for ($i=0; $i < 300; $i++) { 
             $users = User::create([
                 'username'  => $faker->userName(),
                 'name'      => $faker->name(),
                 'email'     => $faker->email(),
-                'phone' => $faker->phoneNumber(),
-                'description' => $faker->paragraph('2'),
+                'description' => $faker->text('20'),
                 'password'  => Hash::make('password')
             ]);
-            $users->assignRole('writer');
+            $users->assignRole('creator');
         }
 
     }

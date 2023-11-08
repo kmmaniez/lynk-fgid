@@ -43,15 +43,34 @@ class ProfileController extends Controller
         $currentUser = $request->user();
         $photoName = date('HisdmY') . '_' . strtolower($request->user()->username);
         $coverName = date('HisdmY') . '_cover_' . strtolower($request->user()->username);
-        // dd($request, $currentUser);
-        if ($request->has('photo')) {
-            echo 'photo';
-        }
-        if ($request->has('coverimage')) {
-            echo 'coverimage';
+        if ($request->hasFile('photo') && $request->hasFile('coverimage')) {
+
+            if ($currentUser->photo != NULL && $currentUser->coverimage != NULL) {
+                FileService::remove($currentUser->photo);
+                FileService::remove($currentUser->coverimage);
+            }
+            $photoPath = FileService::store(
+                'public/users', 
+                $request->file('photo'),
+                $request->photo->extension(), 
+                $photoName
+            );
+            $coverPath = FileService::store(
+                'public/users', 
+                $request->file('coverimage'),
+                $request->coverimage->extension(), 
+                $coverName
+            );
+            $request->user()->fill([
+                'photo' => ($request->hasFile('photo')) ? $photoPath : NULL,
+                'coverimage' => ($request->hasFile('coverimage')) ? $coverPath : NULL,
+                'description' => $request->description,
+                'theme' => $request->theme,
+            ]);
+            $request->user()->save();
+
         }
 
-        die;
         if ($request->hasFile('photo')) {
 
             if ($currentUser->photo != NULL) {
@@ -64,8 +83,17 @@ class ProfileController extends Controller
                 $request->photo->extension(), 
                 $photoName
             );
-        }else if($request->hasFile('coverimage')) {
-            
+            $request->user()->fill([
+                'photo' => ($request->hasFile('photo')) ? $photoPath : NULL,
+                'description' => $request->description,
+                'theme' => $request->theme,
+            ]);
+            $request->user()->save();
+
+        }
+        
+        if ($request->hasFile('coverimage')) {
+
             if ($currentUser->coverimage != NULL) {
                 FileService::remove($currentUser->coverimage);
             }
@@ -76,20 +104,14 @@ class ProfileController extends Controller
                 $request->coverimage->extension(), 
                 $coverName
             );
+            $request->user()->fill([
+                'coverimage' => ($request->hasFile('coverimage')) ? $coverPath : NULL,
+                'description' => $request->description,
+                'theme' => $request->theme,
+            ]);
+            $request->user()->save();
+
         }
-        
-        $request->user()->fill([
-            'photo' => ($request->hasFile('photo')) ? $photoPath : NULL,
-            'coverimage' => ($request->hasFile('coverimage')) ? $coverPath : NULL,
-            'description' => $request->description,
-            'theme' => $request->theme,
-        ]);
-
-        // $request->user()->fill(
-        //     $request->validated()
-        // );
-
-        $request->user()->save();
 
         return redirect()->back()->with('success','Updated');
     }

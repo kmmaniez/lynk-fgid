@@ -185,9 +185,9 @@
     @stack('styles')
 </head>
 
-<body class="{{ $user->theme == 'light' || Request::routeIs('cart.checkout') ? 'bg-light-cover' : 'bg-dark' }}">
+<body class="{{ $user->theme == 'light' || Request::routeIs('cart.checkout') || Request::routeIs('transaction.return') ? 'bg-light-cover' : 'bg-dark' }}">
 
-    <div class="wrapper {{ $user->theme == 'light' || Request::routeIs('cart.checkout') ? 'bg-white' : 'bg-dark-cover' }}"
+    <div class="wrapper {{ $user->theme == 'light' || Request::routeIs('cart.checkout') || Request::routeIs('transaction.return') ? 'bg-white' : 'bg-dark-cover' }}"
         style="">
 
         <nav

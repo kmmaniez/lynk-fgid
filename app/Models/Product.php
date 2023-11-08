@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory, HasUlids;
-    protected $with = ['users','transactions','payouts'];
+    protected $with = ['users', 'transactions', 'payouts'];
 
     protected $fillable = [
         'user_id',
@@ -24,7 +24,7 @@ class Product extends Model
         'description',
         'url',
         'min_price',
-        'max_price',
+        'recommend_price',
         'messages',
         'cta_text',
         'layout',
@@ -35,7 +35,7 @@ class Product extends Model
         'cta_text' => CtaEnum::class,
         'layout' => LayoutEnum::class,
         'min_price' => 'integer',
-        'max_price' => 'integer',
+        'recommend_price' => 'integer',
         'images' => 'array',
     ];
 
@@ -46,7 +46,7 @@ class Product extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class, 'user_id','id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function transactions()
