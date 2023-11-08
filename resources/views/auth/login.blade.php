@@ -179,7 +179,7 @@
                             </div>
                             <div class="button-group">
                                 <button class="btn btn-md btn-register shadow-none btn-danger w-100 text-uppercase fw-semibold rounded-0 mt-3 mb-3" style="letter-spacing: 0.5px">Register</button>
-                                <small><a href="" id="btnLogin" class="text-decoration-none text-danger">Already have an account? login</a></small>
+                                <small><a href="#" id="btnLogin" class="text-decoration-none text-danger">Already have an account? login</a></small>
                             </div>
                         </form>
                     </div>
@@ -206,6 +206,9 @@
             }
 
             $('.btn-register').on('click', () => {
+                localStorage.clear()
+            })
+            $('.btn-login').on('click', () => {
                 localStorage.clear()
             })
 
