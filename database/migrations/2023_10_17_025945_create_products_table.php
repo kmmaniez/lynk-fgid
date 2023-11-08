@@ -12,16 +12,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    // public const CTA = ['I Want this','Support Creator','Beli Sekarang','Book Now'];
-    // public const LAYOUT = ['default','grid','large'];
-    // public const PRODUCT_TYPE = ['link','digital'];
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
-            // $table->enum('type',[self::PRODUCT_TYPE]);
             $table->string('type')->default(ProductTypeEnum::PRODUCT_LINK->value);
             $table->string('slug')->nullable();
             $table->string('thumbnail')->nullable();
@@ -29,11 +25,9 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('url')->nullable();
             $table->integer('min_price')->nullable();
-            $table->integer('max_price')->nullable();
+            $table->integer('recommend_price')->nullable();
             $table->text('messages')->nullable();
-            // $table->enum('cta_text',[self::CTA])->default(self::CTA[0]);
             $table->string('cta_text')->nullable();
-            // $table->enum('layout',[self::LAYOUT])->default(self::LAYOUT[0]);
             $table->string('layout')->default(LayoutEnum::LAYOUT_DEFAULT->value);
             $table->timestamps();
         });

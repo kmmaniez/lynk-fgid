@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('payouts', function (Blueprint $table) {
             $table->id();
-            $table->foreignUlid('product_id')->constrained(); 
+            $table->foreignId('transactions_id')->constrained()->cascadeOnDelete(); 
+            $table->foreignUlid('product_id'); 
             $table->integer('total_item');
             $table->integer('total_price');
             $table->boolean('is_payout')->default(false);
