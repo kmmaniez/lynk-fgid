@@ -194,7 +194,7 @@
             width: 100%;
             /* height: 180px; */
             min-height: 100%;
-            max-height: 180px;
+            max-height: 240px;
             /* display: none; */
             visibility: hidden;
             /* height: 180px; */
@@ -285,7 +285,8 @@
                 url: "{{ route('public.search') }}?username="+e.target.value,
                 method: 'GET',
                 success: (res) => {
-                    const {user} = res;
+                    // const {user} = res.data;
+                    const {user} = res.data;
                     $('.searchbox').css('visibility', 'visible');
                     let listUsers = [];
                     $('.searchbox').empty()
