@@ -38,7 +38,7 @@ class DuitkuController extends Controller
     }
 
     /**
-     * Create Transaction / Invoice
+     * Get Payment Methods
      *
      **/
     public static function getPaymentMethods(int $paymentamount)
@@ -151,7 +151,7 @@ class DuitkuController extends Controller
 
             if ($response['statusCode'] == "00") {
 
-                Log::info('Request invoice '.$response['statusCode']);
+                Log::info('Request INVOICE SUCCESS, STATUS CODE = '.$response['statusCode']);
                 return $response;
 
             }else{
@@ -188,17 +188,17 @@ class DuitkuController extends Controller
             )->post(self::$baseUrl . self::$checkTransactioStatusUrl, $params);
             
             $response = $request->json();
-            // return $response;
+            return $response;
             //  00 = PAID, 01 = PROCESS, 02 = EXPIRED
-            if ($response['statusCode'] == "01") {
+            // if ($response['statusCode'] == "01") {
 
-                Log::info('Request Transaction status '.$response['statusCode']);
-                return $response;
+            //     Log::info('Request Transaction status '.$response['statusCode']);
+            //     return $response;
 
-            }else{
-                $err = new Exception("Error Processing Request", 1);
-                Log::error($err->getMessage());
-            }
+            // }else{
+            //     $err = new Exception("Error Processing Request", 1);
+            //     Log::error($err->getMessage());
+            // }
             
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
