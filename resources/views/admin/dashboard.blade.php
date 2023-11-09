@@ -159,7 +159,7 @@
                                     <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">Top 5 User Payouts</div>
                                     <ol>
                                         @foreach ($user_rank as $user)
-                                        <li>{{ $user->users->username }} | Rp. {{ number_format($user->payout_amount,0,0,'.') }}</li>
+                                        <li>{{ $user->users->username }} | Rp. {{ number_format($user->total_payout,0,0,'.') }}</li>
                                         @endforeach
                                     </ol>
                                 </div>

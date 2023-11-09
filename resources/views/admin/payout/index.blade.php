@@ -153,12 +153,16 @@
                   {data: 'DT_RowIndex', name: 'id', orderable: false},
                   {data: 'name', name: 'name'},
                   {data: 'username', name: 'username'},
+                //   {data: 'name', name: 'name'},
+                //   {data: 'username', name: 'username'},
                   {data: 'email', name: 'email'},
+                //   {data: 'banks.bank_name', name: 'banks'},
                   {data: 'banks', name: 'banks'},
                   {data: 'total_payout', name: 'total_payout'},
+                //   {data: 'banks', name: 'banks'},
                   {
                     data: 'settlements',
-                    name: 'settlements.payout_date',
+                    name: 'settlements',
                     orderable: false,
                     searchable: false
                   },
