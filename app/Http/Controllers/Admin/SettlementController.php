@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\MasterPayoutDate;
 use App\Models\Payout;
 use App\Models\Settlement;
 use Carbon\Carbon;
@@ -16,6 +17,8 @@ class SettlementController extends Controller
      */
     public function index()
     {
+        $initialDate = MasterPayoutDate::all('initial_date');
+        // dump($initialDate[0]->initial_date);
         return view('admin.settlement.index',[
             'title' => 'Settlement'
         ]);
@@ -24,7 +27,10 @@ class SettlementController extends Controller
     public function getAllSettlements(Request $request)
     {
         // if ($request->ajax()) {
-            $model = Settlement::with('users')->get();
+            // $model = Settlement::with('users')->get();
+            $initialDate = MasterPayoutDate::all('initial_date');
+            $model = Settlement::all()->whereBetween('payout_date',
+                [$initialDate[0]->initial_date, Carbon::parse($initialDate[0]->initial_date)->addMonth()]);
 
             return DataTables::of($model)
                 ->only(['id','user_id', 'users.username','users.email','user_id', 'payout_date', 'payout_amount', 'created_at', 'action'])
@@ -33,7 +39,8 @@ class SettlementController extends Controller
                     return 'Rp. '.number_format($row->payout_amount);
                 })
                 ->editColumn('created_at', function ($row) {
-                    $date = Carbon::parse($row->created_at)->translatedFormat('l') . ', ' . Carbon::parse($row->created_at)->translatedFormat('d M Y H:i:s');
+                    // $date = Carbon::parse($row->created_at)->translatedFormat('l') . ', ' . Carbon::parse($row->created_at)->translatedFormat('d M Y H:i:s');
+                    $date = Carbon::parse($row->created_at)->translatedFormat('l') . ', ' . Carbon::parse($row->created_at)->translatedFormat('d M Y');
                     return $date;
                 })
                 // ->editColumn('action', function ($row) {
@@ -48,13 +55,7 @@ class SettlementController extends Controller
         // }
         // return abort(404);
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.

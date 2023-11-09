@@ -1,28 +1,28 @@
 @extends('layouts.products')
 
 @section('produk')
-    <section id="checkout" class="">
+    <section id="checkout">
 
         <div class="card border-0 h-100" style="border-radius: 0">
             <div class="card-body">
-                <h2>Transaction is </h2>
-                {{-- @dump($transactionStatus) --}}
-                {{-- @dump($increment) --}}
-                PAGE REFRESH {{ $viewsCount[0]->views }}
-                @dump($transaction)
-
-                {{-- @if ($transaction[0]->payment_status === 'pending')
-                    <span>{{ $transaction[0]->payment_status }}</span>
-                @elseif ($transaction[0]->payment_status === 'paid')
-                @foreach ($transaction as $item)
-                    <span>{{ $item->product_file_url }}</span>
-                @endforeach
-                @endif --}}
-                <div class="card">
-                    <div class="card-body">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, dolorem.</p>
-                    </div>
-                </div>
+                
+                @if ($transactionStatus['statusCode'] == '00')
+                <h2 class="mt-3">Your transactions is <strong>{{ Str::upper($transactionStatus['statusMessage']) }}</strong></h2>
+                    @foreach ($transaction as $item)
+                        <div class="alert alert-info">
+                            <h6 class="fw-semibold">Product : {{ $item->products[0]->name }}</h6>
+                            <span>{{ $item->product_file_url }}</span>
+                        </div>
+                    @endforeach
+                    <p class="text-danger fw-semibold">Please, copy or save the results link, we didn't guarantee if you losing access to products link. Thankyou!</p>
+                
+                @elseif ($transactionStatus['statusCode'] == '01')
+                    <h2 class="mt-3">Your transactions is <strong>PENDING</strong></h2>
+                    <span>Please complete your payment, the links waiting for you!. <strong>After complete payment refresh browser to get your link.</strong></span>
+                
+                @else
+                    <span><strong>Your payment is {{ Str::lower($transactionStatus['statusMessage']) }}</strong>, please make other <a href="{{ route('public.discover') }}">transactions here!</a></span>
+                @endif
             </div>
         </div>
     </section>

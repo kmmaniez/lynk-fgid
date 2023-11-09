@@ -46,6 +46,7 @@
                     </div>
                 </div>
 
+                <!-- Total item sold -->
                 <div class="col-3 mb-4">
                     <div class="card border-bottom-success shadow h-100 py-2">
                         <div class="card-body">
@@ -62,12 +63,13 @@
                     </div>
                 </div>
                 
+                <!-- Total transaction -->
                 <div class="col-3 mb-4">
                     <div class="card border-bottom-success shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">Total Transaction</div>
+                                    <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">Total Paid Transaction</div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_transaction }}</div>
                                 </div>
                                 <div class="col-auto">
@@ -159,7 +161,7 @@
                                     <div class="text-lg font-weight-bold text-primary text-uppercase mb-1">Top 5 User Payouts</div>
                                     <ol>
                                         @foreach ($user_rank as $user)
-                                        <li>{{ $user->users->username }} | Rp. {{ number_format($user->payout_amount,0,0,'.') }}</li>
+                                        <li>{{ $user->users->username }} | Rp. {{ number_format($user->total_payout,0,0,'.') }}</li>
                                         @endforeach
                                     </ol>
                                 </div>

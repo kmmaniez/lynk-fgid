@@ -29,7 +29,7 @@ class Transaction extends Model
 
     public function prunable()
     {
-        return static::where('transaction_finished','=', NULL);
+        return static::where('payment_status','expired');
     }
 
     public function products()

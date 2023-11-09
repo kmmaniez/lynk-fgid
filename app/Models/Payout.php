@@ -11,11 +11,11 @@ class Payout extends Model
     protected $with = ['products'];
 
     protected $fillable = [
-        'transactions_id',
+        // 'transactions_id',
         'product_id',
         'total_item',
         'total_price',
-        'is_payout',
+        // 'is_payout',
     ];
 
 

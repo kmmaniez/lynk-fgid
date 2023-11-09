@@ -6,21 +6,10 @@ use App\Http\Controllers\Admin\PayoutController;
 use App\Http\Controllers\Admin\ProductsAdminController;
 use App\Http\Controllers\Admin\SettlementController;
 use App\Http\Controllers\Admin\UsersAdminController;
-// use App\Http\Controllers\CartController;
 use App\Http\Controllers\Creators\DashboardCreatorController;
 use App\Http\Controllers\Creators\ProductCreatorController;
 use App\Http\Controllers\Creators\ProfileController;
-use App\Http\Controllers\PaymentGateway\DuitkuController;
-// use App\Http\Controllers\ProductController;
-// use App\Http\Controllers\PublicController;
-use App\Http\Controllers\TestController;
-use App\Http\Controllers\TransactionController;
-use App\Models\Product;
-use App\Models\Transaction;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Public\TransactionController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -36,9 +25,9 @@ use Illuminate\Support\Facades\Route;
 // ROUTE PUBLIC / LANDING PAGE & CART
 require __DIR__.'/public/web.php';
 
-
 // ROUTE PUBLIC USER PRODUCTS
 Route::get('/@{user:username}/{product}', [ProductCreatorController::class, 'product_user'])->name('products.detailuser');
+
 
 // ROUTE CREATOR PRODUCTS
 Route::prefix('creator')->middleware('auth')->group(function () {
@@ -99,19 +88,5 @@ Route::prefix('creator')->middleware('auth')->group(function () {
 // ROUTE ADMIN
 require __DIR__.'/admin.php';
 
-// Route::get('/return', function() {
-//     $duitku = new DuitkuController();
-    
-//     $merchantOrderId = isset($_GET['merchantOrderId']) ? $_GET['merchantOrderId'] : NULL ; // UNIQUE FROM MERCHANT - REQUIRED
-
-//     $data = $duitku::getTransactionStatus($merchantOrderId);
-// });
-
-Route::controller(TransactionController::class)->prefix('transactions')->group(function () {
-    Route::get('/', 'index');
-    Route::post('/store', 'store')->name('transaction.store');
-    Route::get('/return', 'return')->name('transaction.return');
-
-});
-
+// ROUTE AUTH
 require __DIR__.'/auth.php';

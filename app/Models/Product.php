@@ -56,6 +56,6 @@ class Product extends Model
 
     public function payouts()
     {
-        return $this->belongsTo(Payout::class);
+        return $this->belongsTo(Payout::class,'product_id');
     }
 }

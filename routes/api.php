@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Payout;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -21,22 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/callback', function (Request $request) {
-    $apiKey = "cafbb760f4a70cf1be6e7e4ea129b2fa";
-    // $merchantCode = isset($_POST['merchantCode']) ? $_POST['merchantCode'] : null; 
-    // $amount = isset($_POST['amount']) ? $_POST['amount'] : null; 
-    // $merchantOrderId = isset($_POST['merchantOrderId']) ? $_POST['merchantOrderId'] : null; 
-    // $productDetail = isset($_POST['productDetail']) ? $_POST['productDetail'] : null; 
-    // $additionalParam = isset($_POST['additionalParam']) ? $_POST['additionalParam'] : null; 
-    // $paymentMethod = isset($_POST['paymentCode']) ? $_POST['paymentCode'] : null; 
-    // $resultCode = isset($_POST['resultCode']) ? $_POST['resultCode'] : null; 
-    // $merchantUserId = isset($_POST['merchantUserId']) ? $_POST['merchantUserId'] : null; 
-    // $reference = isset($_POST['reference']) ? $_POST['reference'] : null; 
-    // $signature = isset($_POST['signature']) ? $_POST['signature'] : null; 
-    // $publisherOrderId = isset($_POST['publisherOrderId']) ? $_POST['publisherOrderId'] : null; 
-    // $spUserHash = isset($_POST['spUserHash']) ? $_POST['spUserHash'] : null; 
-    // $settlementDate = isset($_POST['settlementDate']) ? $_POST['settlementDate'] : null; 
-    // $issuerCode = isset($_POST['issuerCode']) ? $_POST['issuerCode'] : null; 
-    
+
     $merchantCode = ($request->merchantCode) ? $request->merchantCode : null; 
     $amount = ($request->amount) ? $request->amount : null; 
     $merchantOrderId = ($request->merchantOrderId) ? $request->merchantOrderId : null; 
@@ -52,56 +38,74 @@ Route::post('/callback', function (Request $request) {
     $settlementDate = ($request->settlementDate) ? $request->settlementDate : null; 
     $issuerCode = ($request->issuerCode) ? $request->issuerCode : null; 
 
-    $message = '';
-    // $messageFailed = '';
-    //log callback untuk debug 
-    // file_put_contents('callback_debug.txt', "* Callback *\r\n", FILE_APPEND | LOCK_EX);
-
     if(!empty($merchantCode) && !empty($amount) && !empty($merchantOrderId) && !empty($signature))
     {
-        $params = $merchantCode . $amount . $merchantOrderId . $apiKey;
+        $params = $merchantCode . $amount . $merchantOrderId . env('DUITKU_API_KEY');
         $calcSignature = md5($params);
 
+        // VALIDATED CALLBACK
         if($signature == $calcSignature){
-            //Callback tervalidasi
-            //Silahkan rubah status transaksi anda disini
+            // CHANGE STATUS
+            // 00 = SUCCESS, 01 = EXPIRED
             $time = date('Y-m-d H:i:s', time());
 
             if ($resultCode == "00") { // SUCCESS
                 // $transaction = Transaction::all()->whereIn('duitku_order_id', $transactionStatus['merchantOrderId']);
                 try {
+                    $dataPayout = Transaction::whereIn('duitku_order_id', [$merchantOrderId])->get();
+                    // create payout
+                    foreach ($dataPayout as $key => $value) {
+                        try {
+                            Payout::create([
+                                'product_id' => $value->product_id, 
+                                'total_item' => $value->total_item, 
+                                'total_price' => $value->total_price, 
+                            ]);
+                            Log::info('PAYMENT SUCCESS, CREATE PAYOUT FROM TRANSACTIONS');
+                        } catch (\Throwable $th) {
+                            throw $th;
+                            Log::error($th->getMessage());
+                        }
+                    }
+
                     $update =  Transaction::whereIn('duitku_order_id', [$merchantOrderId])->update([
-                        'payment_status' => 'paid'
+                        'payment_status' => 'paid',
+                        'transaction_finished' => now()
                     ]);
+
                     if ($update) {
-                        Log::info('PAYMENT SUCCESS, USER PAY');
+                        Log::info('PAYMENT SUCCESS, UPDATE TRANSACTION STATUS');
                     } else {
-                        Log::alert($update);
+                        Log::error($update);
                     }
                     
                 } catch (\Throwable $th) {
-                    //throw $th;
+                    Log::error("ERROR UPDATE PAYMENT SUCCESS ".$th->getMessage());
                 }
                 
             }elseif ($resultCode == "01") {
-                // $query = mysqli_query($connect, 
-                // "UPDATE `transaction` SET `status` = 'FAILED', `payment_finished` = '$time' WHERE order_id = '$merchantOrderId'");
-                // if ($query) {
-                //     $message = 
-                //     "FAILED !! RESULT CODE = ".$resultCode." > KODE MERCHANT [".$merchantOrderId."] | BELI ".$productDetail." | User ".$merchantUserId." has Transaction merchantOrderId: " . $merchantOrderId . "
-                //     successfully transfered using " . $paymentMethod . " with amount ".$amount." Settlement on ". $settlementDate. " | PUBLISHER ORDER ".$publisherOrderId;
-                // }else{
-                //     file_put_contents('sql-err.txt', mysqli_error($connect), FILE_APPEND | LOCK_EX);
-                // }
+
+                try {
+                    $update =  Transaction::whereIn('duitku_order_id', [$merchantOrderId])->update([
+                        'payment_status' => 'expired'
+                    ]);
+
+                    if ($update) {
+                        Log::info('PAYMENT EXPIRED, USER NOT PAY');
+                    } else {
+                        Log::error($update);
+                    }
+                    
+                } catch (\Throwable $th) {
+                    Log::error("ERROR UPDATE PAYMENT EXPIRED ".$th->getMessage());
+                }
             }
             
         }else{
-            file_put_contents('callback.txt', "* Bad Signature *\r\n\r\n", FILE_APPEND | LOCK_EX);
-            throw new Exception('Bad Signature');
+            Log::error("CALLBACK BAD SIGNATURE");
         }
     }
     else{
-        file_put_contents('callback.txt', "* Bad Parameter *\r\n\r\n", FILE_APPEND | LOCK_EX);
-        throw new Exception('Bad Parameter');
+        Log::error("CALLBACK BAD PARAMETERS");
     }
 });

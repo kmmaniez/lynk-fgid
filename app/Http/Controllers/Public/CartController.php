@@ -16,22 +16,20 @@ class CartController extends Controller
 
     public function __construct(\Cart $cart)
     {
-        // $this->cart = $cart::session('shopping');
         $this->cart = $cart;
     }
 
 
     public function index(User $user, Product $product)
     {
-        if (!$this->cart::session($user->id)->isEmpty()) {
-            // abort(404);
-            // abort(404);
-            $cartitems = $this->cart::session($user->id)->getContent();
-        } else {
-            $cartitems = [];
+        if (request()->ajax()) {
+            if (!$this->cart::session($user->id)->isEmpty()) {
+                $cartitems = $this->cart::session($user->id)->getContent();
+            } else {
+                $cartitems = [];
+            }
         }
-
-        return view('cart.detail-produk', compact('user', 'product', 'cartitems'));
+        abort(404);
     }
 
     public function getAllItems(Request $request)
@@ -119,36 +117,35 @@ class CartController extends Controller
     {
         // checkout item product & checking fees
         // if access without cart, abort!
-        if ($request->get('type')) {
-
-            $duitku = new DuitkuController;
-            $response = $duitku::getPaymentMethods($this->cart::session($request->get('order_id'))->getSubTotal());
-
-            foreach ($response['paymentFee'] as $key => $value) {
-                if ($request->get('type') === $response['paymentFee'][$key]['paymentMethod']) {
-                    $this->fee = $response['paymentFee'][$key]['totalFee'];
-                    break;
+        if ($request->ajax()) {
+            if ($request->get('type')) {
+    
+                $duitku = new DuitkuController();
+                $response = $duitku::getPaymentMethods($this->cart::session($request->get('order_id'))->getSubTotal());
+    
+                foreach ($response['paymentFee'] as $key => $value) {
+                    if ($request->get('type') === $response['paymentFee'][$key]['paymentMethod']) {
+                        $this->fee = $response['paymentFee'][$key]['totalFee'];
+                        break;
+                    }
                 }
+                return response()->json([
+                    'cart' => $this->cart::session($request->get('order_id'))->getContent(),
+                    'response' => $response,
+                    'fees' => $this->fee,
+                    'payment_fee' => $this->fee + $this->cart::session($request->get('order_id'))->getSubTotal(),
+                ]);
             }
-            return response()->json([
-                'cart' => $this->cart::session($request->get('order_id'))->getContent(),
-                'fees' => $this->fee,
-                'payment_fee' => $this->fee + $this->cart::session($request->get('order_id'))->getSubTotal(),
-            ]);
         }
 
-        if (!count($this->cart::session($request->get('order_id'))->getContent()->toArray()) > 0) {
-            abort(404);
+        if ($request->get('order_id')) {
+            $cartitems = $this->cart::session($request->get('order_id'))->getContent();
+            $totalitem = $this->cart::session($request->get('order_id'))->getContent()->count();
+            $totalprice = $this->cart::session($request->get('order_id'))->getSubTotal();
+    
+            return view('cart.checkout', compact('user', 'cartitems', 'totalitem', 'totalprice'));
         }
-
-        $cart = $this->cart::session($request->get('order_id'))->getContent()->toArray();
-        $idCart = Arr::join(array_keys($cart), '');
-
-        $cartitems = $this->cart::session($request->get('order_id'))->getContent();
-        $totalitem = $this->cart::session($request->get('order_id'))->getContent()->count();
-        $totalprice = $this->cart::session($request->get('order_id'))->getSubTotal();
-
-        return view('cart.checkout', compact('user', 'cartitems', 'totalitem', 'totalprice'));
+        abort(404);
     }
 
     public function remove_item(Request $request)

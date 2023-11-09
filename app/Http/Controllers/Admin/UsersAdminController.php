@@ -14,7 +14,7 @@ class UsersAdminController extends Controller
 {
     public function index() : View
     {
-        return view('admin.user',[
+        return view('admin.user.index',[
             'title' => 'ok'
         ]);
     }
@@ -22,7 +22,7 @@ class UsersAdminController extends Controller
     public function getAllUsers(Request $request)
     {
         if ($request->ajax()) {
-            $model = User::all();
+            $model = User::whereRelation('roles','name','!=','admin')->WhereRelation('roles','name','!=','super-admin')->get();
 
             return DataTables::of($model)
                 ->only(['id', 'photo', 'name', 'username', 'email', 'phone', 'updated_at','action'])

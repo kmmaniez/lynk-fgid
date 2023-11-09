@@ -14,8 +14,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         
-        // DATA WILL DELETED EVERY WEEKS IF TRANSACTION FINISHED IS NULL (USER NOT PAY), 
-        // $schedule->command('model:prune')->weekly();
+        // DATA WILL DELETED EVERY WEEKS IF TRANSACTION STATUS IS PENDING/NULL (USER NOT PAY), 
+        $schedule->command('model:prune')->weekly();
     }
 
     /**
