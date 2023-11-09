@@ -232,16 +232,16 @@
             <div class="row row-cols-2 row-cols-lg-5 g-4 mt-3">
                 @foreach ($creatorFeatured as $creator)
                 <div class="col">
-                    <a href="{{ route('public.user', $creator->username) }}" title="{{ $creator->username }}" class="text-decoration-none">
+                    <a href="{{ route('public.user', $creator->users->username) }}" title="{{ $creator->users->username }}" class="text-decoration-none">
                         <div class="card h-100 rounded-4 border-0">
-                            <img src="{{ ($creator->coverimage) ? Storage::url($creator->coverimage) : asset('assets/cover-white.png') }}" loading="lazy" style="width: 100%; height: 120px;"
+                            <img src="{{ ($creator->users->coverimage) ? Storage::url($creator->users->coverimage) : asset('assets/cover-white.png') }}" loading="lazy" style="width: 100%; height: 120px;"
                                 class="card-img-top object-fit-cover rounded-4 rounded-bottom-0" alt="...">
                             <div class="card-body position-relative">
-                                <img id="avatar" src="{{ ($creator->photo) ? Storage::url($creator->photo) : asset('assets/profile-default.png') }}"
+                                <img id="avatar" src="{{ ($creator->users->photo) ? Storage::url($creator->users->photo) : asset('assets/profile-default.png') }}"
                                     class="rounded-circle object-fit-cover border border-white border-3"
                                     style="width: 96px; height: 96px;" loading="lazy" alt="creator-avatar" srcset="">
-                                <h5 class="card-title">{{ $creator->username }}</h5>
-                                <p class="card-text">{{ $creator->description }}</p>
+                                <h5 class="card-title">{{ $creator->users->username }}</h5>
+                                <p class="card-text">{{ $creator->users->description }}</p>
                             </div>
                         </div>
                     </a>
