@@ -161,7 +161,6 @@
                 cache: false,
                 success: (res) => {
                     const {cart} = res;
-                    console.log(res);
                     btnPayment.text('Bayar Sekarang - Rp. '+res.payment_fee)
                     totalPrice.text(res.payment_fee)
                     feePlatform.text(res.fees)
