@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Models\Settlement;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -18,7 +19,11 @@ class PublicController extends Controller
 
     public function discover(): View
     {
-        $creatorFeatured = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->limit(10)->get();
+        $creatorFeatured = Settlement::whereHas('users')
+                            ->select('user_id')->selectRaw('SUM(payout_amount) as total_payout')
+                            ->groupBy('user_id')->orderBy('total_payout','desc')
+                            ->limit(10)->get();
+        // $creatorFeatured = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->limit(10)->get();
         $creatorRecents = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->latest()->limit(10)->get();
         return view('public.discover', compact('creatorFeatured', 'creatorRecents'));
     }
@@ -41,27 +46,15 @@ class PublicController extends Controller
                     return $this->sendResponse('Users found', 201, [
                         'user' => $user
                     ]);
-                    // return response()->json([
-                    //     'user' => $user,
-                    //     'message' => 'Users Found',
-                    // ]);
                 } else {
                     return $this->sendResponse('No Results Found', 201, [
                         'user' => []
                     ]);
-                    // return response()->json([
-                    //     'user' => [],
-                    //     'message' => 'No Results Found',
-                    // ]);
                 }
             } else {
                 return $this->sendResponse('No Results Found', 201, [
                     'user' => []
                 ]);
-                // return response()->json([
-                //     'user' => [],
-                //     'message' => 'No Results Found',
-                // ]);
             }
         }
         abort(404);
