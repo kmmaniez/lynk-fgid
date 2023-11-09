@@ -121,7 +121,7 @@ class CartController extends Controller
         // if access without cart, abort!
         if ($request->get('type')) {
 
-            $duitku = new DuitkuController;
+            $duitku = new DuitkuController();
             $response = $duitku::getPaymentMethods($this->cart::session($request->get('order_id'))->getSubTotal());
 
             foreach ($response['paymentFee'] as $key => $value) {
@@ -132,6 +132,7 @@ class CartController extends Controller
             }
             return response()->json([
                 'cart' => $this->cart::session($request->get('order_id'))->getContent(),
+                'response' => $response,
                 'fees' => $this->fee,
                 'payment_fee' => $this->fee + $this->cart::session($request->get('order_id'))->getSubTotal(),
             ]);
