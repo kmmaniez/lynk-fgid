@@ -19,7 +19,7 @@ class TransactionSeeder extends Seeder
         $product = Product::all();
         
         try {
-            for ($i=0; $i < 500; $i++) { 
+            for ($i=0; $i < 10; $i++) { 
                 Transaction::create([
                     'product_id' => $product[rand(0, $product->count() - 1)]->id,
                     'duitku_order_id' => rand(500,1000) * rand(5,100) * rand(2,8) ,
