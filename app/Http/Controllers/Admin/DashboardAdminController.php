@@ -27,7 +27,7 @@ class DashboardAdminController extends Controller
         $total_product_link = Product::where('type','link')->count();
 
         $total_item_paid = Transaction::where('payment_status','paid')->sum('total_item');
-        $total_transaction = Transaction::count();
+        $total_transaction = Transaction::where('payment_status','paid')->count();
         $total_transaction_amount = Transaction::where('payment_status','paid')->sum('total_price');
         $total_payout_amount = Settlement::sum('payout_amount');
         
