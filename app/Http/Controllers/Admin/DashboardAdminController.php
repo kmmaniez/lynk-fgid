@@ -16,15 +16,19 @@ class DashboardAdminController extends Controller
     public function index()
     {
         $total_user = User::count();
-        $user_rank = Settlement::with(['users'])->limit(5)->orderBy('payout_amount','DESC')->get();
-
+        // $user_rank = Settlement::with(['users'])->limit(5)->orderBy('aggregate','DESC')->groupBy('user_id')->sum('payout_amount');
+        $user_rank = Settlement::whereHas('users')->select('user_id')->selectRaw('SUM(payout_amount) as total_payout')
+                        ->groupBy('user_id')
+                        ->orderBy('total_payout','desc')
+                        ->limit(5)->get();
+                        
         $total_product = Product::count();
         $total_product_digital = Product::where('type','digital')->count();
         $total_product_link = Product::where('type','link')->count();
 
-        $total_item_paid = Transaction::where('payment_status','paid')->count();
+        $total_item_paid = Transaction::where('payment_status','paid')->sum('total_item');
         $total_transaction = Transaction::count();
-        $total_transaction_amount = Transaction::sum('total_price');
+        $total_transaction_amount = Transaction::where('payment_status','paid')->sum('total_price');
         $total_payout_amount = Settlement::sum('payout_amount');
         
         return view('admin.dashboard', compact(
