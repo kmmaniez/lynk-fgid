@@ -73,9 +73,8 @@
                             @if ($user->banks)
                                 <p><strong>{{ $user->banks->bank_name }}</strong> | {{ $user->banks->bank_number }} A/n
                                     {{ $user->banks->bank_account_name }}</p>
-                                {{-- @dump($user->banks) --}}
                             @else
-                                <small class="text-secondary">you didn't settings your withdrawal accounts</small>
+                                <small class="text-secondary fw-semibold">We only process your withdrawal if you already settings bank account.</small>
                             @endif
                         </div>
                     </div>
