@@ -107,7 +107,7 @@ require __DIR__.'/admin.php';
 //     $data = $duitku::getTransactionStatus($merchantOrderId);
 // });
 
-Route::controller(TransactionController::class)->prefix('transactions')->group(function () {
+Route::controller(TransactionController::class)->prefix('tx')->group(function () {
     Route::get('/', 'index');
     Route::post('/store', 'store')->name('transaction.store');
     Route::get('/return', 'return')->name('transaction.return');
