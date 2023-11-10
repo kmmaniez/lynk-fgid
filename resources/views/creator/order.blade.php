@@ -42,8 +42,7 @@
                                         <span class="">Detail Item :</span>
                                         {{-- <span>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</span> --}}
                                         <ul class="m-0">
-                                            <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp.
-                                                {{ number_format($transact->total_price, 0, 0, '.') }}</li>
+                                            <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x)</li>
                                             {{-- <li>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</li> --}}
                                         </ul>
                                     </div>
