@@ -19,25 +19,25 @@ class DatabaseSeeder extends Seeder
     {
         $allDir = Storage::disk('public')->allDirectories();
 
-        // if (count($allDir) > 0) {
-        //     for ($i=0; $i < count($allDir); $i++) { 
-        //         try {
-        //             Storage::disk('public')->deleteDirectory($allDir[$i]);
-        //             Storage::disk('public')->deleteDirectory($allDir[$i]);
-        //             Storage::disk('public')->deleteDirectory($allDir[$i]);
-        //         } catch (\Throwable $th) {
-        //             throw $th;
-        //         }
-        //     }
-        // }
-        // MasterPayoutDate::create([
-        //     'initial_date' => date('Y-m-d')
-        // ]);
+        if (count($allDir) > 0) {
+            for ($i=0; $i < count($allDir); $i++) { 
+                try {
+                    Storage::disk('public')->deleteDirectory($allDir[$i]);
+                    Storage::disk('public')->deleteDirectory($allDir[$i]);
+                    Storage::disk('public')->deleteDirectory($allDir[$i]);
+                } catch (\Throwable $th) {
+                    throw $th;
+                }
+            }
+        }
+        MasterPayoutDate::create([
+            'initial_date' => date('Y-m-d')
+        ]);
         $this->call([
-            // PermissionSeeder::class,
-            // UserSeeder::class,
+            PermissionSeeder::class,
+            UserSeeder::class,
             // ProductSeeder::class,
-            TransactionSeeder::class,
+            // TransactionSeeder::class,
         ]);
     }
 }

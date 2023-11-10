@@ -1,5 +1,5 @@
 @extends('layouts.products')
-
+@section('TITLE', 'Transaction Status')
 @section('produk')
     <section id="checkout">
 
@@ -9,7 +9,7 @@
                 @if ($transactionStatus['statusCode'] == '00')
                 <h2 class="mt-3">Your transactions is <strong>{{ Str::upper($transactionStatus['statusMessage']) }}</strong></h2>
                     @foreach ($transaction as $item)
-                        <div class="alert alert-info">
+                        <div class="alert alert-info mt-3">
                             <h6 class="fw-semibold">Product : {{ $item->products[0]->name }}</h6>
                             <span>{{ $item->product_file_url }}</span>
                         </div>

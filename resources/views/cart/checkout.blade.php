@@ -1,5 +1,5 @@
 @extends('layouts.products')
-
+@section('TITLE', 'Checkout Product')
 @section('produk')
     <section id="checkout" class="">
 

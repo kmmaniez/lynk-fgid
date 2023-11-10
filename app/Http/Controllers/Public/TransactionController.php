@@ -90,7 +90,6 @@ class TransactionController extends Controller
         $dataItem = array();
         $total = 0;
         foreach ($dataCart as $key => $cart) {
-            $total =+ $cart->price * $cart->quantity;
             array_push($dataItem,
                 [
                     'name' => $cart->name,
@@ -98,6 +97,7 @@ class TransactionController extends Controller
                     'quantity' => $cart->quantity,
                 ]
             );
+            $total += $cart->price * $cart->quantity;
         }
 
         // calculate total amount from cart for transaction duitku

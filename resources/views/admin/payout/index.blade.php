@@ -114,9 +114,10 @@
     <script src="{{ url('sb-admin') }}/js/demo/datatables-demo.js"></script>
 
     <script>
-        $(document).ready(function(){
-            $('body').on('click', '#btnAddPayout', (e) => {
+        // $(document).ready(function(){
+            $('tbody').on('click', '#btnAddPayout', (e) => {
                 e.preventDefault();
+                // e.target.disabled = true;
                 const {user,payout} = e.target.dataset
                 $.ajax({
                     url: "{{ route('admin-settlement.store') }}",
@@ -125,6 +126,9 @@
                         _token: '{{ csrf_token() }}',
                         user_id: user,
                         amount: parseInt(payout),
+                    },
+                    beforeSend: (xhr) =>{
+                        e.target.disabled = true;
                     },
                     success: (res) => {
                         console.log(res);
@@ -142,7 +146,7 @@
                     },
                 })
             })
-        })
+        // })
         /* INISIALISASI DATATABLE */
         $('#DTUsers').DataTable({
               processing: true,
@@ -157,8 +161,8 @@
                 //   {data: 'username', name: 'username'},
                   {data: 'email', name: 'email'},
                 //   {data: 'banks.bank_name', name: 'banks'},
-                  {data: 'banks', name: 'banks'},
-                  {data: 'total_payout', name: 'total_payout'},
+                  {data: 'banks', name: 'banks', orderable: false, searchable: false},
+                  {data: 'total_payout', name: 'total_payout', orderable: false, searchable: false},
                 //   {data: 'banks', name: 'banks'},
                   {
                     data: 'settlements',

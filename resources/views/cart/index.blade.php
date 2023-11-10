@@ -1,4 +1,5 @@
 @extends('layouts.products')
+@section('TITLE', 'Product '.$user->username)
 @push('styles')
     <style>
         .header span{

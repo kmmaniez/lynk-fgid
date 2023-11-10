@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Creators;
 
 use App\Http\Controllers\Controller;
 use App\Models\MasterPayoutDate;
+use App\Models\Payout;
 use App\Models\Product;
 use App\Models\Settlement;
 use App\Models\Transaction;
@@ -86,11 +87,15 @@ class DashboardCreatorController extends Controller
             return $q->where('user_id', $user->id);
         })->where('payment_status','paid')->sum('total_price');
         
-        $estimate_payout = Transaction::whereHas('products',function($q) use ($user){
-            return $q->where('user_id', $user->id);
-        })->where('payment_status','paid')->sum('total_price');
-        // ->where('payment_status','paid')
+        $estimate_payout = Payout::whereHas('products', function($q) use ($user) {
+            $q->where('is_payout', 0)->where('user_id', $user->id);
+        })->sum('total_price');
 
+        // $estimate_payout = Transaction::whereHas('products',function($q) use ($user){
+        //     return $q->where('user_id', $user->id);
+        // })->where('payment_status','paid')->sum('total_price');
+        // ->where('payment_status','paid')
+        // dump($total_earning, $estimate_payout, $tes);
         return view('creator.earning',compact('user','estimate_payout','total_earning','settlements','date'));
     }
 
