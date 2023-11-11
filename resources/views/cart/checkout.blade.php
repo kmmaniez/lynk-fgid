@@ -1,9 +1,24 @@
 @extends('layouts.products')
 @section('TITLE', 'Checkout Product')
+@push('styles')
+    <style>
+        #choose_payment{
+            width: 100%;
+            display: flex;
+            gap: 2rem;
+        }
+        @media (max-width: 820px) {
+            #choose_payment{
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+        }
+    </style>
+@endpush
 @section('produk')
     <section id="checkout" class="">
 
-        <div class="card border-0 h-100" style="border-radius: 0">
+        <div class="card border-0" style="border-radius: 0">
             <div class="card-body">
                 <div class="card">
                     <div class="card-body">
@@ -93,7 +108,7 @@
                             <div class="payment-method mt-3">
                                 <div class="form-group">
                                     <label for="payment">Pilih Pembayaran</label>
-                                    <div class="hstack mt-2" id="choose_payment">
+                                    <div class="mt-2" id="choose_payment">
                                         <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="OV">
                                             <img src="{{ asset('assets/payments-icon/ovo.jpg') }}" alt="ovo">
@@ -108,7 +123,7 @@
                                         </label>
                                         <label>
                                             <input class="form-check-input" type="radio" id="payment" name="payment" value="BC">
-                                            <img src="{{ asset('assets/cover-dark.png') }}" alt="bca">
+                                            <img src="{{ asset('assets/payments-icon/bca.png') }}" alt="bca">
                                         </label>
                                     </div>
                                 </div>
@@ -131,7 +146,7 @@
             </div> --}}
         </div>
     </section>
-@endsection
+@endsection 
 @push('scripts')
     <script>
         const btnPayment = $('#btnPay');
