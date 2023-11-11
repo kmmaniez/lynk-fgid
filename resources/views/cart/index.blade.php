@@ -8,18 +8,11 @@
             text-shadow: 0 0 10px rgb(38, 38, 38);
         }
         #coverprofile{
-            /* content: ''; */
-            /* background: url('{{ asset("assets/user6.jpg") }}'); */
-            /* object-fit: contain; */
-            /* background-size: 100%; */
-            /* background-position: center; */
-            /* background-repeat: no-repeat; */
             position: absolute;
             width: 800px;
             height: 100px; 
             left: -6px;
             z-index: -1;
-            /* size cover 800 x 200 */
         }
         #coverprofile::after{
             content: '';
@@ -72,28 +65,39 @@
             flex-basis: 100%;
             height: 400px;
         }
-        .item.large .card{
-            /* height: 100%; */
-        }
-        .item.large .card .card-body > img{
-            /* width: 100%; */
-            /* height: 200px; */
-        }
         .item.grid{
             /* flex: 0 0 calc(100%); */
             flex: 0 0 48%;
             /* background-color: bisque; */
         }
+        .list-products .card .card-body{
+            padding: 8px;
+        }
+        .list-products .card .card-body img{
+            border-radius: 6px;
+        }
+        #product-name, #product-price{
+            padding: 6px;
+        }
         @media screen and (max-width: 800px){
             .list-products{
                 width: 100%;
             }
+            .list-products .card .card-body{
+                padding: 0 0 8px 0;
+            }
+            .list-products .card .card-body img{
+                border-radius: 0px;
+            }
             .item.grid{
-                flex: 0 0 calc(100%);
+                flex: 0 0 calc(48%);
             }
             .item{
                 flex: 0 0 48%; 
                 /* background-color: green; */
+            }
+            #product-name, #product-price{
+                padding: 0 0 0 8px;
             }
         }
     </style>
@@ -137,15 +141,13 @@
                                 <h6 class="mt-3 {{ ($product->type->value == 'link') ? 'flex-grow-1 text-center' : '' }}">{{ $product->name }} {{ $product->type->value }}</h6>
                             @else
                                 @if ($product->thumbnail)
-                                <img src="{{ Storage::url('products/digital/'.$product->thumbnail) }}" style="width: 100%; {{ ($product->layout->value == 'large') ? 'height:300px' : 'height:120px'  }};" class="rounded-1 object-fit-cover">
+                                <img src="{{ Storage::url('products/digital/'.$product->thumbnail) }}" style="width: 100%; {{ ($product->layout->value == 'large') ? 'height:300px' : 'height:120px'  }};" class="object-fit-cover">
                                 @else
                                 <img src="{{ ($user->theme == 'light') ? asset('assets/cover-white.png') : asset('assets/cover-dark.png') }}" style="width: 100%; height: 120px;" class="rounded-1 object-fit-cover">
                                 @endif
-                                <h6 class="mt-3">{{ $product->name }}</h6>
-                                {{-- <h6 class="{{ ($product->thumbnail) ? 'mt-3' : '' }}">{{ $product->name }} {{ $product->type->value }}</h6> --}}
-                                <span><strong>Rp. {{ $product->min_price }}</strong></span>
+                                <h6 class="mt-3 mb-1" id="product-name">{{ $product->name }}</h6>
+                                <span id="product-price"><strong>Rp. {{ $product->min_price }}</strong></span>
                             @endif
-                            {{-- <small>{{ $product->id }}</small> --}}
                         </div>
                     </div>
                 </a>
