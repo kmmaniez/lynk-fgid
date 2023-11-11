@@ -68,7 +68,7 @@ class ProfileController extends Controller
                 'theme' => $request->theme,
             ]);
             $request->user()->save();
-
+            return redirect()->back()->with('success','Updated');
         }
 
         if ($request->hasFile('photo')) {
@@ -89,7 +89,7 @@ class ProfileController extends Controller
                 'theme' => $request->theme,
             ]);
             $request->user()->save();
-
+            return redirect()->back()->with('success','Updated');
         }
         
         if ($request->hasFile('coverimage')) {
@@ -110,9 +110,10 @@ class ProfileController extends Controller
                 'theme' => $request->theme,
             ]);
             $request->user()->save();
-
+            return redirect()->back()->with('success','Updated');
         }
-
+        $request->user()->fill($request->all());
+        $request->user()->save();
         return redirect()->back()->with('success','Updated');
     }
 

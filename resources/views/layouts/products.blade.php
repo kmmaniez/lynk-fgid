@@ -180,6 +180,14 @@
             justify-content: center;
             align-items: center;
         }
+        .button-group{
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-group a svg{
+            width: 24px;
+            height: 24px;
+        }
     </style>
     <script src="{{ asset('assets/feather-icons/dist/feather.js') }}"></script>
     @stack('styles')
@@ -223,7 +231,7 @@
                     <div class="card-body">
                         <span class="mt-2">Shopping Cart</span>
                         <div class="keterangan-order mt-3">
-                            <div class="list-item vstack mt-2 mb-2 gap-2 p-2" style="overflow-y: scroll; scroll-behavior: smooth;">
+                            <div class="list-item vstack mt-2 mb-2 gap-2" style="overflow-y: scroll; scroll-behavior: smooth;">
                             </div>
                             <table class="table">
                                 <tbody>
@@ -293,6 +301,7 @@
                 const {
                     data
                 } = res;
+                console.log(res);
                 $('#total-cart').text(data.total_item)
             }
         })
@@ -400,6 +409,9 @@
         $('.list-item').children().remove()
         addToCart();
         showCartItems();
+        setTimeout(() => {
+            
+        }, 1000);
     })
 
 
@@ -418,6 +430,7 @@
                 creator_id: '{{ $user->id }}'
             },
             success: (res) => {
+                console.log(res);
                 if (res.code == 201) {
                     userPayError.text(res.messages)
                     userPayError.css('display', 'block');
@@ -444,7 +457,7 @@
                 cart_id: id,
             },
             success: (res) => {
-                // console.log(res);
+                $('#btnGroup').children().first().remove();
                 $('.list-item').children().remove()
                 showCartItems();
             }
@@ -463,6 +476,7 @@
                 const {
                     data
                 } = res;
+                console.log(res);
                 if (Object.keys(data).length > 0) {
                     // filled cart
                     listItem.css({
@@ -470,12 +484,12 @@
                     })
                     $.each(data.cart, function(idx, product) {
                         let card = `
-                            <div class="card" style="height: 6rem;">
-                                <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-3">
+                            <div class="card" style="height: max-content;">
+                                <div class="card-body ps-2 pe-2 d-flex justify-content-between align-items-center gap-1">
                                     
                                     <img src='/${(product.attributes.image) ? product.attributes.image : "assets/profile-default.png"}' style="width: 4rem; height: 4rem;" class="card-img-top" alt="image">
         
-                                    <div class="vstack justify-content-between">
+                                    <div class="vstack justify-content-around">
                                         <span class="d-block">${product.name}</span>
                                         <span class="d-block fw-semibold">Rp. ${product.price}</span>
                                     </div>
@@ -485,13 +499,13 @@
         
                                         <span class="button-group">
                                             <a href="#" id="btnIncreaseQty" title="increase" data-id="${product.id}" class="px-2 fs-2 text-decoration-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus text-success"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>    
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus text-success"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>    
                                             </a>
                                             <a href="#" id="btnDecreaseQty" title="decrease" data-id="${product.id}" class="px-2 fs-2 text-decoration-none">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus text-success"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-minus text-success"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                             </a>
                                             <a href="#" id="btnRemoveItem" title="remove" data-id="${product.id}" class="px-2 fs-2">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash text-danger"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash text-danger"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                                             </a>
                                         </span>
                                     </div>
@@ -508,7 +522,6 @@
                             `Rp ${data.total_price}`)
                         $('#total-cart').text(data.total_item)
                     })
-
                     const link = `
                      <a href="{{ route('cart.checkout') }}?order_id={{ $user->id }}" id="checkoutBtn" class="btn btn-md btn-danger bg-gradient w-100">Checkout</a>
                     `;
