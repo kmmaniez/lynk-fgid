@@ -38,7 +38,7 @@ class CartController extends Controller
         if ($request->get('user_id')) {
 
             if ($this->cart::session($request->get('user_id'))->isEmpty()) {
-                return $this->sendResponse('Cart empty');
+                return $this->sendResponse('get all Cart empty');
             }
 
             $cartItem = [
@@ -49,7 +49,7 @@ class CartController extends Controller
                 'payment_fee' => 0
             ];
 
-            return $this->sendResponse('Cart has items', 200, $cartItem);
+            return $this->sendResponse('get all Cart has items', 200, $cartItem);
         }
     }
 
@@ -83,7 +83,7 @@ class CartController extends Controller
             'payment_fee' => 0
         ];
 
-        return $this->sendResponse('Cart has items', 200, $data);
+        return $this->sendResponse('storing Cart has items', 200, $data);
     }
 
     public function update(Request $request)
