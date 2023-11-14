@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignUlid('product_id')->constrained()->cascadeOnDelete(); 
+            $table->foreignUlid('products_id')->constrained()->cascadeOnDelete(); 
             $table->bigInteger('duitku_order_id');
             $table->string('duitku_reference');
             $table->integer('total_item');
             $table->integer('total_price');
-            // $table->boolean('is_payout')->default(false);
             $table->string('customer_info')->nullable();
             $table->string('payment_method');
             $table->enum('payment_status',['pending','paid','expired'])->default('pending');
@@ -26,7 +25,7 @@ return new class extends Migration
             $table->integer('transaction_url_views')->default(1);
             $table->timestamp('transaction_created');
             $table->timestamp('transaction_finished')->nullable();
-            // $table->timestamps();
+            $table->timestamps();
         });
     }
 
