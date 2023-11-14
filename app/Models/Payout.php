@@ -9,7 +9,6 @@ class Payout extends Model
 {
     use HasFactory;
     protected $with = ['products'];
-
     protected $fillable = [
         'product_id',
         'total_item',
@@ -25,6 +24,11 @@ class Payout extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'id','product_id');
+        return $this->hasMany(Product::class,'id','product_id');
     }
+
+    // public function transactions()
+    // {
+    //     return $this->hasMany(Transaction::class, 'transactions_id', 'id');
+    // }
 }
