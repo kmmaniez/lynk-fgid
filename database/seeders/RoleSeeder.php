@@ -14,9 +14,6 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        // DATA PERMISSION LIST REFERENSI DARI PermissionSeeder
-        $permission_lists = Permission::all();
-
         try {
             
             $role1 = Role::create(['name' => 'creator']);
