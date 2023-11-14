@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Prunable;
 class Transaction extends Model
 {
     use HasFactory, Prunable;
-    protected $with = ['products'];
+    protected $with = ['products','payouts'];
     public $timestamps = false;
 
     protected $fillable = [
-        'product_id',
+        'products_id',
         'duitku_order_id',
         'duitku_reference',
         'total_item',
@@ -34,6 +34,11 @@ class Transaction extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'id','product_id');
+        return $this->belongsTo(Product::class,'products_id','id');
+    }
+
+    public function payouts()
+    {
+        return $this->belongsTo(Payout::class,'transactions_id','id');
     }
 }
