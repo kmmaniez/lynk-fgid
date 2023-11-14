@@ -62,27 +62,31 @@ class SettlementController extends Controller
      */
     public function store(Request $request)
     {
-        $userId = (int) $request->user_id;
-        $curentPayout = Payout::whereHas('products', function($q) use ($userId) {
-            return $q->where('is_payout', 0)->where('user_id', $userId);
-        })->sum('total_price');
+        $userId = $request->user_id;
+        // $curentPayout = Payout::whereHas('products', function($q) use ($userId) {
+        //     return $q->where('is_payout', 0)->where('user_id', $userId);
+        // })->sum('total_price');
 
-        $updateStatusPayout = Payout::whereHas('products', function($q) use ($userId){
-            return $q->where('is_payout',0)->where('user_id', $userId);
-        })->update([
-            'is_payout' => true
-        ]);
+        // $updateStatusPayout = Payout::whereHas('products', function($q) use ($userId){
+        //     return $q->where('is_payout',0)->where('user_id', $userId);
+        // })->update([
+        //     'is_payout' => true
+        // ]);
 
         $settlement = Settlement::create([
-            'user_id' => (int) $request->user_id,
+            'users_id' => $request->user_id,
             'payout_date' => date('Y-m-d'),
             'payout_amount' => $request->amount,
         ]);
+        $payout = Payout::whereHas('products', function($q) use($userId) {
+            $q->where('is_payout', 0)->where('user_id', $userId);
+        })->update(['is_payout' => 1]);
         if ($settlement) {
             # code...
             return response()->json([
                 'message' => 'Data added successfully!',
                 'type' => 'success',
+                'payout' => 'changed'
             ]);
         }else{
             return response()->json([
