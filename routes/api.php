@@ -47,23 +47,21 @@ Route::post('/callback', function (Request $request) {
         if($signature == $calcSignature){
             // CHANGE STATUS
             // 00 = SUCCESS, 01 = EXPIRED
-            $time = date('Y-m-d H:i:s', time());
 
             if ($resultCode == "00") { // SUCCESS
-                // $transaction = Transaction::all()->whereIn('duitku_order_id', $transactionStatus['merchantOrderId']);
+
                 try {
                     $dataPayout = Transaction::whereIn('duitku_order_id', [$merchantOrderId])->get();
                     // create payout
                     foreach ($dataPayout as $key => $value) {
                         try {
                             Payout::create([
-                                'product_id' => $value->product_id, 
+                                'product_id' => $value->products_id, 
                                 'total_item' => $value->total_item, 
                                 'total_price' => $value->total_price, 
                             ]);
                             Log::info('PAYMENT SUCCESS, CREATE PAYOUT FROM TRANSACTIONS');
                         } catch (\Throwable $th) {
-                            throw $th;
                             Log::error($th->getMessage());
                         }
                     }
