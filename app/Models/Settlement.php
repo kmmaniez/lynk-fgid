@@ -11,13 +11,13 @@ class Settlement extends Model
     protected $with = ['users'];
 
     protected $fillable = [
-        'user_id',
+        'users_id',
         'payout_date',
         'payout_amount',
     ];
 
     public function users()
     {
-        return $this->belongsTo(User::class,'user_id', 'id');
+        return $this->belongsTo(User::class);
     }
 }
