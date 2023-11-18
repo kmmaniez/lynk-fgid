@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
             $table->string('type')->default(ProductTypeEnum::PRODUCT_LINK->value);
             $table->string('slug')->nullable();
