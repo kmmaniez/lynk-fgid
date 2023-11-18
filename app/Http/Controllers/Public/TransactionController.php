@@ -34,10 +34,9 @@ class TransactionController extends Controller
         // check transaction status
         $transactionStatus = $this->_duitku::getTransactionStatus($merchantOrderId);
         $transaction = Transaction::whereIn('duitku_order_id', [$merchantOrderId])->get();
-
+        
         // if status paid, insert to payouts
         if ($transactionStatus['statusCode'] === '00') {
-            
             // increment views, to avoid users access url web in X times
             $updateViewsTransactionUrl = Transaction::whereIn('duitku_order_id', [$merchantOrderId])->increment('transaction_url_views');
 
@@ -59,7 +58,7 @@ class TransactionController extends Controller
                     if ($update) {
                         Log::info('USER NOT PAY, PAYMENT EXPIRED');
                     }else {
-                        Log::error('ERROR QUERY UPDATE STATUS EXPIRED', $update);
+                        Log::error($update);
                     }
 
                 } catch (\Throwable $th) {
@@ -123,7 +122,7 @@ class TransactionController extends Controller
         foreach ($dataCart as $key => $cart) {
             $productLink = Product::where('id', $cart->id)->get('url');
             Transaction::create([
-                'product_id' => $cart->id,
+                'products_id' => $cart->id,
                 'duitku_order_id' => $orderId,
                 'duitku_reference' => $invoice['reference'],
                 'total_item' => $cart->quantity,
