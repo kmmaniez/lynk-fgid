@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             }
         }
         MasterPayoutDate::create([
-            'initial_date' => date('Y-m-d')
+            'initial_date' => date('2023-11-04')
         ]);
         $this->call([
             PermissionSeeder::class,

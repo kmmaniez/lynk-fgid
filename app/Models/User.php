@@ -14,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
-    // HasUuids;
+    use HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -67,7 +67,7 @@ class User extends Authenticatable
     
     public function banks()
     {
-        return $this->hasOne(BankAccount::class);
+        return $this->hasOne(BankAccount::class, 'users_id');
     }
 
     public function settlements()

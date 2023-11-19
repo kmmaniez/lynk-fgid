@@ -11,7 +11,7 @@ class BankAccount extends Model
     protected $with = ['users'];
 
     protected $fillable = [
-        'user_id',
+        'users_id',
         'bank_name',
         'bank_number',
         'bank_account_name',
@@ -19,6 +19,6 @@ class BankAccount extends Model
 
     public function users()
     {
-        return $this->belongsTo(User::class,'user_id','id');
+        return $this->belongsTo(User::class);
     }
 }

@@ -20,8 +20,8 @@ class PublicController extends Controller
     public function discover(): View
     {
         $creatorFeatured = Settlement::whereHas('users')
-                            ->select('user_id')->selectRaw('SUM(payout_amount) as total_payout')
-                            ->groupBy('user_id')->orderBy('total_payout','desc')
+                            ->select('users_id')->selectRaw('SUM(payout_amount) as total_payout')
+                            ->groupBy('users_id')->orderBy('total_payout','desc')
                             ->limit(10)->get();
         // $creatorFeatured = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->limit(10)->get();
         $creatorRecents = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->latest()->limit(10)->get();

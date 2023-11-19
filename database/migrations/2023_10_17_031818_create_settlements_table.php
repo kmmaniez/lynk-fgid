@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('settlements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignUuid('users_id')->constrained()->cascadeOnDelete(); 
             $table->date('payout_date');
             $table->bigInteger('payout_amount');
             $table->timestamps();
