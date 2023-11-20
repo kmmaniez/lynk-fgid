@@ -31,12 +31,9 @@
                                 <div class="last-payment">
                                     <span class="d-block text-secondary">Estimate Payout</span>
                                     <span class="fw-semibold">Rp. {{ number_format($estimate_payout, 0, 0, '.') }}</span>
-                                    {{-- <span class="fw-semibold">Rp. 200.000</span> --}}
-                                    {{-- <span class="fw-semibold">Rp. {{ 200000 - (200000 * 0.05)  }}</span> --}}
                                 </div>
                                 <div class="next-payment">
                                     <span class="d-block text-secondary">Next Payment</span>
-                                    {{-- <span class="fw-semibold">30 Sep 2023</span> --}}
                                     <span class="fw-semibold">{{ $date->format('d') }}
                                         {{ $date->addMonth()->shortMonthName }} {{ $date->year }}</span>
                                 </div>
@@ -89,16 +86,5 @@
     <script>
         const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
         const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
-
-        const popoverCustomMessage = document.getElementById('popover-custom-message');
-        const contentMessage = document.getElementById('popover-custom-content');
-
-        // popoverCustomMessage.addEventListener('click', (e) => {
-        //     contentMessage.classList.toggle('d-block')
-        // })
-        // const popover = new bootstrap.Popover(popoverCustomMessage, {
-        //     html: true,
-        //     content: contentMessage,
-        // })
     </script>
 @endpush
