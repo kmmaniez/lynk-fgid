@@ -130,7 +130,7 @@ class ProfileController extends Controller
             $currentUser->banks->update($request->all());
         }else{
             BankAccount::create([
-                'user_id' => $currentUser->id,
+                'users_id' => $currentUser->id,
                 ...$request->all()
             ]);
         }
