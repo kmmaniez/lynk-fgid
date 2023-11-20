@@ -9,7 +9,6 @@ use App\Models\Settlement;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -43,7 +42,17 @@ class PayoutController extends Controller
     public function getAllPayouts(Request $request)
     {
         // if ($request->ajax()) {
-            $model = User::with('banks')->whereHas('banks')
+            // $model = Product::with('users.banks','transactions')->whereHas('transactions')
+            $model = User::with('products')
+            ->whereHas('products.payouts',  function($q) {
+                    return $q->where('is_payout',0);
+                })
+            // ->whereRelation('products.payouts',  function($q) {
+            //     return $q->where('is_payout',0);
+            // })
+            ->whereRelation('roles', function($q){
+                return $q->where('name','!=','admin')->where('name','!=','super-admin');
+            })
             ;
             return DataTables::of($model)
                 ->addIndexColumn()
@@ -59,10 +68,12 @@ class PayoutController extends Controller
                     $amount = Payout::whereHas('products', function($q) use ($row) {
                         $q->where('is_payout', 0)->where('user_id', $row->id);
                     })->sum('total_price');
-                    return 'Rp. '.number_format($amount,0,0,'.');
+                    // $amount = Payout::whereHas('transactions')->sum('total_price');
+                    return $amount;
+                    // return 'Rp. '.number_format($amount,0,0,'.');
                 })
                 ->addColumn('settlements', function($user){
-                    return Settlement::whereHas('users')->where('user_id',$user->id)->orderBy('id','desc')->get()->map(function($set,$key){
+                    return Settlement::whereHas('users')->where('users_id',$user->id)->orderBy('id','desc')->get()->map(function($set,$key){
                         $info = '
                         <div class="mb-1">'.Carbon::parse($set->payout_date)->translatedFormat('l, d-m-Y').'</div>
                         <span class="badge badge-danger p-2">Rp. '.number_format($set->payout_amount,0,0,'.').'</span>
@@ -87,6 +98,7 @@ class PayoutController extends Controller
                         return 'Not enough balance to withdraw';
                     }
                 })
+            // ->rawColumns(['banks'])
             ->rawColumns(['settlements','action'])
             ->toJson();
             // final
