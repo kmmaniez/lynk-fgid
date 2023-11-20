@@ -3,13 +3,9 @@
     <link href="{{ url('sb-admin') }}/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <style>
         input.form-control.is-invalid:focus{
-            /* background-color: red; */
             box-shadow: none;
             border: 1px solid #ff887d;
         }
-        /* table tbody tr td:last-child{
-            width: 180px;
-        } */
     </style>
 @endpush
 @section('konten')
@@ -26,9 +22,6 @@
                     <h6 class="m-0 font-weight-bold text-primary">Tabel Data {{ $title ?? 'n' }}</h6>
                 </div>
                 <div class="card-body">
-                    {{-- @dump($data) --}}
-                    {{-- <a href="" class="btn btn-md btn-primary mb-3" id="btnTambahUser" data-toggle="modal" data-target="#modalUser"><i
-                            class="fas fa-fw fa-plus"></i> Add User</a> --}}
                     <div class="table-responsive">
                         <table class="table table-bordered" id="DTUsers" width="100%" cellspacing="0">
                             <thead>
@@ -129,6 +122,9 @@
                     },
                     beforeSend: (xhr) =>{
                         e.target.disabled = true;
+                        e.target.innerHTML = `
+                        <span class="spinner-border bg-transparent" style="width: 16px; height: 16px;" role="status"></span>
+                        `;
                     },
                     success: (res) => {
                         console.log(res);
