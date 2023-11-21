@@ -17,11 +17,10 @@ class DashboardAdminController extends Controller
     {
         $total_user = User::count();
         // $user_rank = Settlement::with(['users'])->limit(5)->orderBy('aggregate','DESC')->groupBy('user_id')->sum('payout_amount');
-        $user_rank = Settlement::whereHas('users')->select('user_id')->selectRaw('SUM(payout_amount) as total_payout')
-                        ->groupBy('user_id')
+        $user_rank = Settlement::whereHas('users')->select('users_id')->selectRaw('SUM(payout_amount) as total_payout')
+                        ->groupBy('users_id')
                         ->orderBy('total_payout','desc')
                         ->limit(5)->get();
-                        
         $total_product = Product::count();
         $total_product_digital = Product::where('type','digital')->count();
         $total_product_link = Product::where('type','link')->count();

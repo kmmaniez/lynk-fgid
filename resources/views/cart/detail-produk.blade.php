@@ -42,18 +42,10 @@
                 </div>
             </div>
             <div class="card-footer bg-white border-0">
-                {{-- <form action="{{ route('cart.store') }}" id="formAddProduct" method="post">
-                    @csrf --}}
-                {{-- <div class="hstack"> --}}
                 <input type="hidden" name="productId" id="productId" value="{{ $product->id }}">
                 <input type="hidden" name="quantity" id="quantity" value="1" class="form-control shadow-none">
-                <button class="btn bg-danger text-white fw-semibold bg-gradient w-100"
-                    id="btnAddToCart">{{ $product->cta_text->value }}</button>
-                {{-- </div> --}}
-                {{-- </form> --}}
-                {{-- <a href="#" id="btnAddToCart" class="btn bg-danger text-white fw-semibold bg-gradient w-100">{{ $product->cta_text->value }}</a> --}}
-                <a href="{{ route('public.user',request()->route()->originalParameters()['user']) }}" id=""
-                    class="btn mt-2 w-100">Back</a>
+                <button class="btn bg-danger text-white fw-semibold bg-gradient w-100" id="btnAddToCart">{{ $product->cta_text->value }}</button>
+                <a href="{{ route('public.user',request()->route()->originalParameters()['user']) }}" class="btn mt-2 w-100">Back</a>
             </div>
         </div>
     </section>

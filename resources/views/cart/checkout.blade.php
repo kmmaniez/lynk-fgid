@@ -47,21 +47,10 @@
 
                                                         <div class="hstack justify-content-between">
                                                             <ol class="mt-2" id="cartitems">
-                                                                {{-- @foreach ($cartitems as $item)
-                                                                <li><span>{{ $item->name }} ({{ $item->quantity }}x)</span></li>
-                                                                <li><span>Valorant cheat (2x)</span></li>
-                                                                <li><span>Ninja Saga (1x)</span></li>
-                                                                @endforeach --}}
                                                             </ol>
     
                                                             <ul class="mt-2" id="cartprice" style="list-style-type: none">
-                                                                {{-- @foreach ($cartitems as $item)
-                                                                <li><span>Rp. {{ $item->quantity * $item->price }}</span></li>
-                                                                <li><span>Rp. 10.000</span></li>
-                                                                <li><span>Rp. 30.000</span></li>
-                                                                @endforeach --}}
                                                             </ul>
-
                                                         </div>
                                                         
                                                     </div>
@@ -140,10 +129,6 @@
                 </div>
 
             </div>
-            {{-- <div class="card-footer border-0">
-                <a href="#" id="btnPay" class="btn text-white bg-danger bg-gradient w-100"></a>
-                <a href="{{ route('public.user', $userProduct[0]->username) }}" id="btnAddToCart" class="btn btn-default w-100 mt-1">Back to Shopping</a>
-            </div> --}}
         </div>
     </section>
 @endsection 
@@ -191,7 +176,6 @@
                 url: "{{  route('cart.getitems')  }}?user_id="+match[1],
                 method: 'GET',
                 success: (res) => {
-                    // console.log(res);
                     const {cart} = res.data;
                     btnPayment.text('Bayar Sekarang - Rp. '+res.data.total_price)
                     totalItem.text(res.data.total_item)

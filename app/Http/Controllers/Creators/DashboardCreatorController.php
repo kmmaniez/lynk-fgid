@@ -19,10 +19,12 @@ class DashboardCreatorController extends Controller
     {
         $user = auth()->user();
 
-        $products = Product::with('users')->where('user_id','=',$user->id)->latest()->get();
-        $total_product = Product::with('users')->where('user_id','=',$user->id)->get()->count();
+        // $products = Product::with('users')->where('user_id','=',$user->id)->latest()->get();
+        // $total_product = Product::with('users')->where('user_id','=',$user->id)->get()->count();
         // $pag = Product::with('users')->where('user_id','=',$user->id)->latest()->paginate(2);
 
+        $products = Product::where('user_id','=',$user->id)->latest()->get(); // new
+        $total_product = Product::where('user_id','=', $user->id)->count(); 
         return view('creator.index', compact('products','total_product'));
     }
 
@@ -30,35 +32,38 @@ class DashboardCreatorController extends Controller
     {
         $userId = auth()->user()->id;
 
-        $transactions = Transaction::whereHas('products',function($q) use ($userId){
-            return $q->where('user_id',$userId)->where('payment_status','paid');
-        })
-        ->orderBy('id','DESC')->get();
+        // $transactions = Transaction::whereHas('products',function($q) use ($userId){
+        //     return $q->where('user_id',$userId)->where('payment_status','paid');
+        // })
+        // ->orderBy('id','DESC')->get();
         // ->latest()->paginate(3);
+        $transactions =  Transaction::whereHas('products')->whereHas('products',function($q) use($userId) {
+            return $q->where('user_id', $userId);
+        })->where('payment_status','paid')->orderBy('id','desc')->get();
+        // dump($ts);
+        // $paymentPaid = Transaction::whereHas('products',function($q) use ($userId){
+        //     return $q->where('user_id',$userId)->where('payment_status','paid');
+        // })->get();
 
-        $paymentPaid = Transaction::whereHas('products',function($q) use ($userId){
-            return $q->where('user_id',$userId)->where('payment_status','paid');
-        })->get();
-
-        $amountWithdrawUserNotPayout = Transaction::whereHas('products', function($q)use ($userId){
-            return $q->where('user_id', $userId)->where('payment_status','paid');
-            // return $q->where('user_id', $userId)->where('is_payout',0);
-        })
-        ->sum('total_price');
-        // ->get();
+        // $amountWithdrawUserNotPayout = Transaction::whereHas('products', function($q)use ($userId){
+        //     return $q->where('user_id', $userId)->where('payment_status','paid');
+        //     // return $q->where('user_id', $userId)->where('is_payout',0);
+        // })
+        // ->sum('total_price');
+        // // ->get();
 
         // update payout status
-        $update = Transaction::with('products')
-        ->whereRelation('products.users','user_id','=',$userId)
-        ->get();
+        // $update = Transaction::with('products')
+        // ->whereRelation('products.users','user_id','=',$userId)
+        // ->get();
         // ->where('is_payout',0)->update([
         //     'is_payout' => 1
         // ]);
 
         // create new settlement
-        $totalAllPayout = Transaction::with('products')
-        ->whereRelation('products.users','user_id','=',$userId)
-        ->sum('total_price');
+        // $totalAllPayout = Transaction::with('products')
+        // ->whereRelation('products.users','user_id','=',$userId)
+        // ->sum('total_price');
         // $set = Settlement::create([
         //     'user_id' => $userId,
         //     'payout_date' => now(),
@@ -79,9 +84,9 @@ class DashboardCreatorController extends Controller
 
         // dump($date->addMonth());
         // $last_payment = Settlement::with('users')->where('user_id', $user->id)->latest()->get();
-        $settlements = Settlement::where('user_id', $user->id)->orderBy('id','DESC')->first('payout_amount');
+        $settlements = Settlement::where('users_id', $user->id)->orderBy('id','DESC')->first('payout_amount');
         // $total_earning = Transaction::whereHas('products',function($q) use ($user){
-        //     return $q->where('user_id', $user->id);
+        //     return $q->where('users_id', $user->id);
         // })->get();
         $total_earning = Transaction::whereHas('products',function($q) use ($user){
             return $q->where('user_id', $user->id);
@@ -90,7 +95,7 @@ class DashboardCreatorController extends Controller
         $estimate_payout = Payout::whereHas('products', function($q) use ($user) {
             $q->where('is_payout', 0)->where('user_id', $user->id);
         })->sum('total_price');
-
+        // dump($settlements, $total_earning, $estimate_payout);
         // $estimate_payout = Transaction::whereHas('products',function($q) use ($user){
         //     return $q->where('user_id', $user->id);
         // })->where('payment_status','paid')->sum('total_price');
@@ -103,21 +108,32 @@ class DashboardCreatorController extends Controller
     {
         $userId = auth()->user()->id;
 
-        $total_sales = Settlement::with('users')->where('user_id', $userId)->sum('payout_amount');
-        $total_earning = Transaction::whereHas('products',function($q) use ($userId){
-            return $q->where('user_id', $userId)->where('payment_status','paid');
-        })->sum('total_price');
-        $total_product_sales = Transaction::whereHas('products',function($q) use ($userId){
-            return $q->where('user_id', $userId)->where('payment_status','paid');
-        })->sum('total_item');
-        // dump($total_sales);
+        // $total_sales = Settlement::with('users')->where('user_id', $userId)->sum('payout_amount');
+        // $total_earning = Transaction::whereHas('products',function($q) use ($userId){
+        //     return $q->where('user_id', $userId)->where('payment_status','paid');
+        // })->sum('total_price');
+        // $total_product_sales = Transaction::whereHas('products',function($q) use ($userId){
+        //     return $q->where('user_id', $userId)->where('payment_status','paid');
+        // })->sum('total_item');
+
+        // $total_earning = 0;
+        // $total_sales = 0;
+        // $total_product_sales = 0;
+        $total_sales = Settlement::with('users')->where('users_id', $userId)->sum('payout_amount');
+        $total_earning = Transaction::whereHas('products')->whereHas('products',function($q) use($userId) {
+            return $q->where('user_id', $userId);
+        })->where('payment_status','paid')->sum('total_price');
+        $total_product_sales = Transaction::with('products')->whereHas('products',function($q) use($userId) {
+            return $q->where('user_id', $userId);
+        })->where('payment_status','paid')->sum('total_item');
+        // dump($tot);
         return view('creator.statistik', compact('total_sales','total_earning','total_product_sales'));
     }
 
     public function settlement_history()
     {
         $userId = auth()->user()->id;
-        $settlements = Settlement::with('users')->where('user_id', $userId)->orderBy('id','DESC')->get();
+        $settlements = Settlement::with('users')->where('users_id', $userId)->orderBy('id','DESC')->get();
         // dump($settlements);
         return view('creator.settlement-history', compact('settlements'));
     }

@@ -40,10 +40,9 @@
                                     <span class="fw-semibold">Date : {{ $transact->transaction_created }}</span>
                                     <div class="list-item">
                                         <span class="">Detail Item :</span>
-                                        {{-- <span>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x) | Rp. {{ $transact->total_price }}</span> --}}
                                         <ul class="m-0">
-                                            <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x)</li>
-                                            {{-- <li>Joki Valorant ({{ rand(1,10) }}x) | Rp. {{ rand(1,10) }}0.000</li> --}}
+                                            {{-- <li>{{ $transact->products[0]->name }} ({{ $transact->total_item }}x)</li> --}}
+                                            <li>{{ $transact->products->name }} ({{ $transact->total_item }}x)</li>
                                         </ul>
                                     </div>
                                     <span class="d-block mt-2"><strong>Total : Rp.
