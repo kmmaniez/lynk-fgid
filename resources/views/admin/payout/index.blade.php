@@ -135,7 +135,8 @@
                             showConfirmButton: false,
                             timer: 2500,
                         });
-                        $('#DTUsers').DataTable().draw()
+                        // $('#DTUsers').DataTable().draw()
+                        $('#DTUsers').DataTable().ajax.reload()
                     },
                     error: (res) => {
                         console.log(res);

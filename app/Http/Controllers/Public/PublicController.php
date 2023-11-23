@@ -13,7 +13,7 @@ class PublicController extends Controller
 
     public function index(): View
     {
-        $creators = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->limit(10)->get();
+        $creators = User::whereRelation('roles', 'name', '=', 'creator')->limit(10)->get();
         return view('public.index', compact('creators'));
     }
 
@@ -23,8 +23,7 @@ class PublicController extends Controller
                             ->select('users_id')->selectRaw('SUM(payout_amount) as total_payout')
                             ->groupBy('users_id')->orderBy('total_payout','desc')
                             ->limit(10)->get();
-        // $creatorFeatured = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->limit(10)->get();
-        $creatorRecents = User::whereRelation('roles', 'name', '!=', 'admin')->WhereRelation('roles', 'name', '!=', 'super-admin')->latest()->limit(10)->get();
+        $creatorRecents = User::WhereRelation('roles', 'name', '=', 'creator')->latest()->limit(10)->get();
         return view('public.discover', compact('creatorFeatured', 'creatorRecents'));
     }
 
@@ -40,7 +39,7 @@ class PublicController extends Controller
         if (request()->ajax()) {
             if (strlen($request->username) > 0) {
 
-                $user = User::where('username', 'LIKE', "%$request->username%")->get(['username', 'photo']);
+                $user = User::WhereRelation('roles', 'name', '=', 'creator')->where('username', 'LIKE', "%$request->username%")->get(['username', 'photo']);
 
                 if (count($user) > 0) {
                     return $this->sendResponse('Users found', 201, [
